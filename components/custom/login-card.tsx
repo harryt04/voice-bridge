@@ -23,29 +23,11 @@ function LoginCard() {
   }
 
   return (
-    <div>
-      <Card
-        className={cn(
-          'flex flex-col items-center justify-center gap-4 p-8 text-center',
-        )}
-      >
-        <SignedOut>
-          <RedirectToSignIn />
-        </SignedOut>
-
-        <SignedIn>
-          <h1 className="text-2xl font-bold">
-            Signed in as: <UserButton /> {user?.firstName} {user?.lastName}
-          </h1>
-          <SignOutButton>
-            <Button>
-              <ExitIcon className="mr-2 h-4 w-4" />
-              Sign out
-            </Button>
-          </SignOutButton>
-        </SignedIn>
-      </Card>
-    </div>
+    <>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+    </>
   )
 }
 

@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { SignOutButton } from '@clerk/nextjs'
+import { UserButton } from '@clerk/nextjs'
 
 // Menu items.
 const items = [
@@ -47,7 +47,10 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <div className="p-2">
+            <UserButton />
+          </div>
+          <SidebarGroupLabel>VoiceBridge</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -64,9 +67,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SignOutButton></SignOutButton>
-      </SidebarFooter>
+      <SidebarFooter></SidebarFooter>
     </Sidebar>
   )
 }
