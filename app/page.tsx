@@ -12,7 +12,7 @@ export default function Home() {
 
       <SignedIn>
         <SideNav />
-        <p>Welcome to scaffolding bitches</p>
+        <p>Welcome to voicebridge bitches</p>
         {/* <div
           className={cn(
             'flex min-h-screen flex-col items-center justify-center gap-4 px-10 py-20',

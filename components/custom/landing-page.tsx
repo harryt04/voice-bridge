@@ -7,7 +7,7 @@ function LandingPage() {
     <div>
       <div className="flex h-screen flex-col items-center justify-center">
         <div className="flex max-w-2xl flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold"> Scaffolding </h1>
+          <h1 className="text-4xl font-bold"> VoiceBridge </h1>
           <br />
           <ThemeSwitcher />
           <br />

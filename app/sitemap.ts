@@ -3,11 +3,11 @@ import { MetadataRoute } from 'next'
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://scaffolding.app',
+      url: 'https://voicebridge.app',
       lastModified: new Date(),
     },
     {
-      url: 'https://scaffolding.app/login',
+      url: 'https://voicebridge.app/login',
       lastModified: new Date(),
     },
   ]
