@@ -11,7 +11,11 @@ function LandingPage() {
           <br />
           <ThemeSwitcher />
           <br />
-          <p className="text-l">Description</p>
+          <p className="text-l">
+            This app helps children with autism communicate by offering visual
+            tools for daily activities, including navigating places, choosing
+            food, and accessing calming music playlists.
+          </p>
           <br />
           <p className="text-l"></p>
           Coming soon.
@@ -26,6 +30,11 @@ function LandingPage() {
           <br />
           <Button variant={'link'}>
             <Link href="/login">Sign in to the free and open beta</Link>
+          </Button>
+          <Button variant={'link'}>
+            <Link href="https://github.com/harryt04/VoiceBridge">
+              Report a bug / View source code
+            </Link>
           </Button>
         </div>
       </div>

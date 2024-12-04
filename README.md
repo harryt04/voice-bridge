@@ -1,1 +1,1 @@
-This represents my blank slate for a new personal project, complete with my default choices for auth and posthog.
+VoiceBridge is a free and open source web and mobile app that helps children with autism communicate by offering visual tools for daily activities, including navigating places, choosing food, and accessing calming music playlists.
