@@ -11,29 +11,31 @@ function LandingPage() {
           <br />
           <ThemeSwitcher />
           <br />
-          <p className="text-l">
-            This app helps children with autism communicate by offering visual
-            tools for daily activities, including navigating places, choosing
-            food, and accessing calming music playlists.
+          <p className="text-l text-center">
+            VoiceBridge is a free and open-source app that helps children with
+            autism communicate by offering visual tools for daily activities,
+            including navigating places, choosing food, and accessing calming
+            music playlists.
           </p>
           <br />
           <p className="text-l"></p>
-          Coming soon.
+          Under construction, coming soon.
           <br />
           <br />
-          <Button variant={'default'}>
+          {/* <Button variant={'default'}>
             <Link href="https://forms.gle/grPSfC6ZdT7c2UNi8">
               Join the waitlist here
             </Link>
           </Button>
           <br />
-          <br />
-          <Button variant={'link'}>
+          <br /> */}
+          <Button variant={'secondary'}>
             <Link href="/login">Sign in to the free and open beta</Link>
           </Button>
-          <Button variant={'link'}>
+          <br />
+          <Button variant={'outline'}>
             <Link href="https://github.com/harryt04/VoiceBridge">
-              Report a bug / View source code
+              View source code
             </Link>
           </Button>
         </div>
