@@ -3,6 +3,7 @@ import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -10,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { SignOutButton } from '@clerk/nextjs'
 
 // Menu items.
 const items = [
@@ -62,6 +64,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SignOutButton></SignOutButton>
+      </SidebarFooter>
     </Sidebar>
   )
 }

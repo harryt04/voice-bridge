@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider, SignedIn } from '@clerk/nextjs'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
@@ -44,9 +44,10 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <AppSidebar />
-
-                <SidebarTrigger />
+                <SignedIn>
+                  <AppSidebar />
+                  <SidebarTrigger />
+                </SignedIn>
                 {children}
               </ThemeProvider>
             </SidebarProvider>
