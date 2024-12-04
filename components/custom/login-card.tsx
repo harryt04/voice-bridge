@@ -1,3 +1,5 @@
+'use client'
+
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import {
@@ -5,14 +7,20 @@ import {
   SignedIn,
   SignedOut,
   SignOutButton,
+  useClerk,
   UserButton,
 } from '@clerk/nextjs'
-import { currentUser, User } from '@clerk/nextjs/server'
 import { Button } from '../ui/button'
 import { ExitIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
-async function LoginCard() {
-  const user: User | null = await currentUser()
+function LoginCard() {
+  const { user } = useClerk()
+  const router = useRouter()
+
+  if (!!user) {
+    router.push('/')
+  }
 
   return (
     <div>

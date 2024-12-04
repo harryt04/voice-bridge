@@ -7,6 +7,8 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -35,14 +37,19 @@ export default function RootLayout({
               fontSans.variable,
             )}
           >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
+            <SidebarProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <AppSidebar />
+
+                <SidebarTrigger />
+                {children}
+              </ThemeProvider>
+            </SidebarProvider>
           </body>
         </PostHogProvider>
       </ClerkProvider>
