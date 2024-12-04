@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
+import { Apple, LandPlot, Music } from 'lucide-react'
 
 import {
   Sidebar,
@@ -12,33 +12,24 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { UserButton } from '@clerk/nextjs'
+import Link from 'next/link'
 
 // Menu items.
 const items = [
   {
-    title: 'Home',
-    url: '#',
-    icon: Home,
+    title: `Let's go!`,
+    url: '/places',
+    icon: LandPlot,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
+    title: `Let's eat!`,
+    url: '/food',
+    icon: Apple,
   },
   {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
+    title: `Music`,
+    url: '/music',
+    icon: Music,
   },
 ]
 
@@ -56,10 +47,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
