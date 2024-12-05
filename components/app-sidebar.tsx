@@ -14,6 +14,8 @@ import {
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { Button } from './ui/button'
+import { ThemeSwitcher } from './custom/themeSwitcher'
 
 // Menu items.
 const items = [
@@ -45,9 +47,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            VoiceBridge{' '}
-            <div className={cn('px-4')}>
+            VoiceBridge {/* anchor div to the right */}
+            <div className={cn('flex w-full flex-row justify-end gap-4')}>
               <UserButton />
+              <ThemeSwitcher />
             </div>
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -66,7 +69,18 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter></SidebarFooter>
+      <SidebarFooter className={cn('p-4')}>
+        <Button variant={'ghost'}>
+          <Link href="https://github.com/harryt04/VoiceBridge/issues/new">
+            Report a bug
+          </Link>
+        </Button>
+        <Button variant={'ghost'}>
+          <Link href="https://github.com/harryt04/VoiceBridge">
+            View source code
+          </Link>
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   )
 }
