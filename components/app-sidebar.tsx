@@ -1,4 +1,4 @@
-import { Apple, LandPlot, Music } from 'lucide-react'
+import { Apple, LandPlot, Music, Phone } from 'lucide-react'
 
 import {
   Sidebar,
@@ -17,12 +17,12 @@ import Link from 'next/link'
 // Menu items.
 const items = [
   {
-    title: `Let's go!`,
+    title: `Places`,
     url: '/places',
     icon: LandPlot,
   },
   {
-    title: `Let's eat!`,
+    title: `Food`,
     url: '/food',
     icon: Apple,
   },
@@ -30,6 +30,11 @@ const items = [
     title: `Music`,
     url: '/music',
     icon: Music,
+  },
+  {
+    title: `Call`,
+    url: '/call',
+    icon: Phone,
   },
 ]
 
