@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/sidebar'
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 // Menu items.
 const items = [
@@ -43,10 +44,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <div className="p-2">
-            <UserButton />
-          </div>
-          <SidebarGroupLabel>VoiceBridge</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            VoiceBridge{' '}
+            <div className={cn('px-4')}>
+              <UserButton />
+            </div>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
