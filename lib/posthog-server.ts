@@ -5,6 +5,7 @@ export default function PostHogClient() {
   if (!runningInProduction) {
     return {
       capture: () => {},
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any as PostHog
   }
 
