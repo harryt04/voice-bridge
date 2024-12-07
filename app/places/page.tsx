@@ -1,20 +1,20 @@
-import { PlaceComponent } from '@/components/custom/place'
+import { PlaceComponent } from '@/components/custom/place-component'
 import { Place } from '@/models'
 
 const places: Place[] = [
   {
     id: '1',
-    name: 'Place 1',
-    description: 'Place 1 description',
+    name: 'Adams All Abilities Park',
+    description: `This is William's favorite park to come to in Utah county! He could hang out here for HOURS!`,
     imageUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzsa39Ct_wlG-0JAPqMIuZOyiJisvdO_Df_Q&s',
+      'https://i.ytimg.com/vi/pAcpEbxCCPk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDOl1u-VepMBwNvzFfimUUHJ5zarA',
   },
   {
     id: '2',
-    name: 'Place 2',
-    description: 'Place 2 description',
+    name: 'Suncrest Park',
+    description: `Not Will's favorite park, but it gets the job done when we are in a pinch and don't want to drive any further.`,
     imageUrl:
-      'https://cdn.britannica.com/02/20302-050-C9632F53/Seto-Great-Bridge-Inland-Sea-Kojima-Honshu.jpg',
+      'https://locable-assets-production.s3.amazonaws.com/uploads/resource/file/656616/suncrest_203.jpeg?timestamp=1733067996',
   },
 ]
 
