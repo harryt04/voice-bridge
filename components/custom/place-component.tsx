@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from '../ui/card'
 import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
 import { speakText } from '@/utils/speech'
 import { AudioLines } from 'lucide-react'
 
