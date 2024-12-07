@@ -22,4 +22,13 @@ module.exports = {
   },
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**', // Allows images from any hostname
+      },
+    ],
+  },
 }
