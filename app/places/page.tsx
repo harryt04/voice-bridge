@@ -50,7 +50,7 @@ export default function Places() {
   return (
     <div
       className={
-        'flex flex-wrap justify-start gap-8 p-8' // Flex container with wrapping and spacing
+        'flex flex-wrap justify-center gap-8 p-8' // Flex container with wrapping and spacing
       }
     >
       {places.map((place) => {
