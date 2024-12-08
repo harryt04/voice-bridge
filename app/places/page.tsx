@@ -1,5 +1,7 @@
 import { PlaceComponent } from '@/components/custom/place-component'
+import { Button } from '@/components/ui/button'
 import { Place } from '@/models'
+import { PlusIcon } from 'lucide-react'
 
 const places: Place[] = [
   {
@@ -48,21 +50,26 @@ const places: Place[] = [
 
 export default function Places() {
   return (
-    <div
-      className={
-        'flex flex-wrap justify-center gap-8 p-8' // Flex container with wrapping and spacing
-      }
-    >
-      {places.map((place) => {
-        return (
-          <div
-            key={place.id}
-            className={`// Two columns on tablets // Three columns on desktops // One column on mobile // Optional: Limit max size per card max-w-[400px] flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
-          >
-            <PlaceComponent place={place}></PlaceComponent>
-          </div>
-        )
-      })}
-    </div>
+    <>
+      <div className="flex flex-col">
+        <div className="header">
+          <Button className="ml-8 mt-8">
+            <PlusIcon /> Add place
+          </Button>
+        </div>
+        <div className={'flex flex-wrap justify-center gap-8 p-8'}>
+          {places.map((place) => {
+            return (
+              <div
+                key={place.id}
+                className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+              >
+                <PlaceComponent place={place}></PlaceComponent>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </>
   )
 }
