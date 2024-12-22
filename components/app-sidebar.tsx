@@ -46,14 +46,20 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
+          <SidebarGroupLabel className="pt-4">
             VoiceBridge {/* anchor div to the right */}
             <div className={cn('flex w-full flex-row justify-end gap-4')}>
-              <UserButton />
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonPopoverCard: { pointerEvents: 'initial' },
+                  },
+                }}
+              />
               <ThemeSwitcher />
             </div>
           </SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="pt-8">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
