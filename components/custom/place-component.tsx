@@ -97,8 +97,8 @@ export const PlaceComponent = ({
           </div>
         ) : (
           <Image
-            height={300}
-            width={300}
+            height={750}
+            width={750}
             src={imageUrl}
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
