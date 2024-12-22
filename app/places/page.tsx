@@ -8,6 +8,7 @@ import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Switch } from '@/components/ui/switch'
+import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -64,48 +65,53 @@ export default function Places() {
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="ml-8 mt-8">
-          <Button variant="default" onClick={() => setIsFormOpen(true)}>
-            <PlusIcon /> Add place
-          </Button>
-          {places.length > 0 && (
-            <div
-              className="float-right flex items-center gap-2 px-8 py-2"
-              onClick={() => setEditMode(!editMode)}
-            >
-              <Switch checked={editMode}></Switch>
-              Edit mode
-            </div>
-          )}
-        </div>
-        <div className={'flex flex-wrap justify-center gap-8 p-8'}>
-          {loading ? (
-            <p>Loading places...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            places.map((place) => (
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+      <SignedIn>
+        <div className="flex flex-col">
+          <div className="ml-8 mt-8">
+            <Button variant="default" onClick={() => setIsFormOpen(true)}>
+              <PlusIcon /> Add place
+            </Button>
+            {places.length > 0 && (
               <div
-                key={place._id}
-                className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+                className="float-right flex items-center gap-2 px-8 py-2"
+                onClick={() => setEditMode(!editMode)}
               >
-                <PlaceComponent
-                  place={place}
-                  editMode={editMode}
-                  onDelete={handleDeletePlace}
-                ></PlaceComponent>
+                <Switch checked={editMode}></Switch>
+                Edit mode
               </div>
-            ))
-          )}
+            )}
+          </div>
+          <div className={'flex flex-wrap justify-center gap-8 p-8'}>
+            {loading ? (
+              <p>Loading places...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              places.map((place) => (
+                <div
+                  key={place._id}
+                  className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+                >
+                  <PlaceComponent
+                    place={place}
+                    editMode={editMode}
+                    onDelete={handleDeletePlace}
+                  ></PlaceComponent>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      </div>
-      {isFormOpen && (
-        <PlaceForm
-          onClose={() => setIsFormOpen(false)}
-          onSubmit={handleAddPlace}
-        />
-      )}
+        {isFormOpen && (
+          <PlaceForm
+            onClose={() => setIsFormOpen(false)}
+            onSubmit={handleAddPlace}
+          />
+        )}
+      </SignedIn>
     </>
   )
 }

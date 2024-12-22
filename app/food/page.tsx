@@ -8,6 +8,7 @@ import { Food } from '@/models/food'
 import { Button } from '@/components/ui/button'
 import { FoodForm } from '@/components/custom/food-form'
 import { FoodComponent } from '@/components/custom/food-component'
+import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 
 export default function Foods() {
   const [foods, setFoods] = useState<Food[]>([])
@@ -65,48 +66,53 @@ export default function Foods() {
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="ml-8 mt-8">
-          <Button variant="default" onClick={() => setIsFormOpen(true)}>
-            <PlusIcon /> Add food
-          </Button>
-          {foods.length > 0 && (
-            <div
-              className="float-right flex items-center gap-2 px-8 py-2"
-              onClick={() => setEditMode(!editMode)}
-            >
-              <Switch checked={editMode}></Switch>
-              Edit mode
-            </div>
-          )}
-        </div>
-        <div className={'flex flex-wrap justify-center gap-8 p-8'}>
-          {loading ? (
-            <p>Loading foods...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            foods.map((food) => (
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+      <SignedIn>
+        <div className="flex flex-col">
+          <div className="ml-8 mt-8">
+            <Button variant="default" onClick={() => setIsFormOpen(true)}>
+              <PlusIcon /> Add food
+            </Button>
+            {foods.length > 0 && (
               <div
-                key={food._id}
-                className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+                className="float-right flex items-center gap-2 px-8 py-2"
+                onClick={() => setEditMode(!editMode)}
               >
-                <FoodComponent
-                  food={food}
-                  editMode={editMode}
-                  onDelete={handleDeleteFood}
-                ></FoodComponent>
+                <Switch checked={editMode}></Switch>
+                Edit mode
               </div>
-            ))
-          )}
+            )}
+          </div>
+          <div className={'flex flex-wrap justify-center gap-8 p-8'}>
+            {loading ? (
+              <p>Loading foods...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              foods.map((food) => (
+                <div
+                  key={food._id}
+                  className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+                >
+                  <FoodComponent
+                    food={food}
+                    editMode={editMode}
+                    onDelete={handleDeleteFood}
+                  ></FoodComponent>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      </div>
-      {isFormOpen && (
-        <FoodForm
-          onClose={() => setIsFormOpen(false)}
-          onSubmit={handleAddFood}
-        />
-      )}
+        {isFormOpen && (
+          <FoodForm
+            onClose={() => setIsFormOpen(false)}
+            onSubmit={handleAddFood}
+          />
+        )}
+      </SignedIn>
     </>
   )
 }
