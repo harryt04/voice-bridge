@@ -88,7 +88,7 @@ export const FoodComponent = ({
         <CardTitle>
           <div className="flex items-center gap-4">
             {updatedFood.name}
-            <AudioLines />
+            {!editMode && <AudioLines />}
           </div>
         </CardTitle>
         <CardDescription>{updatedFood.description}</CardDescription>
