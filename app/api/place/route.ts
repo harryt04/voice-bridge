@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
       )
     } else {
       const result = await placesCollection.updateOne(
-        { _id: new ObjectId(id) },
+        { _id: new ObjectId(id as string) },
         { $set: updatedPlace },
       )
 
