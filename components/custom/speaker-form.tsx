@@ -88,7 +88,7 @@ export function SpeakerForm({
             />
           </div>
           <div>
-            <Label htmlFor="villagerIds">Villager User IDs</Label>
+            <Label htmlFor="villagerIds">Users you've shared access with</Label>
             <Input
               id="villagerIds"
               value={villagerIds}

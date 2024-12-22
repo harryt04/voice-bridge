@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
+import { toast } from 'sonner'
 
 export const SpeakerSelector = () => {
   const {
@@ -42,6 +43,14 @@ export const SpeakerSelector = () => {
 
   const handleCloseForm = () => {
     setIsFormOpen(false)
+  }
+
+  const handleShareLink = () => {
+    const isDev = process.env.NODE_ENV === 'development'
+    const baseURL = isDev ? 'http://localhost:3000' : 'https://voicebridge.app'
+    const magicLink = `${baseURL}/activate/${selectedSpeaker?._id}` // dev
+    navigator.clipboard.writeText(magicLink)
+    toast('Share link copied to clipboard')
   }
 
   const handleFormSubmit = async (speaker: any) => {
@@ -102,6 +111,17 @@ export const SpeakerSelector = () => {
             </TooltipTrigger>
             <TooltipContent>
               <p>Add Speaker</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" onClick={handleShareLink}>
+                <ShareIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Share this speaker</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
