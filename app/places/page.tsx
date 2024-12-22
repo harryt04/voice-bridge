@@ -57,6 +57,10 @@ export default function Places() {
     }
   }
 
+  const handleDeletePlace = async (place: Place) => {
+    setPlaces(places.filter((p) => p._id !== place._id))
+  }
+
   return (
     <>
       <div className="flex flex-col">
@@ -82,6 +86,7 @@ export default function Places() {
                 <PlaceComponent
                   place={place}
                   editMode={editMode}
+                  onDelete={handleDeletePlace}
                 ></PlaceComponent>
               </div>
             ))

@@ -14,15 +14,20 @@ import { speakText } from '@/utils/speech'
 import { AudioLines, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
+import { PlaceForm } from './place-form'
 
 export const PlaceComponent = ({
   place,
   editMode,
+  onDelete,
 }: {
   place: Place
   editMode: boolean
+  onDelete: (place: Place) => void
 }) => {
   const [imageError, setImageError] = useState(false)
+  const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
+  const [updatedPlace, setUpdatedPlace] = useState<Place>(place) // Local state to hold the updated place
   const fallbackImage = 'https://i.sstatic.net/fUChS.png'
 
   // Check if imageUrl is valid
@@ -35,9 +40,36 @@ export const PlaceComponent = ({
     }
   }
 
-  const imageUrl = isValidUrl(place.imageUrl) ? place.imageUrl : fallbackImage
+  const imageUrl = isValidUrl(updatedPlace.imageUrl)
+    ? updatedPlace.imageUrl
+    : fallbackImage
 
-  const key = `place-${place._id}`
+  const key = `place-${updatedPlace._id}`
+
+  const handleEditClick = () => {
+    setIsEditing(true)
+  }
+
+  const handleCloseEdit = () => {
+    setIsEditing(false)
+  }
+
+  const handleSubmit = async (updatedPlaceData: Place) => {
+    setUpdatedPlace(updatedPlaceData)
+    setIsEditing(false)
+    fetch(`/api/place?id=${updatedPlaceData._id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedPlaceData),
+    })
+  }
+
+  const handleDeleteClick = async () => {
+    onDelete(updatedPlace)
+    fetch(`/api/place?id=${updatedPlace._id}`, {
+      method: 'DELETE',
+    })
+  }
 
   return (
     <Card
@@ -51,13 +83,11 @@ export const PlaceComponent = ({
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-4">
-            {place.name}
+            {updatedPlace.name}
             <AudioLines />
           </div>
         </CardTitle>
-        <CardDescription className={cn('visible:false')}>
-          {place.description}
-        </CardDescription>
+        <CardDescription>{updatedPlace.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {imageError ? (
@@ -73,25 +103,25 @@ export const PlaceComponent = ({
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
         )}
-        {editMode && (
+        {editMode && !isEditing && (
           <div className="flex flex-row gap-4 p-4">
             <Button
               variant="outline"
-              onClick={() => {
-                console.log('edit')
-              }}
+              onClick={handleEditClick} // Open the edit form
             >
               <Pencil1Icon /> Edit
             </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                console.log('delete')
-              }}
-            >
+            <Button variant="destructive" onClick={handleDeleteClick}>
               <TrashIcon /> Delete
             </Button>
           </div>
+        )}
+        {isEditing && (
+          <PlaceForm
+            onClose={handleCloseEdit} // Close the form
+            onSubmit={handleSubmit} // Submit the form with updated data
+            place={updatedPlace} // Pass the current updated place to pre-populate the form
+          />
         )}
       </CardContent>
     </Card>

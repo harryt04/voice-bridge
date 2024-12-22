@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,22 +12,51 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Place } from '@/models'
+import { Place, PlaceInput } from '@/models'
 
 export function PlaceForm({
   onClose,
   onSubmit,
+  place,
 }: {
   onClose: () => void
-  onSubmit: (place: Partial<Place>) => void
+  onSubmit: (place: Place) => void
+  place?: Place // Optional, for editing an existing place
 }) {
-  const [name, setName] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [description, setDescription] = useState('')
-  const [address, setAddress] = useState('')
+  // Consolidate all state into a single object
+  const [formState, setFormState] = useState<PlaceInput>({
+    name: place?.name || '',
+    imageUrl: place?.imageUrl || '',
+    description: place?.description || '',
+    address: place?.address || '',
+  })
+
+  // Update the state when `place` changes
+  useEffect(() => {
+    if (place) {
+      setFormState({
+        name: place.name,
+        imageUrl: place.imageUrl,
+        description: place.description,
+        address: place.address,
+      })
+    }
+  }, [place])
+
+  const handleChange =
+    (field: keyof typeof formState) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormState({
+        ...formState,
+        [field]: e.target.value,
+      })
+    }
 
   const handleSubmit = () => {
-    onSubmit({ name, imageUrl, description, address })
+    onSubmit({
+      ...place,
+      ...formState,
+    } as Place)
     onClose()
   }
 
@@ -35,15 +64,15 @@ export function PlaceForm({
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Place</DialogTitle>
+          <DialogTitle>{place ? 'Edit Place' : 'Add Place'}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={formState.name}
+              onChange={handleChange('name')}
               placeholder="Enter place name"
             />
           </div>
@@ -51,8 +80,8 @@ export function PlaceForm({
             <Label htmlFor="imageUrl">Image URL</Label>
             <Input
               id="imageUrl"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              value={formState.imageUrl}
+              onChange={handleChange('imageUrl')}
               placeholder="Enter image URL"
             />
           </div>
@@ -60,8 +89,8 @@ export function PlaceForm({
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formState.description}
+              onChange={handleChange('description')}
               placeholder="Enter a description"
             />
           </div>
@@ -69,8 +98,8 @@ export function PlaceForm({
             <Label htmlFor="address">Address</Label>
             <Input
               id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              value={formState.address}
+              onChange={handleChange('address')}
               placeholder="Enter address"
             />
           </div>
