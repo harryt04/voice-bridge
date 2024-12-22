@@ -38,11 +38,20 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
     isError,
   } = useQuery({ queryKey: ['speakers'], queryFn: fetchSpeakers })
 
-  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null)
+  const [selectedSpeaker, setSelectedSpeakerState] = useState<Speaker | null>(
+    null,
+  )
+
+  const setSelectedSpeaker = (speaker: Speaker | null) => {
+    if (!speakers.find((s) => s._id === speaker?._id)) {
+      speakers.push(speaker as any)
+    }
+    setSelectedSpeakerState(speaker)
+  }
 
   useEffect(() => {
     if (speakers?.length > 0 && !selectedSpeaker) {
-      setSelectedSpeaker(speakers[0])
+      setSelectedSpeakerState(speakers[0])
     }
   }, [selectedSpeaker, speakers])
 

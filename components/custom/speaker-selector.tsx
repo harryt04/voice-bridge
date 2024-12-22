@@ -1,4 +1,6 @@
 'use client'
+
+import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
 import { useSpeakerContext } from '@/hooks/use-speakers'
@@ -9,9 +11,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip'
+import { SpeakerForm } from './speaker-form'
 
 export const SpeakerSelector = () => {
   const { speakers, selectedSpeaker, setSelectedSpeaker } = useSpeakerContext()
+
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingSpeaker, setEditingSpeaker] = useState<any>(null) // Store the speaker being edited
 
   const handleChildSwitch = (speakerId: string) => {
     setSelectedSpeaker(
@@ -20,19 +26,34 @@ export const SpeakerSelector = () => {
   }
 
   const handleAddSpeaker = () => {
-    console.log('Open Add Child Modal')
-    // Implement modal logic here
+    setEditingSpeaker(null) // Clear any speaker being edited
+    setIsFormOpen(true)
   }
 
-  const handleEditSpaker = () => {
-    console.log('Open Add Child Modal')
-    // Implement modal logic here
+  const handleEditSpeaker = () => {
+    setEditingSpeaker(selectedSpeaker) // Set the speaker to be edited
+    setIsFormOpen(true)
   }
 
-  const handleShareSpeaker = () => {
-    const magicLink = `https://voicebridge.app/share/${selectedSpeaker}?token=12345`
-    console.log(`Sharing speaker profile with link: ${magicLink}`)
-    // Implement sharing logic (e.g., send email or show the link in UI)
+  const handleCloseForm = () => {
+    setIsFormOpen(false)
+  }
+
+  const handleFormSubmit = async (speaker: any) => {
+    console.log('speaker: ', speaker)
+    // Handle adding or updating the speaker
+    const addOrUpdateUrl = speaker._id
+      ? `/api/speaker?id=${speaker._id}`
+      : '/api/speaker'
+    const addOrUpdateResponse = await fetch(addOrUpdateUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(speaker),
+    })
+    const addOrUpdateResponseBody = await addOrUpdateResponse.json()
+    console.log('newSpeaker: ', addOrUpdateResponseBody.updatedSpeaker)
+    setSelectedSpeaker(addOrUpdateResponseBody.updatedSpeaker as any)
+    setIsFormOpen(false)
   }
 
   return (
@@ -43,7 +64,7 @@ export const SpeakerSelector = () => {
         value={selectedSpeaker?._id || ''}
       >
         <SelectTrigger className="w-full">
-          {selectedSpeaker?.name}
+          {selectedSpeaker?.name || 'Select a Speaker'}
         </SelectTrigger>
         <SelectContent>
           {speakers.map((speaker) => (
@@ -59,7 +80,7 @@ export const SpeakerSelector = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Button onClick={handleEditSpaker}>
+              <Button onClick={handleEditSpeaker}>
                 <PencilIcon />
               </Button>
             </TooltipTrigger>
@@ -78,19 +99,17 @@ export const SpeakerSelector = () => {
               <p>Add Speaker</p>
             </TooltipContent>
           </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger>
-              <Button variant="outline" onClick={handleShareSpeaker}>
-                <ShareIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Share Speaker</p>
-            </TooltipContent>
-          </Tooltip>
         </TooltipProvider>
       </div>
+
+      {/* Speaker Form Modal */}
+      {isFormOpen && (
+        <SpeakerForm
+          onClose={handleCloseForm}
+          onSubmit={handleFormSubmit}
+          speaker={editingSpeaker}
+        />
+      )}
     </div>
   )
 }
