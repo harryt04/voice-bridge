@@ -62,9 +62,11 @@ export function PlaceForm({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{place ? 'Edit Place' : 'Add Place'}</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl">
+            {place ? 'Edit Place' : 'Add Place'}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
@@ -74,6 +76,7 @@ export function PlaceForm({
               value={formState.name}
               onChange={handleChange('name')}
               placeholder="Enter place name"
+              className="w-full"
             />
           </div>
           <div>
@@ -83,6 +86,7 @@ export function PlaceForm({
               value={formState.imageUrl}
               onChange={handleChange('imageUrl')}
               placeholder="Enter image URL"
+              className="w-full"
             />
           </div>
           <div>
@@ -92,6 +96,7 @@ export function PlaceForm({
               value={formState.description}
               onChange={handleChange('description')}
               placeholder="Enter a description"
+              className="w-full"
             />
           </div>
           <div>
@@ -101,10 +106,11 @@ export function PlaceForm({
               value={formState.address}
               onChange={handleChange('address')}
               placeholder="Enter address"
+              className="w-full"
             />
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="mt-6 flex justify-end gap-4">
           <Button onClick={onClose} variant="ghost">
             Cancel
           </Button>

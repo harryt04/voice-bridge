@@ -69,7 +69,7 @@ export default function Places() {
           <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add place
           </Button>
-          <div className="float-right flex items-center gap-2 px-8">
+          <div className="float-right flex items-center gap-2 px-8 py-2">
             <Switch
               onCheckedChange={(newState) => setEditMode(newState)}
             ></Switch>
