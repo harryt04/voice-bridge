@@ -3,6 +3,12 @@ import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { PencilIcon, PlusIcon, ShareIcon } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip'
 
 export const SpeakerSelector = () => {
   const { speakers, selectedSpeaker, setSelectedSpeaker } = useSpeakerContext()
@@ -49,16 +55,41 @@ export const SpeakerSelector = () => {
       </Select>
 
       {/* Add and Share Buttons */}
-      <div className="mt-4 flex gap-4">
-        <Button onClick={handleEditSpaker}>
-          <PencilIcon />
-        </Button>
-        <Button onClick={handleAddSpeaker}>
-          <PlusIcon />
-        </Button>
-        <Button variant="outline" onClick={handleShareSpeaker}>
-          <ShareIcon />
-        </Button>
+      <div className="mt-4 flex justify-center gap-4">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button onClick={handleEditSpaker}>
+                <PencilIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit Speaker</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger>
+              <Button onClick={handleAddSpeaker}>
+                <PlusIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Add Speaker</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger>
+              <Button variant="outline" onClick={handleShareSpeaker}>
+                <ShareIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Share Speaker</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   )
