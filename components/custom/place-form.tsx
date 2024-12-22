@@ -29,6 +29,7 @@ export function PlaceForm({
     imageUrl: place?.imageUrl || '',
     description: place?.description || '',
     address: place?.address || '',
+    speakerId: place?.speakerId || '',
   })
 
   // Update the state when `place` changes
@@ -39,6 +40,7 @@ export function PlaceForm({
         imageUrl: place.imageUrl,
         description: place.description,
         address: place.address,
+        speakerId: place.speakerId,
       })
     }
   }, [place])
