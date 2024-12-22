@@ -38,13 +38,13 @@ export default function RootLayout({
               fontSans.variable,
             )}
           >
-            <SidebarProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <SidebarProvider>
                 <VBQueryClient>
                   <SignedIn>
                     <AppSidebar />
@@ -52,8 +52,8 @@ export default function RootLayout({
                   </SignedIn>
                   {children}
                 </VBQueryClient>
-              </ThemeProvider>
-            </SidebarProvider>
+              </SidebarProvider>
+            </ThemeProvider>
           </body>
         </PostHogProvider>
       </ClerkProvider>

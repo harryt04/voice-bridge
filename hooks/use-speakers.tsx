@@ -15,6 +15,7 @@ type SpeakerContextType = {
   speakers: Speaker[]
   selectedSpeaker: Speaker | null
   setSelectedSpeaker: (speaker: Speaker | null) => void
+  isLoading: boolean
 }
 
 const SpeakerContext = createContext<SpeakerContextType | undefined>(undefined)
@@ -57,7 +58,7 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <SpeakerContext.Provider
-      value={{ speakers, selectedSpeaker, setSelectedSpeaker }}
+      value={{ speakers, selectedSpeaker, setSelectedSpeaker, isLoading }}
     >
       {children}
     </SpeakerContext.Provider>
