@@ -24,21 +24,21 @@ const items = [
     url: '/places',
     icon: LandPlot,
   },
-  {
-    title: `Food`,
-    url: '/food',
-    icon: Apple,
-  },
-  {
-    title: `Music`,
-    url: '/music',
-    icon: Music,
-  },
-  {
-    title: `Call`,
-    url: '/call',
-    icon: Phone,
-  },
+  // {
+  //   title: `Food`,
+  //   url: '/food',
+  //   icon: Apple,
+  // },
+  // {
+  //   title: `Music`,
+  //   url: '/music',
+  //   icon: Music,
+  // },
+  // {
+  //   title: `Call`,
+  //   url: '/call',
+  //   icon: Phone,
+  // },
 ]
 
 export function AppSidebar() {
