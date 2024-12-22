@@ -4,6 +4,7 @@ import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
 
 export async function GET(req: NextRequest) {
   const user = getAuth(req)
+  console.log('user: ', user)
   try {
     if (!user?.userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
