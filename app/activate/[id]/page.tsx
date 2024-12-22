@@ -7,7 +7,6 @@ import { useEffect } from 'react'
 export default function Activate() {
   const { user } = useClerk()
   const { id } = useParams()
-  console.log('id: ', id)
   useEffect(() => {
     const activateMutation = async () => {
       await fetch(`/api/speaker/activate`, {

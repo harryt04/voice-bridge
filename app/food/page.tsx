@@ -100,7 +100,7 @@ export default function Foods() {
               foods.map((food) => (
                 <div
                   key={food._id}
-                  className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+                  className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
                 >
                   <FoodComponent
                     food={food}
