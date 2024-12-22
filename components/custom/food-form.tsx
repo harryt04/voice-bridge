@@ -28,6 +28,7 @@ export function FoodForm({
     name: food?.name || '',
     imageUrl: food?.imageUrl || '',
     description: food?.description || '',
+    speakerId: food?.speakerId || '',
   })
 
   // Update the state when `food` changes
@@ -37,6 +38,7 @@ export function FoodForm({
         name: food.name,
         imageUrl: food.imageUrl,
         description: food.description,
+        speakerId: food.speakerId,
       })
     }
   }, [food])
