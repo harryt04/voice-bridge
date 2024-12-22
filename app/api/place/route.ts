@@ -3,13 +3,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
 import { ObjectId } from 'mongodb'
 
+// Helper to extract `id` from the query
+function extractIdFromQuery(req: NextRequest): string | null {
+  const url = new URL(req.url)
+  return url.searchParams.get('id')
+}
+
 // GET, PATCH, DELETE for a specific place
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: NextRequest) {
   const user = getAuth(req)
-  const { id } = params
+  const id = extractIdFromQuery(req)
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
+  }
 
   try {
     if (!user?.userId) {
@@ -42,12 +49,9 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function POST(req: NextRequest) {
   const user = getAuth(req)
-  const { id } = params
+  const id = extractIdFromQuery(req)
 
   try {
     if (!user?.userId) {
@@ -59,33 +63,36 @@ export async function PATCH(
     const db = client.db(mongoDBConfig.dbName)
     const placesCollection = db.collection(mongoDBConfig.collections.places)
 
-    const existingPlace = await placesCollection.findOne({
-      _id: new ObjectId(id),
-      userId: user.userId,
-    })
-
-    if (!existingPlace) {
-      return NextResponse.json(
-        { error: 'Place not found or unauthorized' },
-        { status: 404 },
-      )
-    }
+    const existingPlace = id
+      ? await placesCollection.findOne({
+          _id: new ObjectId(id),
+          userId: user.userId,
+        })
+      : false
 
     const updatedPlace = {
-      ...(body.name && { name: body.name }),
-      ...(body.location && { location: body.location }),
+      ...body,
+      userId: user.userId,
       updatedAt: new Date(),
     }
 
-    const result = await placesCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updatedPlace },
-    )
+    if (!existingPlace) {
+      placesCollection.insertOne(updatedPlace)
+      return NextResponse.json(
+        { success: true, updatedCount: 1, updatedPlace },
+        { status: 200 },
+      )
+    } else {
+      const result = await placesCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedPlace },
+      )
 
-    return NextResponse.json(
-      { success: true, updatedCount: result.modifiedCount },
-      { status: 200 },
-    )
+      return NextResponse.json(
+        { success: true, updatedCount: result.modifiedCount, updatedPlace },
+        { status: 200 },
+      )
+    }
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
@@ -95,12 +102,13 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: NextRequest) {
   const user = getAuth(req)
-  const { id } = params
+  const id = extractIdFromQuery(req)
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
+  }
 
   try {
     if (!user?.userId) {

@@ -1,14 +1,17 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { PlaceComponent } from '@/components/custom/place-component'
 import { Button } from '@/components/ui/button'
-import { Place } from '@/models'
 import { PlusIcon } from 'lucide-react'
+import { Place } from '@/models'
+import { PlaceForm } from '@/components/custom/place-form'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -16,7 +19,7 @@ export default function Places() {
       setError(null)
 
       try {
-        const response = await fetch('/api/places') // Fetches places for the logged-in user
+        const response = await fetch('/api/places')
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`)
         }
@@ -33,11 +36,30 @@ export default function Places() {
     fetchPlaces()
   }, [])
 
+  const handleAddPlace = async (newPlace: Partial<Place>) => {
+    try {
+      const response = await fetch('/api/place', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPlace),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`)
+      }
+
+      const responseBody = await response.json()
+      setPlaces((prev) => [...prev, responseBody.updatedPlace])
+    } catch (err) {
+      console.error('Error adding place:', err)
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col">
         <div className="ml-8 mt-8">
-          <Button>
+          <Button onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add place
           </Button>
         </div>
@@ -49,7 +71,7 @@ export default function Places() {
           ) : (
             places.map((place) => (
               <div
-                key={place.id}
+                key={place._id}
                 className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
               >
                 <PlaceComponent place={place}></PlaceComponent>
@@ -58,6 +80,12 @@ export default function Places() {
           )}
         </div>
       </div>
+      {isFormOpen && (
+        <PlaceForm
+          onClose={() => setIsFormOpen(false)}
+          onSubmit={handleAddPlace}
+        />
+      )}
     </>
   )
 }
