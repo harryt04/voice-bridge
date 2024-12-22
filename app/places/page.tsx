@@ -70,10 +70,11 @@ export default function Places() {
             <PlusIcon /> Add place
           </Button>
           {places.length > 0 && (
-            <div className="float-right flex items-center gap-2 px-8 py-2">
-              <Switch
-                onCheckedChange={(newState) => setEditMode(newState)}
-              ></Switch>
+            <div
+              className="float-right flex items-center gap-2 px-8 py-2"
+              onClick={() => setEditMode(!editMode)}
+            >
+              <Switch checked={editMode}></Switch>
               Edit mode
             </div>
           )}

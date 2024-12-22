@@ -70,12 +70,12 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className={cn('p-4')}>
-        <Button variant={'ghost'}>
+        <Button variant={'outline'}>
           <Link href="https://github.com/harryt04/VoiceBridge/issues/new">
             Report a bug
           </Link>
         </Button>
-        <Button variant={'ghost'}>
+        <Button variant={'outline'}>
           <Link href="https://github.com/harryt04/VoiceBridge">
             View source code
           </Link>
