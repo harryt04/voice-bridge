@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button'
 import { PlusIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
+import { Pencil1Icon } from '@radix-ui/react-icons'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editMode, setEditMode] = useState(false)
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -58,9 +60,12 @@ export default function Places() {
   return (
     <>
       <div className="flex flex-col">
-        <div className="ml-8 mt-8">
-          <Button onClick={() => setIsFormOpen(true)}>
+        <div className="ml-8 mt-8 flex flex-row gap-4">
+          <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add place
+          </Button>
+          <Button variant="outline" onClick={() => setEditMode(!editMode)}>
+            <Pencil1Icon /> Edit mode
           </Button>
         </div>
         <div className={'flex flex-wrap justify-center gap-8 p-8'}>
@@ -74,7 +79,10 @@ export default function Places() {
                 key={place._id}
                 className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
               >
-                <PlaceComponent place={place}></PlaceComponent>
+                <PlaceComponent
+                  place={place}
+                  editMode={editMode}
+                ></PlaceComponent>
               </div>
             ))
           )}

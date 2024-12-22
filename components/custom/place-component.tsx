@@ -11,9 +11,17 @@ import {
 } from '../ui/card'
 import { cn } from '@/lib/utils'
 import { speakText } from '@/utils/speech'
-import { AudioLines } from 'lucide-react'
+import { AudioLines, TrashIcon } from 'lucide-react'
+import { Button } from '../ui/button'
+import { Pencil1Icon } from '@radix-ui/react-icons'
 
-export const PlaceComponent = ({ place }: { place: Place }) => {
+export const PlaceComponent = ({
+  place,
+  editMode,
+}: {
+  place: Place
+  editMode: boolean
+}) => {
   const [imageError, setImageError] = useState(false)
   const fallbackImage = 'https://i.sstatic.net/fUChS.png'
 
@@ -34,7 +42,11 @@ export const PlaceComponent = ({ place }: { place: Place }) => {
   return (
     <Card
       className={cn('min-h-full cursor-pointer')}
-      onClick={() => speakText(place.name)}
+      onClick={() => {
+        if (!editMode) {
+          speakText(place.name)
+        }
+      }}
     >
       <CardHeader>
         <CardTitle>
@@ -60,6 +72,26 @@ export const PlaceComponent = ({ place }: { place: Place }) => {
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
+        )}
+        {editMode && (
+          <div className="flex flex-row gap-4 p-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                console.log('edit')
+              }}
+            >
+              <Pencil1Icon /> Edit
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                console.log('delete')
+              }}
+            >
+              <TrashIcon /> Delete
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>
