@@ -77,13 +77,13 @@ export default function Places() {
       </SignedOut>
       <SignedIn>
         <div className="flex flex-col">
-          <div className="ml-8 mt-8">
+          <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>
               <PlusIcon /> Add place
             </Button>
             {places.length > 0 && (
               <div
-                className="float-right flex items-center gap-2 px-8 py-2"
+                className="float-right flex items-center gap-2 px-8 py-2 md:absolute md:right-0"
                 onClick={() => setEditMode(!editMode)}
               >
                 <Switch checked={editMode}></Switch>
@@ -91,7 +91,7 @@ export default function Places() {
               </div>
             )}
           </div>
-          <div className={'flex flex-wrap justify-center gap-8 p-8'}>
+          <div className={'flex flex-wrap justify-center gap-8 pr-8 pt-4'}>
             {loading ? (
               <p>Loading places...</p>
             ) : error ? (
