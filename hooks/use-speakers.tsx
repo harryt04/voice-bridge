@@ -55,9 +55,6 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [selectedSpeaker, speakers])
 
-  if (isLoading) return <div>Loading speakers...</div>
-  if (isError) return <div>Error loading speakers</div>
-
   return (
     <SpeakerContext.Provider
       value={{ speakers, selectedSpeaker, setSelectedSpeaker }}
