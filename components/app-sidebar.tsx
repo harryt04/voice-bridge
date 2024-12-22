@@ -24,11 +24,11 @@ const items = [
     url: '/places',
     icon: LandPlot,
   },
-  // {
-  //   title: `Food`,
-  //   url: '/food',
-  //   icon: Apple,
-  // },
+  {
+    title: `Food`,
+    url: '/food',
+    icon: Apple,
+  },
   // {
   //   title: `Music`,
   //   url: '/music',
