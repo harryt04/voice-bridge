@@ -1,5 +1,5 @@
-import { Apple, LandPlot, Music, Phone } from 'lucide-react'
-
+'use client'
+import { Apple, LandPlot } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { ThemeSwitcher } from './custom/themeSwitcher'
+import { SpeakerSelector } from './custom/speaker-selector'
 
 // Menu items.
 const items = [
@@ -29,16 +30,6 @@ const items = [
     url: '/food',
     icon: Apple,
   },
-  // {
-  //   title: `Music`,
-  //   url: '/music',
-  //   icon: Music,
-  // },
-  // {
-  //   title: `Call`,
-  //   url: '/call',
-  //   icon: Phone,
-  // },
 ]
 
 export function AppSidebar() {
@@ -47,7 +38,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="pt-4">
-            VoiceBridge {/* anchor div to the right */}
+            VoiceBridge
             <div className={cn('flex w-full flex-row justify-end gap-4')}>
               <UserButton
                 appearance={{
@@ -59,7 +50,8 @@ export function AppSidebar() {
               <ThemeSwitcher />
             </div>
           </SidebarGroupLabel>
-          <SidebarGroupContent className="pt-8">
+          <SpeakerSelector />
+          <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>

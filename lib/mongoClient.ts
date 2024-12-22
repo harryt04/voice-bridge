@@ -25,6 +25,7 @@ export const mongoDBConfig = {
   dbName: 'voicebridge',
   collections: {
     places: 'places',
+    speakers: 'speakers',
     foods: 'foods',
   },
 }

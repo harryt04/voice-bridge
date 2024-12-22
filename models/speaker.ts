@@ -4,5 +4,6 @@ export type SpeakerInput = {
 
 export type Speaker = SpeakerInput & {
   _id: string
-  createdBy: string
+  parentId: string
+  villagerIds: string[]
 }

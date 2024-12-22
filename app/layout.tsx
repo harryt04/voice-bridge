@@ -9,7 +9,7 @@ import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
-import { MenuIcon } from 'lucide-react'
+import { VBQueryClient } from '@/hooks/use-query-client'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -45,11 +45,13 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <SignedIn>
-                  <AppSidebar />
-                  <SidebarTrigger className="ml-4 mt-4 p-4" />
-                </SignedIn>
-                {children}
+                <VBQueryClient>
+                  <SignedIn>
+                    <AppSidebar />
+                    <SidebarTrigger className="ml-4 mt-4 p-4" />
+                  </SignedIn>
+                  {children}
+                </VBQueryClient>
               </ThemeProvider>
             </SidebarProvider>
           </body>
