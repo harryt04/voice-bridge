@@ -69,12 +69,14 @@ export default function Places() {
           <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add place
           </Button>
-          <div className="float-right flex items-center gap-2 px-8 py-2">
-            <Switch
-              onCheckedChange={(newState) => setEditMode(newState)}
-            ></Switch>
-            Edit mode
-          </div>
+          {places.length > 0 && (
+            <div className="float-right flex items-center gap-2 px-8 py-2">
+              <Switch
+                onCheckedChange={(newState) => setEditMode(newState)}
+              ></Switch>
+              Edit mode
+            </div>
+          )}
         </div>
         <div className={'flex flex-wrap justify-center gap-8 p-8'}>
           {loading ? (
