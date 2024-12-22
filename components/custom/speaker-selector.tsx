@@ -12,9 +12,15 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
+import { toast } from 'sonner'
 
 export const SpeakerSelector = () => {
-  const { speakers, selectedSpeaker, setSelectedSpeaker } = useSpeakerContext()
+  const {
+    isLoading: isLoadingSpeakers,
+    speakers,
+    selectedSpeaker,
+    setSelectedSpeaker,
+  } = useSpeakerContext()
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingSpeaker, setEditingSpeaker] = useState<any>(null) // Store the speaker being edited
@@ -39,8 +45,15 @@ export const SpeakerSelector = () => {
     setIsFormOpen(false)
   }
 
+  const handleShareLink = () => {
+    const isDev = process.env.NODE_ENV === 'development'
+    const baseURL = isDev ? 'http://localhost:3000' : 'https://voicebridge.app'
+    const magicLink = `${baseURL}/activate/${selectedSpeaker?._id}` // dev
+    navigator.clipboard.writeText(magicLink)
+    toast('Share link copied to clipboard')
+  }
+
   const handleFormSubmit = async (speaker: any) => {
-    console.log('speaker: ', speaker)
     // Handle adding or updating the speaker
     const addOrUpdateUrl = speaker._id
       ? `/api/speaker?id=${speaker._id}`
@@ -51,10 +64,11 @@ export const SpeakerSelector = () => {
       body: JSON.stringify(speaker),
     })
     const addOrUpdateResponseBody = await addOrUpdateResponse.json()
-    console.log('newSpeaker: ', addOrUpdateResponseBody.updatedSpeaker)
     setSelectedSpeaker(addOrUpdateResponseBody.updatedSpeaker as any)
     setIsFormOpen(false)
   }
+
+  if (isLoadingSpeakers) return <div>Loading speakers...</div>
 
   return (
     <div className="px-4 py-6">
@@ -76,11 +90,11 @@ export const SpeakerSelector = () => {
       </Select>
 
       {/* Add and Share Buttons */}
-      <div className="mt-4 flex justify-center gap-4">
+      <div className="mt-4 flex flex-row justify-center gap-4">
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
-              <Button onClick={handleEditSpeaker}>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" onClick={handleEditSpeaker}>
                 <PencilIcon />
               </Button>
             </TooltipTrigger>
@@ -90,8 +104,8 @@ export const SpeakerSelector = () => {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
-              <Button onClick={handleAddSpeaker}>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" onClick={handleAddSpeaker}>
                 <PlusIcon />
               </Button>
             </TooltipTrigger>
@@ -99,10 +113,20 @@ export const SpeakerSelector = () => {
               <p>Add Speaker</p>
             </TooltipContent>
           </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" onClick={handleShareLink}>
+                <ShareIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Share this speaker</p>
+            </TooltipContent>
+          </Tooltip>
         </TooltipProvider>
       </div>
 
-      {/* Speaker Form Modal */}
       {isFormOpen && (
         <SpeakerForm
           onClose={handleCloseForm}

@@ -10,6 +10,7 @@ import { ThemeProvider } from '@/providers/themeProvider'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 import { VBQueryClient } from '@/hooks/use-query-client'
+import { Toaster } from 'sonner'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -38,22 +39,23 @@ export default function RootLayout({
               fontSans.variable,
             )}
           >
-            <SidebarProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <SidebarProvider>
                 <VBQueryClient>
                   <SignedIn>
                     <AppSidebar />
                     <SidebarTrigger className="ml-4 mt-4 p-4" />
                   </SignedIn>
                   {children}
+                  <Toaster />
                 </VBQueryClient>
-              </ThemeProvider>
-            </SidebarProvider>
+              </SidebarProvider>
+            </ThemeProvider>
           </body>
         </PostHogProvider>
       </ClerkProvider>

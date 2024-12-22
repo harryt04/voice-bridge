@@ -88,12 +88,14 @@ export function SpeakerForm({
             />
           </div>
           <div>
-            <Label htmlFor="villagerIds">Villager Emails</Label>
+            <Label htmlFor="villagerIds">
+              Users you&apos;ve shared access with
+            </Label>
             <Input
               id="villagerIds"
               value={villagerIds}
               onChange={handleVillagerIdsChange}
-              placeholder="Enter comma-separated emails"
+              placeholder="Enter comma-separated User IDs"
               className="w-full"
             />
           </div>

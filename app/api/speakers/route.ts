@@ -17,7 +17,12 @@ export async function GET(req: NextRequest) {
 
     // Query the "speakers" collection for documents created by the user
     const speakers = await speakersCollection
-      .find({ parentId: user.userId })
+      .find({
+        $or: [
+          { parentId: user.userId }, // Condition to match parentId
+          { villagerIds: user.userId }, // Condition to match user.id in villagerIds array
+        ],
+      })
       .toArray()
 
     if (speakers.length === 0) {
