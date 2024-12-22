@@ -69,12 +69,15 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className={cn('p-4')}>
         <Button variant={'outline'}>
-          <Link href="https://github.com/harryt04/VoiceBridge/issues/new">
+          <Link
+            href="https://github.com/harryt04/VoiceBridge/issues"
+            target="_blank"
+          >
             Report a bug
           </Link>
         </Button>
         <Button variant={'outline'}>
-          <Link href="https://github.com/harryt04/VoiceBridge">
+          <Link href="https://github.com/harryt04/VoiceBridge" target="_blank">
             View source code
           </Link>
         </Button>
