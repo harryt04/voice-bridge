@@ -12,4 +12,4 @@ Built with:
 ### Self-hosting your own instance
 
 1. Supply values for the environment variables. A sample file can be found in `.env.sample`.
-1. That's it. Depnding on your hosting provider, you the next steps vary wildly. I choose to host this on [Coolify](https://coolify.io/docs), which is a self-hosted version of Vercel, basically.
+1. That's it. Depnding on your hosting provider, the next steps vary wildly. I choose to host this on [Coolify](https://coolify.io/docs), which is a self-hosted version of Vercel, basically. But if you're new to next.js, I'd recommend trying out [Vercel](https://vercel.com/new).
