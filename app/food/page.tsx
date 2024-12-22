@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { FoodForm } from '@/components/custom/food-form'
 import { FoodComponent } from '@/components/custom/food-component'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { useSpeakerContext } from '@/hooks/use-speakers'
 
 export default function Foods() {
   const [foods, setFoods] = useState<Food[]>([])
@@ -16,6 +17,7 @@ export default function Foods() {
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const { selectedSpeaker } = useSpeakerContext()
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -23,7 +25,9 @@ export default function Foods() {
       setError(null)
 
       try {
-        const response = await fetch('/api/foods') // Update API endpoint
+        const response = await fetch(
+          `/api/foods?speakerId=${selectedSpeaker?._id}`,
+        ) // Update API endpoint
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`)
         }
@@ -46,7 +50,7 @@ export default function Foods() {
         // Update API endpoint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newFood),
+        body: JSON.stringify({ ...newFood, speakerId: selectedSpeaker?._id }),
       })
 
       if (!response.ok) {

@@ -9,6 +9,7 @@ import { PlaceForm } from '@/components/custom/place-form'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Switch } from '@/components/ui/switch'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { useSpeakerContext } from '@/hooks/use-speakers'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -17,13 +18,17 @@ export default function Places() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
 
+  const { selectedSpeaker } = useSpeakerContext()
+
   useEffect(() => {
     const fetchPlaces = async () => {
       setLoading(true)
       setError(null)
 
       try {
-        const response = await fetch('/api/places')
+        const response = await fetch(
+          `/api/places?speakerId=${selectedSpeaker?._id}`,
+        )
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`)
         }
@@ -37,15 +42,17 @@ export default function Places() {
       }
     }
 
-    fetchPlaces()
-  }, [])
+    if (selectedSpeaker) {
+      fetchPlaces()
+    }
+  }, [selectedSpeaker])
 
   const handleAddPlace = async (newPlace: Partial<Place>) => {
     try {
       const response = await fetch('/api/place', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPlace),
+        body: JSON.stringify({ ...newPlace, speakerId: selectedSpeaker?._id }),
       })
 
       if (!response.ok) {

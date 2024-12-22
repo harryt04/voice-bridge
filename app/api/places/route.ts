@@ -1,9 +1,12 @@
 import { getAuth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
+import { extractParamFromUrl } from '@/lib/utils'
+import { speakerAuthCheck } from '@/lib/speakerAuthCheck'
 
 export async function GET(req: NextRequest) {
   const user = getAuth(req)
+  const speakerId = extractParamFromUrl(req, 'speakerId')
   try {
     if (!user?.userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -15,8 +18,11 @@ export async function GET(req: NextRequest) {
     const placesCollection = db.collection(mongoDBConfig.collections.places)
 
     // Query the "places" collection for documents created by the user
+
+    speakerAuthCheck(req, speakerId as string)
+
     const places = await placesCollection
-      .find({ userId: user.userId })
+      .find({ speakerId: speakerId })
       .toArray()
 
     // Return the places as JSON

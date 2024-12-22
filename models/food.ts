@@ -1,5 +1,6 @@
 export type FoodInput = {
   name: string
+  speakerId: string
   imageUrl?: string
   description?: string
   dictationUrl?: string
