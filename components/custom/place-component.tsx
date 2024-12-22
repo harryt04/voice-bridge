@@ -77,7 +77,7 @@ export const PlaceComponent = ({
       className={cn('min-h-full cursor-pointer')}
       onClick={() => {
         if (!editMode) {
-          speakText(place.name)
+          speakText(updatedPlace.name)
         }
       }}
     >
