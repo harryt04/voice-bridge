@@ -9,6 +9,7 @@ import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
+import { MenuIcon } from 'lucide-react'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -46,7 +47,7 @@ export default function RootLayout({
               >
                 <SignedIn>
                   <AppSidebar />
-                  <SidebarTrigger />
+                  <SidebarTrigger className="ml-4 mt-4 p-4" />
                 </SignedIn>
                 {children}
               </ThemeProvider>
