@@ -11,10 +11,11 @@ import {
 } from '../ui/card'
 import { cn } from '@/lib/utils'
 import { speakText } from '@/utils/speech'
-import { AudioLines, TrashIcon } from 'lucide-react'
+import { AudioLines, LandPlotIcon, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { PlaceForm } from './place-form'
+import { openGoogleMapsDirections } from '@/utils/directions'
 
 export const PlaceComponent = ({
   place,
@@ -102,6 +103,19 @@ export const PlaceComponent = ({
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
+        )}
+        {!editMode && updatedPlace.address && (
+          <div className="flex flex-row gap-4 py-4">
+            <Button
+              variant="outline"
+              onClick={(event) => {
+                event.stopPropagation()
+                openGoogleMapsDirections(updatedPlace.address as string)
+              }}
+            >
+              <LandPlotIcon /> Directions
+            </Button>
+          </div>
         )}
         {editMode && !isEditing && (
           <div className="flex flex-row gap-4 p-4">

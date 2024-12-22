@@ -7,6 +7,7 @@ import { PlusIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
 import { Pencil1Icon } from '@radix-ui/react-icons'
+import { Switch } from '@/components/ui/switch'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -64,13 +65,16 @@ export default function Places() {
   return (
     <>
       <div className="flex flex-col">
-        <div className="ml-8 mt-8 flex flex-row gap-4">
+        <div className="ml-8 mt-8">
           <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add place
           </Button>
-          <Button variant="outline" onClick={() => setEditMode(!editMode)}>
-            <Pencil1Icon /> Edit mode
-          </Button>
+          <div className="float-right flex items-center gap-2 px-8">
+            <Switch
+              onCheckedChange={(newState) => setEditMode(newState)}
+            ></Switch>
+            Edit mode
+          </div>
         </div>
         <div className={'flex flex-wrap justify-center gap-8 p-8'}>
           {loading ? (
