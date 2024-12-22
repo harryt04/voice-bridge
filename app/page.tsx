@@ -1,16 +1,20 @@
+'use client'
 import { LandingPage } from '@/components/custom/landing-page'
-import { SignedIn, SignedOut } from '@clerk/nextjs'
+import { SignedOut, useClerk } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const { user } = useClerk()
+  const router = useRouter()
+
+  if (user) {
+    router.push('/places')
+  }
   return (
     <>
       <SignedOut>
         <LandingPage />
       </SignedOut>
-
-      <SignedIn>
-        <p>Welcome to voicebridge </p>
-      </SignedIn>
     </>
   )
 }
