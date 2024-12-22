@@ -41,8 +41,10 @@ export default function Foods() {
       }
     }
 
-    fetchFoods()
-  }, [])
+    if (selectedSpeaker) {
+      fetchFoods()
+    }
+  }, [selectedSpeaker])
 
   const handleAddFood = async (newFood: Partial<Food>) => {
     try {
