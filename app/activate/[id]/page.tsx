@@ -26,7 +26,7 @@ export default function Activate() {
   return (
     <>
       <SignedOut>
-        <RedirectToSignIn />
+        <RedirectToSignIn redirectUrl={`/activate/${id}`} />
       </SignedOut>
       <SignedIn>
         <div>
