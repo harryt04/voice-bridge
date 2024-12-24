@@ -28,8 +28,8 @@ export const Hero = () => {
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
           <div className="center grid max-w-screen-sm grid-cols-1 items-center justify-center gap-4 self-center md:grid-cols-2">
             <Link href="/login">
-              <Button className="w-full md:max-w-none">
-                <CirclePlayIcon className="ml-2 h-5 w-5" />
+              <Button className="border-gradient w-full bg-gradient-to-r from-[#aa00ff] to-[#00cc99] md:max-w-none">
+                <CirclePlayIcon />
                 Get Started
               </Button>
             </Link>
@@ -39,7 +39,7 @@ export const Hero = () => {
               href="https://github.com/harryt04/VoiceBridge"
             >
               <Button variant="outline" className="w-full md:max-w-none">
-                <GitHubLogoIcon className="ml-2 h-5 w-5" />
+                <GitHubLogoIcon />
                 View source code
               </Button>
             </Link>
