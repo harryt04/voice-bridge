@@ -40,13 +40,15 @@ export function AppSidebar() {
           <SidebarGroupLabel className="pt-4">
             VoiceBridge
             <div className={cn('flex w-full flex-row justify-end gap-4')}>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonPopoverCard: { pointerEvents: 'initial' },
-                  },
-                }}
-              />
+              <div className="h-full w-fit pt-1.5">
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonPopoverCard: { pointerEvents: 'initial' },
+                    },
+                  }}
+                />
+              </div>
               <ThemeSwitcher />
             </div>
           </SidebarGroupLabel>
