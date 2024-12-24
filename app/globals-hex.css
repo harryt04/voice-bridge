@@ -1,0 +1,84 @@
+/* This file is for reference only, representing the theme in hex format */
+
+@layer base {
+  :root {
+    --background: #f4f4fb;
+    --foreground: #333333;
+    --card: #f9f9fc;
+    --card-foreground: #333333;
+    --popover: #f9f9fc;
+    --popover-foreground: #333333;
+    --primary: #aa00ff;
+    --primary-foreground: #fafafa;
+    --secondary: #e6e6e6;
+    --secondary-foreground: #aa00ff;
+    --muted: #ededed;
+    --muted-foreground: #666666;
+    --accent: #00cc99;
+    --accent-foreground: #fafafa;
+    --destructive: #ff3333;
+    --destructive-foreground: #fafafa;
+    --radius: 1rem;
+    --border: #d9d9d9;
+    --input: #d9d9d9;
+    --ring: #aa00ff;
+    --chart-1: #aa00ff;
+    --chart-2: #00cc99;
+    --chart-3: #ffaa00;
+    --chart-4: #ff0055;
+    --chart-5: #0055ff;
+    --sidebar-background: #f4f4fb;
+    --sidebar-foreground: #333333;
+    --sidebar-primary: #aa00ff;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #00cc99;
+    --sidebar-accent-foreground: #fafafa;
+    --sidebar-border: #d9d9d9;
+    --sidebar-ring: #aa00ff;
+  }
+
+  .dark {
+    --background: #1c1c26;
+    --foreground: #f4f4fb;
+    --card: #23232b;
+    --card-foreground: #f4f4fb;
+    --popover: #23232b;
+    --popover-foreground: #f4f4fb;
+    --primary: #d580ff;
+    --primary-foreground: #1a1a1a;
+    --secondary: #404040;
+    --secondary-foreground: #d580ff;
+    --muted: #393939;
+    --muted-foreground: #b3b3b3;
+    --accent: #00e6ac;
+    --accent-foreground: #1a1a1a;
+    --destructive: #ff3333;
+    --destructive-foreground: #fafafa;
+    --border: #404040;
+    --input: #404040;
+    --radius: 1rem;
+    --ring: #d580ff;
+    --chart-1: #d580ff;
+    --chart-2: #00e6ac;
+    --chart-3: #ffaa33;
+    --chart-4: #ff3377;
+    --chart-5: #3377ff;
+    --sidebar-background: #23232b;
+    --sidebar-foreground: #f4f4fb;
+    --sidebar-primary: #d580ff;
+    --sidebar-primary-foreground: #1a1a1a;
+    --sidebar-accent: #00e6ac;
+    --sidebar-accent-foreground: #1a1a1a;
+    --sidebar-border: #404040;
+    --sidebar-ring: #d580ff;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
