@@ -15,7 +15,7 @@ export const Hero = () => {
           </h1>
         </main>
 
-        <p className="mx-auto w-11/12 text-xs text-muted-foreground md:w-8/12 md:text-xl">
+        <p className="mx-auto w-11/12 text-sm text-muted-foreground md:w-8/12 md:text-xl">
           VoiceBridge is a
           <span className="border-gradient inline border-b-2 bg-gradient-to-r from-[#aa00ff] to-[#00cc99] bg-clip-text text-transparent">
             &nbsp;free and open source&nbsp;
@@ -40,7 +40,7 @@ export const Hero = () => {
             >
               <Button variant="outline" className="w-full md:max-w-none">
                 <GitHubLogoIcon className="ml-2 h-5 w-5" />
-                Github Repository
+                View source code
               </Button>
             </Link>
           </div>
