@@ -5,7 +5,7 @@ import { CirclePlayIcon } from 'lucide-react'
 
 export const Hero = () => {
   return (
-    <section className="container grid h-screen w-screen place-items-center items-center p-4">
+    <section className="container grid h-screen w-screen place-items-center items-center overflow-hidden p-4">
       <div className="space-y-6 text-center">
         <main className="text-5xl font-bold md:text-6xl">
           <h1 className="inline">
