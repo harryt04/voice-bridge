@@ -1,4 +1,6 @@
 'use client'
+
+import { usePathname } from 'next/navigation'
 import { Apple, LandPlot } from 'lucide-react'
 import {
   Sidebar,
@@ -33,6 +35,8 @@ const items = [
 ]
 
 export function AppSidebar() {
+  const pathname = usePathname() // Get the current route.
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -55,16 +59,23 @@ export function AppSidebar() {
           <SpeakerSelector />
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const isActive = pathname === item.url // Check if the current route matches the item's URL.
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      variant={isActive ? 'outline' : 'default'}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
