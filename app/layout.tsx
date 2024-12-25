@@ -49,7 +49,7 @@ export default function RootLayout({
                 <VBQueryClient>
                   <SignedIn>
                     <AppSidebar />
-                    <SidebarTrigger className="ml-4 mt-4 p-6" />
+                    <SidebarTrigger className="p-6" />
                   </SignedIn>
                   {children}
                   <Toaster />
