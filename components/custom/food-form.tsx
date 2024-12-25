@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Food, FoodInput } from '@/models'
+import { BanIcon, SaveIcon } from 'lucide-react'
 
 export function FoodForm({
   onClose,
@@ -101,10 +102,14 @@ export function FoodForm({
           </div>
         </div>
         <DialogFooter className="mt-6 flex justify-end gap-4">
-          <Button onClick={onClose} variant="ghost">
+          <Button onClick={onClose} variant="outline">
+            <BanIcon />
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit}>
+            <SaveIcon />
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

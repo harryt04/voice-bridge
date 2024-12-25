@@ -13,6 +13,7 @@ import {
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
 import { toast } from 'sonner'
+import { Speaker } from '@/models'
 
 export const SpeakerSelector = () => {
   const {
@@ -66,6 +67,18 @@ export const SpeakerSelector = () => {
     const addOrUpdateResponseBody = await addOrUpdateResponse.json()
     setSelectedSpeaker(addOrUpdateResponseBody.updatedSpeaker as any)
     setIsFormOpen(false)
+  }
+
+  const handleDeleteSpeaker = async (speaker: Speaker) => {
+    await fetch(`/api/speaker?id=${speaker._id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...speaker,
+        isArchived: true,
+      }),
+    })
+    window.open('/places')
   }
 
   if (isLoadingSpeakers) return <div>Loading speakers...</div>
@@ -130,6 +143,7 @@ export const SpeakerSelector = () => {
       {isFormOpen && (
         <SpeakerForm
           onClose={handleCloseForm}
+          onDelete={handleDeleteSpeaker}
           onSubmit={handleFormSubmit}
           speaker={editingSpeaker}
         />

@@ -12,13 +12,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Speaker, SpeakerInput } from '@/models'
+import { BanIcon, SaveIcon, TrashIcon } from 'lucide-react'
+import './styles/speaker-form.css'
 
 export function SpeakerForm({
   onClose,
+  onDelete,
   onSubmit,
   speaker,
 }: {
   onClose: () => void
+  onDelete: (speaker: Speaker) => void
   onSubmit: (speaker: Speaker) => void
   speaker?: Speaker // Optional, for editing an existing speaker
 }) {
@@ -100,11 +104,27 @@ export function SpeakerForm({
             />
           </div>
         </div>
-        <DialogFooter className="mt-6 flex justify-end gap-4">
-          <Button onClick={onClose} variant="ghost">
+        <DialogFooter className="speaker-form-footer">
+          <div>
+            <Button
+              onClick={() => {
+                onDelete(speaker as Speaker)
+              }}
+              variant="destructive"
+            >
+              <TrashIcon />
+              Delete
+            </Button>
+          </div>
+          <div className="spacer"></div>
+          <Button onClick={onClose} variant="outline">
+            <BanIcon />
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit}>
+            <SaveIcon />
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
