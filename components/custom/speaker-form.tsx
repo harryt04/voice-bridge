@@ -26,17 +26,14 @@ export function SpeakerForm({
   onSubmit: (speaker: Speaker) => void
   speaker?: Speaker // Optional, for editing an existing speaker
 }) {
-  // Consolidate all state into a single object
   const [formState, setFormState] = useState<SpeakerInput>({
     name: speaker?.name || '',
   })
 
-  // Parse comma-separated list of email addresses into an array
   const [villagerIds, setVillagerIds] = useState<string>(
     speaker?.villagerIds?.join(', ') || '',
   )
 
-  // Update the state when `speaker` changes
   useEffect(() => {
     if (speaker) {
       setFormState({
@@ -59,11 +56,12 @@ export function SpeakerForm({
     setVillagerIds(e.target.value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     const villagerIdsArray = villagerIds
       .split(',')
       .map((email) => email.trim())
-      .filter((email) => email) // Filter out empty values
+      .filter((email) => email)
     onSubmit({
       ...speaker,
       ...formState,
@@ -72,6 +70,7 @@ export function SpeakerForm({
     onClose()
   }
 
+  console.log('speaker: ', speaker)
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
@@ -80,52 +79,56 @@ export function SpeakerForm({
             {speaker ? 'Edit Speaker' : 'Add Speaker'}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={formState.name}
-              onChange={handleChange('name')}
-              placeholder="Enter speaker name"
-              className="w-full"
-            />
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={formState.name}
+                onChange={handleChange('name')}
+                placeholder="Enter speaker name"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <Label htmlFor="villagerIds">
+                Users you&apos;ve shared access with
+              </Label>
+              <Input
+                id="villagerIds"
+                value={villagerIds}
+                onChange={handleVillagerIdsChange}
+                placeholder="Enter comma-separated User IDs"
+                className="w-full"
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="villagerIds">
-              Users you&apos;ve shared access with
-            </Label>
-            <Input
-              id="villagerIds"
-              value={villagerIds}
-              onChange={handleVillagerIdsChange}
-              placeholder="Enter comma-separated User IDs"
-              className="w-full"
-            />
-          </div>
-        </div>
-        <DialogFooter className="speaker-form-footer">
-          <div>
-            <Button
-              onClick={() => {
-                onDelete(speaker as Speaker)
-              }}
-              variant="destructive"
-            >
-              <TrashIcon />
-              Delete
+          <DialogFooter className="speaker-form-footer">
+            <div>
+              {!!speaker && (
+                <Button
+                  onClick={() => {
+                    onDelete(speaker as Speaker)
+                  }}
+                  variant="destructive"
+                >
+                  <TrashIcon />
+                  Delete
+                </Button>
+              )}
+            </div>
+            <div className="spacer"></div>
+            <Button onClick={onClose} variant="outline" type="button">
+              <BanIcon />
+              Cancel
             </Button>
-          </div>
-          <div className="spacer"></div>
-          <Button onClick={onClose} variant="outline">
-            <BanIcon />
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>
-            <SaveIcon />
-            Save
-          </Button>
-        </DialogFooter>
+            <Button type="submit">
+              <SaveIcon />
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

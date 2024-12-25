@@ -24,7 +24,6 @@ export function FoodForm({
   onSubmit: (food: Food) => void
   food?: Food // Optional, for editing an existing food item
 }) {
-  // Consolidate all state into a single object
   const [formState, setFormState] = useState<FoodInput>({
     name: food?.name || '',
     imageUrl: food?.imageUrl || '',
@@ -32,7 +31,6 @@ export function FoodForm({
     speakerId: food?.speakerId || '',
   })
 
-  // Update the state when `food` changes
   useEffect(() => {
     if (food) {
       setFormState({
@@ -53,7 +51,8 @@ export function FoodForm({
       })
     }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault() // Prevent page reload
     onSubmit({
       ...food,
       ...formState,
@@ -69,7 +68,7 @@ export function FoodForm({
             {food ? 'Edit Food' : 'Add Food'}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
@@ -100,17 +99,17 @@ export function FoodForm({
               className="w-full"
             />
           </div>
-        </div>
-        <DialogFooter className="mt-6 flex justify-end gap-4">
-          <Button onClick={onClose} variant="outline">
-            <BanIcon />
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>
-            <SaveIcon />
-            Save
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="mt-6 flex justify-end gap-4">
+            <Button onClick={onClose} type="button" variant="outline">
+              <BanIcon />
+              Cancel
+            </Button>
+            <Button type="submit">
+              <SaveIcon />
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

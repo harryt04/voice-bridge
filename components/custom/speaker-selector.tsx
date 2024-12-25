@@ -78,7 +78,7 @@ export const SpeakerSelector = () => {
         isArchived: true,
       }),
     })
-    window.open('/places')
+    window.location.assign('/places')
   }
 
   if (isLoadingSpeakers) return <div>Loading speakers...</div>

@@ -24,7 +24,6 @@ export function PlaceForm({
   onSubmit: (place: Place) => void
   place?: Place // Optional, for editing an existing place
 }) {
-  // Consolidate all state into a single object
   const [formState, setFormState] = useState<PlaceInput>({
     name: place?.name || '',
     imageUrl: place?.imageUrl || '',
@@ -33,7 +32,6 @@ export function PlaceForm({
     speakerId: place?.speakerId || '',
   })
 
-  // Update the state when `place` changes
   useEffect(() => {
     if (place) {
       setFormState({
@@ -55,7 +53,8 @@ export function PlaceForm({
       })
     }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault() // Prevent default browser form submission
     onSubmit({
       ...place,
       ...formState,
@@ -71,7 +70,7 @@ export function PlaceForm({
             {place ? 'Edit Place' : 'Add Place'}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
@@ -112,17 +111,17 @@ export function PlaceForm({
               className="w-full"
             />
           </div>
-        </div>
-        <DialogFooter className="mt-6 flex justify-end gap-4">
-          <Button onClick={onClose} variant="outline">
-            <BanIcon />
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>
-            <SaveIcon />
-            Save
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="mt-6 flex justify-end gap-4">
+            <Button type="button" onClick={onClose} variant="outline">
+              <BanIcon />
+              Cancel
+            </Button>
+            <Button type="submit">
+              <SaveIcon />
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

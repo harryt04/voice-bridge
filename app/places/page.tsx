@@ -91,7 +91,7 @@ export default function Places() {
               </div>
             )}
           </div>
-          <div className={'flex flex-wrap justify-center gap-8 pr-8 pt-4'}>
+          <div className={'flex flex-wrap justify-center gap-8 pb-8 pr-8 pt-4'}>
             {loading ? (
               <p>Loading places...</p>
             ) : error ? (
