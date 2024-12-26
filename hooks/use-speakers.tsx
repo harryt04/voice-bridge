@@ -16,6 +16,7 @@ type SpeakerContextType = {
   selectedSpeaker: Speaker | null
   setSelectedSpeaker: (speaker: Speaker | null) => void
   isLoading: boolean
+  progress: number
 }
 
 const SpeakerContext = createContext<SpeakerContextType | undefined>(undefined)
@@ -43,6 +44,21 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
     null,
   )
 
+  const [progress, setProgress] = useState(20)
+
+  // Simulate progress
+  useEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setProgress((prev) => (prev < 100 ? prev + 20 : 100))
+      }, 5) // Increments every 5ms. This request is ususally extremely fast.
+
+      return () => clearInterval(interval)
+    } else {
+      setProgress(100) // Set progress to 100% when loading is complete
+    }
+  }, [isLoading])
+
   const setSelectedSpeaker = (speaker: Speaker | null) => {
     if (!speakers.find((s) => s._id === speaker?._id)) {
       speakers.push(speaker as any)
@@ -58,7 +74,13 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <SpeakerContext.Provider
-      value={{ speakers, selectedSpeaker, setSelectedSpeaker, isLoading }}
+      value={{
+        speakers,
+        selectedSpeaker,
+        setSelectedSpeaker,
+        isLoading,
+        progress,
+      }}
     >
       {children}
     </SpeakerContext.Provider>

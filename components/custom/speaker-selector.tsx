@@ -14,10 +14,12 @@ import {
 import { SpeakerForm } from './speaker-form'
 import { toast } from 'sonner'
 import { Speaker } from '@/models'
+import { Progress } from '../ui/progress'
 
 export const SpeakerSelector = () => {
   const {
     isLoading: isLoadingSpeakers,
+    progress: loadingSpeakersProgress,
     speakers,
     selectedSpeaker,
     setSelectedSpeaker,
@@ -81,7 +83,12 @@ export const SpeakerSelector = () => {
     window.location.assign('/places')
   }
 
-  if (isLoadingSpeakers) return <div>Loading speakers...</div>
+  if (isLoadingSpeakers)
+    return (
+      <div className="p-4">
+        <Progress value={loadingSpeakersProgress} />
+      </div>
+    )
 
   return (
     <div className="px-4 py-6">
