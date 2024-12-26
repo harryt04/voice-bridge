@@ -37,7 +37,7 @@ const items = [
 ]
 
 export function AppSidebar() {
-  const { isMobile, setOpen } = useSidebar()
+  const { setOpenMobile } = useSidebar()
   const pathname = usePathname() // Get the current route.
 
   return (
@@ -76,9 +76,7 @@ export function AppSidebar() {
                       <Link
                         href={item.url}
                         onClick={() => {
-                          if (isMobile) {
-                            setOpen(false)
-                          }
+                          setOpenMobile(false)
                         }}
                       >
                         <item.icon />

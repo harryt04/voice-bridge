@@ -20,7 +20,7 @@ export default function Places() {
   const [editMode, setEditMode] = useState(false)
 
   const { selectedSpeaker } = useSpeakerContext()
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -78,7 +78,7 @@ export default function Places() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        {!open && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+        {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
         <div className="flex flex-col">
           <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>
@@ -86,7 +86,7 @@ export default function Places() {
             </Button>
             {places.length > 0 && (
               <div
-                className="float-right flex items-center gap-2 px-8 py-2 md:absolute md:right-0"
+                className="float-right flex items-center gap-2 px-8 py-2 md:absolute md:right-0 md:pr-8"
                 onClick={() => setEditMode(!editMode)}
               >
                 <Switch checked={editMode}></Switch>
@@ -94,7 +94,11 @@ export default function Places() {
               </div>
             )}
           </div>
-          <div className={'flex flex-wrap justify-center gap-8 pb-8 pr-8 pt-4'}>
+          <div
+            className={
+              '-ml-8 flex flex-wrap justify-center gap-8 pb-8 pr-4 pt-4 md:ml-auto md:pl-4 md:pr-8'
+            }
+          >
             {loading ? (
               <p>Loading places...</p>
             ) : error ? (

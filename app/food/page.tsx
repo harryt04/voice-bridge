@@ -19,7 +19,7 @@ export default function Foods() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const { selectedSpeaker } = useSpeakerContext()
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -78,7 +78,7 @@ export default function Foods() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        {!open && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+        {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
 
         <div className="flex flex-col">
           <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
@@ -95,7 +95,11 @@ export default function Foods() {
               </div>
             )}
           </div>
-          <div className={'flex flex-wrap justify-center gap-8 p-8'}>
+          <div
+            className={
+              '-ml-12 flex flex-wrap justify-center gap-8 p-4 md:ml-auto'
+            }
+          >
             {loading ? (
               <p>Loading foods...</p>
             ) : error ? (
