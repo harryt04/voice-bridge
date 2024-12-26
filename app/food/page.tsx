@@ -10,6 +10,7 @@ import { FoodForm } from '@/components/custom/food-form'
 import { FoodComponent } from '@/components/custom/food-component'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 
 export default function Foods() {
   const [foods, setFoods] = useState<Food[]>([])
@@ -18,6 +19,7 @@ export default function Foods() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const { selectedSpeaker } = useSpeakerContext()
+  const { open } = useSidebar()
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -76,6 +78,8 @@ export default function Foods() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
+        {!open && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+
         <div className="flex flex-col">
           <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>

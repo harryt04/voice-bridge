@@ -10,6 +10,7 @@ import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Switch } from '@/components/ui/switch'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -19,6 +20,7 @@ export default function Places() {
   const [editMode, setEditMode] = useState(false)
 
   const { selectedSpeaker } = useSpeakerContext()
+  const { open } = useSidebar()
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -76,6 +78,7 @@ export default function Places() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
+        {!open && <SidebarTrigger className="ml-2 mt-5 p-5" />}
         <div className="flex flex-col">
           <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>

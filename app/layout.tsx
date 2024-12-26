@@ -7,7 +7,11 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 import { VBQueryClient } from '@/hooks/use-query-client'
 import { Toaster } from 'sonner'
@@ -49,7 +53,6 @@ export default function RootLayout({
                 <VBQueryClient>
                   <SignedIn>
                     <AppSidebar />
-                    <SidebarTrigger className="ml-2 mt-3 p-6" />
                   </SignedIn>
                   {children}
                   <Toaster />

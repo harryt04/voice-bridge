@@ -12,6 +12,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
@@ -35,13 +37,15 @@ const items = [
 ]
 
 export function AppSidebar() {
+  const { isMobile, setOpen } = useSidebar()
   const pathname = usePathname() // Get the current route.
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="pt-4">
+          <SidebarGroupLabel className="my-4">
+            <SidebarTrigger className="-ml-2 mr-4 p-5" />
             VoiceBridge
             <div className={cn('flex w-full flex-row justify-end gap-4')}>
               <div className="h-full w-fit pt-1.5">
@@ -58,7 +62,7 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SpeakerSelector />
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-2 px-2">
               {items.map((item) => {
                 const isActive = pathname === item.url // Check if the current route matches the item's URL.
 
@@ -67,8 +71,16 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       variant={isActive ? 'outline' : 'default'}
+                      className="p-6"
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => {
+                          if (isMobile) {
+                            setOpen(false)
+                          }
+                        }}
+                      >
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>
