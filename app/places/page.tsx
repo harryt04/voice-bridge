@@ -80,7 +80,7 @@ export default function Places() {
       <SignedIn>
         {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
         <div className="flex flex-col">
-          <div className="ml-4 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
+          <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>
               <PlusIcon /> Add place
             </Button>
@@ -96,7 +96,7 @@ export default function Places() {
           </div>
           <div
             className={
-              '-ml-12 flex flex-wrap justify-center gap-8 p-4 md:ml-auto md:p-8'
+              '-ml-8 flex flex-wrap justify-center gap-8 p-4 pr-8 md:ml-auto md:p-8'
             }
           >
             {loading ? (

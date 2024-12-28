@@ -81,7 +81,7 @@ export default function Foods() {
         {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
 
         <div className="flex flex-col">
-          <div className="ml-8 mt-8 flex w-10/12 flex-col items-center gap-4 md:flex-row">
+          <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>
               <PlusIcon /> Add food
             </Button>

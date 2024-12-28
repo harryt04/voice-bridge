@@ -70,7 +70,6 @@ export function SpeakerForm({
     onClose()
   }
 
-  console.log('speaker: ', speaker)
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
