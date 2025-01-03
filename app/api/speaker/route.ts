@@ -124,7 +124,6 @@ export async function DELETE(req: NextRequest) {
 
     const existingSpeaker = await speakersCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!existingSpeaker) {

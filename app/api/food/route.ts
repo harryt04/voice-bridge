@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
 
     const food = await foodsCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!food) {
@@ -122,7 +121,6 @@ export async function DELETE(req: NextRequest) {
 
     const existingFood = await foodsCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!existingFood) {
