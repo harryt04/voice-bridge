@@ -14,12 +14,12 @@ import {
 import { SpeakerForm } from './speaker-form'
 import { toast } from 'sonner'
 import { Speaker } from '@/models'
-import { Progress } from '../ui/progress'
+import { Skeleton } from '../ui/skeleton'
+import { Progress } from '@radix-ui/react-progress'
 
 export const SpeakerSelector = () => {
   const {
     isLoading: isLoadingSpeakers,
-    progress: loadingSpeakersProgress,
     speakers,
     selectedSpeaker,
     setSelectedSpeaker,
@@ -85,8 +85,8 @@ export const SpeakerSelector = () => {
 
   if (isLoadingSpeakers)
     return (
-      <div className="p-4">
-        <Progress value={loadingSpeakersProgress} />
+      <div className="min-h-36 p-4">
+        <Skeleton className="h-full" />
       </div>
     )
 

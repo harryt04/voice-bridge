@@ -21,12 +21,10 @@ export async function GET(req: NextRequest) {
     speakerAuthCheck(req, speakerId as string)
 
     // Query the "places" collection for documents created by the user
-    const places = await foodsCollection
-      .find({ speakerId: speakerId })
-      .toArray()
+    const foods = await foodsCollection.find({ speakerId: speakerId }).toArray()
 
     // Return the places as JSON
-    return NextResponse.json(places, { status: 200 })
+    return NextResponse.json(foods, { status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
