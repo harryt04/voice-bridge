@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Apple, Drum, LandPlot, ListChecks } from 'lucide-react'
+import { Apple, BugIcon, Drum, LandPlot, ListChecks } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { ThemeSwitcher } from './custom/themeSwitcher'
 import { SpeakerSelector } from './custom/speaker-selector'
+import { GitHubLogoIcon } from '@radix-ui/react-icons'
 
 // Menu items.
 const items = [
@@ -101,16 +102,18 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className={cn('p-4')}>
-        <Button variant={'outline'}>
+        <Button variant={'outline'} asChild>
           <Link
             href="https://github.com/harryt04/VoiceBridge/issues"
             target="_blank"
           >
+            <BugIcon className="mr-1" />
             Report a bug
           </Link>
         </Button>
-        <Button variant={'outline'}>
+        <Button variant={'outline'} asChild>
           <Link href="https://github.com/harryt04/VoiceBridge" target="_blank">
+            <GitHubLogoIcon className="mr-1" />
             View source code
           </Link>
         </Button>
