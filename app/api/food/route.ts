@@ -65,20 +65,19 @@ export async function POST(req: NextRequest) {
     const existingFood = id
       ? await foodsCollection.findOne({
           _id: new ObjectId(id),
-          userId: user.userId,
         })
       : false
 
     const updatedFood = {
       ...body,
-      userId: user.userId,
+      lastUpdatedBy: user.userId,
       updatedAt: new Date(),
     }
 
     if (!existingFood) {
       foodsCollection.insertOne(updatedFood)
       return NextResponse.json(
-        { success: true, updatedCount: 1, updatedFood },
+        { success: true, updatedCount: 1, updatedItem: updatedFood },
         { status: 200 },
       )
     } else {
@@ -89,7 +88,11 @@ export async function POST(req: NextRequest) {
       )
 
       return NextResponse.json(
-        { success: true, updatedCount: result.modifiedCount, updatedFood },
+        {
+          success: true,
+          updatedCount: result.modifiedCount,
+          updatedItem: updatedFood,
+        },
         { status: 200 },
       )
     }

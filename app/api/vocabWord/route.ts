@@ -9,7 +9,7 @@ function extractIdFromQuery(req: NextRequest): string | null {
   return url.searchParams.get('id')
 }
 
-// GET, PATCH, DELETE for a specific place
+// GET, PATCH, DELETE for a specific food
 export async function GET(req: NextRequest) {
   const user = getAuth(req)
   const id = extractIdFromQuery(req)
@@ -25,20 +25,22 @@ export async function GET(req: NextRequest) {
 
     const client = await getMongoClient()
     const db = client.db(mongoDBConfig.dbName)
-    const placesCollection = db.collection(mongoDBConfig.collections.places)
+    const vocabWordsCollection = db.collection(
+      mongoDBConfig.collections.vocabWords,
+    )
 
-    const place = await placesCollection.findOne({
+    const food = await vocabWordsCollection.findOne({
       _id: new ObjectId(id),
     })
 
-    if (!place) {
+    if (!food) {
       return NextResponse.json(
-        { error: 'Place not found or unauthorized' },
+        { error: 'Food not found or unauthorized' },
         { status: 404 },
       )
     }
 
-    return NextResponse.json(place, { status: 200 })
+    return NextResponse.json(food, { status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
@@ -60,35 +62,41 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const client = await getMongoClient()
     const db = client.db(mongoDBConfig.dbName)
-    const placesCollection = db.collection(mongoDBConfig.collections.places)
+    const vocabWordsCollection = db.collection(
+      mongoDBConfig.collections.vocabWords,
+    )
 
-    const existingPlace = id
-      ? await placesCollection.findOne({
+    const existingVocabWord = id
+      ? await vocabWordsCollection.findOne({
           _id: new ObjectId(id),
         })
       : false
 
-    const updatedPlace = {
+    const updatedVocabWord = {
       ...body,
       lastUpdatedBy: user.userId,
       updatedAt: new Date(),
     }
 
-    if (!existingPlace) {
-      placesCollection.insertOne(updatedPlace)
+    if (!existingVocabWord) {
+      vocabWordsCollection.insertOne(updatedVocabWord)
       return NextResponse.json(
-        { success: true, updatedCount: 1, updatedPlace },
+        { success: true, updatedCount: 1, updatedItem: updatedVocabWord },
         { status: 200 },
       )
     } else {
-      delete updatedPlace._id
-      const result = await placesCollection.updateOne(
+      delete updatedVocabWord._id
+      const result = await vocabWordsCollection.updateOne(
         { _id: new ObjectId(id as string) },
-        { $set: updatedPlace },
+        { $set: updatedVocabWord },
       )
 
       return NextResponse.json(
-        { success: true, updatedCount: result.modifiedCount, updatedPlace },
+        {
+          success: true,
+          updatedCount: result.modifiedCount,
+          updatedItem: updatedVocabWord,
+        },
         { status: 200 },
       )
     }
@@ -116,20 +124,24 @@ export async function DELETE(req: NextRequest) {
 
     const client = await getMongoClient()
     const db = client.db(mongoDBConfig.dbName)
-    const placesCollection = db.collection(mongoDBConfig.collections.places)
+    const vocabWordsCollection = db.collection(
+      mongoDBConfig.collections.vocabWords,
+    )
 
-    const existingPlace = await placesCollection.findOne({
+    const existingVocabWord = await vocabWordsCollection.findOne({
       _id: new ObjectId(id),
     })
 
-    if (!existingPlace) {
+    if (!existingVocabWord) {
       return NextResponse.json(
-        { error: 'Place not found or unauthorized' },
+        { error: 'Food not found or unauthorized' },
         { status: 404 },
       )
     }
 
-    const result = await placesCollection.deleteOne({ _id: new ObjectId(id) })
+    const result = await vocabWordsCollection.deleteOne({
+      _id: new ObjectId(id),
+    })
 
     return NextResponse.json(
       { success: true, deletedCount: result.deletedCount },

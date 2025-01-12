@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Apple, LandPlot } from 'lucide-react'
+import { Apple, LandPlot, ListChecks } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +33,12 @@ const items = [
     title: `Food`,
     url: '/food',
     icon: Apple,
+  },
+
+  {
+    title: `Vocabulary Words`,
+    url: '/vocabulary',
+    icon: ListChecks,
   },
 ]
 

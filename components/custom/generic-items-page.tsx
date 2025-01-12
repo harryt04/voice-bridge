@@ -13,6 +13,8 @@ import { useSpeakerContext } from '@/hooks/use-speakers'
 export type GenericPageInfo = {
   listModelName: string
   editModelName: string
+  singularLabel: string
+  pluralLabel: string
 }
 
 export default function GenericItemsPage({
@@ -56,14 +58,15 @@ export default function GenericItemsPage({
     fetchItems()
   }, [pageInfo, selectedSpeaker])
 
-  const handleAddItem = async (newItem: any) => {
-    if (!pageInfo.editModelName) return
+  const handleUpsertItem = async (newItem: any) => {
+    console.log('newItem: ', newItem)
+    if (!pageInfo.editModelName || !selectedSpeaker?._id) return
 
     try {
       const response = await fetch(`/api/${pageInfo.editModelName}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newItem),
+        body: JSON.stringify({ ...newItem, speakerId: selectedSpeaker._id }),
       })
 
       if (!response.ok) {
@@ -71,14 +74,15 @@ export default function GenericItemsPage({
       }
 
       const responseBody = await response.json()
-      setItems((prev) => [...prev, responseBody])
+      console.log('responseBody: ', responseBody)
+      setItems((prev) => [...prev, responseBody.updatedItem])
     } catch (err) {
       console.error('Error adding item:', err)
     }
   }
 
   const handleDeleteItem = async (item: any) => {
-    if (!pageInfo.editModelName) return
+    if (!pageInfo.editModelName || !selectedSpeaker?._id) return
 
     try {
       await fetch(`/api/${pageInfo.editModelName}?id=${item._id}`, {
@@ -90,6 +94,7 @@ export default function GenericItemsPage({
     }
   }
 
+  console.log('items: ', items)
   return (
     <>
       <SignedOut>
@@ -102,7 +107,7 @@ export default function GenericItemsPage({
         <div className="flex flex-col">
           <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
             <Button variant="default" onClick={() => setIsFormOpen(true)}>
-              <PlusIcon /> Add {pageInfo.editModelName}
+              <PlusIcon /> Add {pageInfo.singularLabel}
             </Button>
             {items.length > 0 && (
               <div
@@ -116,7 +121,7 @@ export default function GenericItemsPage({
           </div>
           <div className="-ml-12 flex flex-wrap justify-center gap-8 p-8 md:ml-auto">
             {loading ? (
-              <p>Loading {pageInfo.listModelName}...</p>
+              <p>Loading {pageInfo.pluralLabel}...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
@@ -129,7 +134,7 @@ export default function GenericItemsPage({
                     item={item}
                     editMode={editMode}
                     onDelete={handleDeleteItem}
-                    modelName={pageInfo.editModelName as string} // Pass modelName dynamically
+                    modelName={pageInfo.editModelName as string}
                   />
                 </div>
               ))
@@ -140,8 +145,8 @@ export default function GenericItemsPage({
         {isFormOpen && (
           <ItemForm
             onClose={() => setIsFormOpen(false)}
-            onSubmit={handleAddItem}
-            modelName={pageInfo.editModelName as string} // Pass modelName dynamically
+            onSubmit={handleUpsertItem}
+            modelName={pageInfo.singularLabel as string}
           />
         )}
       </SignedIn>

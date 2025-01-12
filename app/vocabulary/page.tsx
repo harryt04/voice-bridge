@@ -3,12 +3,12 @@ import GenericItemsPage, {
 } from '@/components/custom/generic-items-page'
 import React from 'react'
 
-function Foods() {
+function VocabPage() {
   const pageInfo: GenericPageInfo = {
-    listModelName: 'foods',
-    editModelName: 'food',
-    singularLabel: 'food',
-    pluralLabel: 'foods',
+    listModelName: 'vocabWords',
+    editModelName: 'vocabWord',
+    singularLabel: 'vocab word',
+    pluralLabel: 'vocab words',
   }
   return (
     <>
@@ -17,4 +17,4 @@ function Foods() {
   )
 }
 
-export default Foods
+export default VocabPage
