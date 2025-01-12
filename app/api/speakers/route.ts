@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
       })
       .toArray()
 
-    console.log('speakers: ', speakers)
     if (speakers.length === 0) {
       const newSpeaker = {
         name: 'Default',

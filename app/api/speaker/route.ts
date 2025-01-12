@@ -78,8 +78,6 @@ export async function POST(req: NextRequest) {
       lastUpdatedBy: user.userId,
       updatedAt: new Date(),
     }
-    console.log('updatedSpeaker: ', updatedSpeaker)
-    console.log('existingSpeaker: ', existingSpeaker)
 
     if (!existingSpeaker) {
       speakersCollection.insertOne(updatedSpeaker)
