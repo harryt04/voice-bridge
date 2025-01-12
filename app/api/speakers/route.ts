@@ -1,7 +1,6 @@
 import { getAuth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
-import { Speaker } from '@/models/speaker'
 
 export async function GET(req: NextRequest) {
   const user = getAuth(req)
@@ -30,6 +29,7 @@ export async function GET(req: NextRequest) {
       })
       .toArray()
 
+    console.log('speakers: ', speakers)
     if (speakers.length === 0) {
       const newSpeaker = {
         name: 'Default',

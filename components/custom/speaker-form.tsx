@@ -70,6 +70,16 @@ export function SpeakerForm({
     onClose()
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSubmit(e)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      onClose()
+    }
+  }
+
   return (
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
@@ -78,7 +88,7 @@ export function SpeakerForm({
             {speaker ? 'Edit Speaker' : 'Add Speaker'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
           <div className="space-y-4">
             <div>
               <Label htmlFor="name">Name</Label>
@@ -108,9 +118,12 @@ export function SpeakerForm({
               {!!speaker && (
                 <Button
                   onClick={() => {
-                    onDelete(speaker as Speaker)
+                    if (speaker) {
+                      onDelete(speaker)
+                    }
                   }}
                   variant="destructive"
+                  type="button"
                 >
                   <TrashIcon />
                   Delete

@@ -57,6 +57,7 @@ export const SpeakerSelector = () => {
   }
 
   const handleFormSubmit = async (speaker: any) => {
+    console.log('handleFormSubmit: ', speaker)
     // Handle adding or updating the speaker
     const addOrUpdateUrl = speaker._id
       ? `/api/speaker?id=${speaker._id}`
@@ -67,11 +68,13 @@ export const SpeakerSelector = () => {
       body: JSON.stringify(speaker),
     })
     const addOrUpdateResponseBody = await addOrUpdateResponse.json()
+    console.log('addOrUpdateResponseBody: ', addOrUpdateResponseBody)
     setSelectedSpeaker(addOrUpdateResponseBody.updatedSpeaker as any)
     setIsFormOpen(false)
   }
 
   const handleDeleteSpeaker = async (speaker: Speaker) => {
+    console.trace()
     await fetch(`/api/speaker?id=${speaker._id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
