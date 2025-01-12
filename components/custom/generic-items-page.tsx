@@ -46,7 +46,6 @@ export default function GenericItemsPage({
         }
 
         const data = await response.json()
-        console.log('data: ', data)
         setItems(data)
       } catch (err: any) {
         setError(err.message || 'Failed to fetch items')
@@ -59,7 +58,6 @@ export default function GenericItemsPage({
   }, [pageInfo, selectedSpeaker])
 
   const handleUpsertItem = async (newItem: any) => {
-    console.log('newItem: ', newItem)
     if (!pageInfo.editModelName || !selectedSpeaker?._id) return
 
     try {
@@ -74,7 +72,6 @@ export default function GenericItemsPage({
       }
 
       const responseBody = await response.json()
-      console.log('responseBody: ', responseBody)
       setItems((prev) => [...prev, responseBody.updatedItem])
     } catch (err) {
       console.error('Error adding item:', err)
@@ -94,7 +91,6 @@ export default function GenericItemsPage({
     }
   }
 
-  console.log('items: ', items)
   return (
     <>
       <SignedOut>
