@@ -24,6 +24,7 @@ export async function getMongoClient(): Promise<MongoClient> {
 export const mongoDBConfig = {
   dbName: 'voicebridge',
   collections: {
+    activities: 'activities',
     places: 'places',
     speakers: 'speakers',
     foods: 'foods',
