@@ -4,11 +4,7 @@ import { Hero } from './hero'
 function LandingPage() {
   const { setTheme } = useTheme()
   setTheme('light')
-  return (
-    <div>
-      <Hero />
-    </div>
-  )
+  return <Hero />
 }
 
 export { LandingPage }
