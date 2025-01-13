@@ -28,6 +28,7 @@ export const mongoDBConfig = {
     places: 'places',
     speakers: 'speakers',
     foods: 'foods',
+    villagers: 'villagers',
     vocabWords: 'vocabWords',
   },
 }

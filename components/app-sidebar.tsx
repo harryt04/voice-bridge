@@ -1,7 +1,14 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Apple, BugIcon, Drum, LandPlot, ListChecks } from 'lucide-react'
+import {
+  Apple,
+  BugIcon,
+  Drum,
+  LandPlot,
+  ListChecks,
+  UsersRoundIcon,
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -21,15 +28,10 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { ThemeSwitcher } from './custom/themeSwitcher'
 import { SpeakerSelector } from './custom/speaker-selector'
-import { GitHubLogoIcon } from '@radix-ui/react-icons'
+import { GitHubLogoIcon, PersonIcon } from '@radix-ui/react-icons'
 
 // Menu items.
 const items = [
-  {
-    title: `Places`,
-    url: '/places',
-    icon: LandPlot,
-  },
   {
     title: `Activities`,
     url: '/activities',
@@ -39,6 +41,16 @@ const items = [
     title: `Food`,
     url: '/food',
     icon: Apple,
+  },
+  {
+    title: `People`,
+    url: '/people',
+    icon: UsersRoundIcon,
+  },
+  {
+    title: `Places`,
+    url: '/places',
+    icon: LandPlot,
   },
   {
     title: `Vocabulary Words`,
