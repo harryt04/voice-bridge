@@ -86,29 +86,31 @@ export function AppSidebar() {
           <SpeakerSelector />
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2 px-2">
-              {items.map((item) => {
-                const isActive = pathname === item.url // Check if the current route matches the item's URL.
+              {items
+                .sort((a, b) => a.title.localeCompare(b.title.toLowerCase()))
+                .map((item) => {
+                  const isActive = pathname === item.url // Check if the current route matches the item's URL.
 
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      variant={isActive ? 'outline' : 'default'}
-                      className="p-6"
-                    >
-                      <Link
-                        href={item.url}
-                        onClick={() => {
-                          setOpenMobile(false)
-                        }}
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        variant={isActive ? 'outline' : 'default'}
+                        className="p-6"
                       >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+                        <Link
+                          href={item.url}
+                          onClick={() => {
+                            setOpenMobile(false)
+                          }}
+                        >
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
