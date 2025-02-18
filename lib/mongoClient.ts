@@ -22,7 +22,7 @@ export async function getMongoClient(): Promise<MongoClient> {
 }
 
 export const mongoDBConfig = {
-  dbName: 'voicebridge',
+  dbName: `voicebridge-${process.env.NODE_ENV}`,
   collections: {
     activities: 'activities',
     places: 'places',
