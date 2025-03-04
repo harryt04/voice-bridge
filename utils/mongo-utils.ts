@@ -51,7 +51,9 @@ export async function handleDatabaseOperation(
       }
       case 'POST': {
         const body = await req.json()
-        const existingItem = id ? await collection.findOne({ _id: new ObjectId(id) }) : null
+        const existingItem = id
+          ? await collection.findOne({ _id: new ObjectId(id) })
+          : null
         const updatedItem = {
           ...body,
           lastUpdatedBy: user.userId,
@@ -60,7 +62,10 @@ export async function handleDatabaseOperation(
 
         if (existingItem) {
           delete updatedItem._id
-          const result = await collection.updateOne({ _id: new ObjectId(id as string) }, { $set: updatedItem })
+          const result = await collection.updateOne(
+            { _id: new ObjectId(id as string) },
+            { $set: updatedItem },
+          )
           return NextResponse.json({
             success: true,
             modifiedCount: result.modifiedCount,
@@ -79,11 +84,17 @@ export async function handleDatabaseOperation(
         })
       }
       default:
-        return NextResponse.json({ error: 'Invalid operation' }, { status: 400 })
+        return NextResponse.json(
+          { error: 'Invalid operation' },
+          { status: 400 },
+        )
     }
   } catch (error) {
     console.error('Error:', error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    )
   }
 }
 
@@ -97,7 +108,10 @@ export async function handleDatabaseOperation(
  * @throws Will return a 401 status code if the user is not authenticated.
  * @throws Will return a 500 status code if there is an error fetching data from the collection.
  */
-export async function fetchDataFromCollection(req: NextRequest, collectionName: string) {
+export async function fetchDataFromCollection(
+  req: NextRequest,
+  collectionName: string,
+) {
   const user = getAuth(req)
   const speakerId = extractParamFromUrl(req, 'speakerId')
 
@@ -118,8 +132,14 @@ export async function fetchDataFromCollection(req: NextRequest, collectionName: 
 
     return NextResponse.json(data, { status: 200 })
   } catch (error) {
-    console.error(`Error fetching data from collection ${collectionName}:`, error)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    console.error(
+      `Error fetching data from collection ${collectionName}:`,
+      error,
+    )
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
+    )
   }
 }
 
@@ -148,8 +168,16 @@ export const speakerAuthCheck = async (req: NextRequest, speakerId: string) => {
     _id: new ObjectId(speakerId as string),
   })) as any as Speaker
 
-  if (!speaker || !user?.userId || (speaker.parentId !== user.userId && !speaker.villagerIds?.includes(user.userId))) {
-    return NextResponse.json({ error: 'Speaker not found or unauthorized' }, { status: 404 })
+  if (
+    !speaker ||
+    !user?.userId ||
+    (speaker.parentId !== user.userId &&
+      !speaker.villagerIds?.includes(user.userId))
+  ) {
+    return NextResponse.json(
+      { error: 'Speaker not found or unauthorized' },
+      { status: 404 },
+    )
   }
 }
 
@@ -163,15 +191,25 @@ export async function createMongoDbIndexes() {
 
   const coll = mongoDBConfig.collections
 
-  await db.collection(coll.activities).createIndexes([{ key: { speakerId: 1 } }])
+  await db
+    .collection(coll.activities)
+    .createIndexes([{ key: { speakerId: 1 } }])
   await db.collection(coll.foods).createIndexes([{ key: { speakerId: 1 } }])
   await db.collection(coll.places).createIndexes([{ key: { speakerId: 1 } }])
 
   await db
     .collection(coll.speakers)
-    .createIndexes([{ key: { parentId: 1 } }, { key: { villagerIds: 1 } }, { key: { isArchived: 1 } }])
+    .createIndexes([
+      { key: { isArchived: 1 } },
+      { key: { parentId: 1 } },
+      { key: { villagerIds: 1 } },
+    ])
 
-  await db.collection(coll.villagers).createIndexes([{ key: { villagerId: 1 } }, { key: { speakerId: 1 } }])
-  await db.collection(coll.vocabWords).createIndexes([{ key: { speakerId: 1 } }])
+  await db
+    .collection(coll.villagers)
+    .createIndexes([{ key: { villagerId: 1 } }, { key: { speakerId: 1 } }])
+  await db
+    .collection(coll.vocabWords)
+    .createIndexes([{ key: { speakerId: 1 } }])
   console.log('Indexes created successfully')
 }
