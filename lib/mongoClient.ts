@@ -25,9 +25,9 @@ export const mongoDBConfig = {
   dbName: `voicebridge-${process.env.NODE_ENV}`,
   collections: {
     activities: 'activities',
+    foods: 'foods',
     places: 'places',
     speakers: 'speakers',
-    foods: 'foods',
     villagers: 'villagers',
     vocabWords: 'vocabWords',
   },
