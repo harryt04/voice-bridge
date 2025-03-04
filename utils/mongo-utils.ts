@@ -1,9 +1,9 @@
 import { getAuth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
+import { getMongoClient, mongoDBConfig } from '../lib/mongoClient'
 import { ObjectId } from 'mongodb'
-import { extractParamFromUrl } from '@/lib/utils'
-import { Speaker } from '@/models'
+import { extractParamFromUrl } from '../lib/utils'
+import { Speaker } from '../models'
 
 /**
  * Handles database operations for a specified collection.
@@ -184,32 +184,40 @@ export const speakerAuthCheck = async (req: NextRequest, speakerId: string) => {
 /**
  * Creates necessary indexes for the MongoDB collections.
  */
-export async function createMongoDbIndexes() {
-  console.log(`Creating indexes for db: ${mongoDBConfig.dbName} ...`)
+export async function createMongoDbIndexes(dbName: string) {
+  console.log(`Ensuring indexes for db: ${dbName} ...`)
   const client = await getMongoClient()
-  const db = client.db(mongoDBConfig.dbName)
+  const db = client.db(dbName)
 
   const coll = mongoDBConfig.collections
 
-  await db
-    .collection(coll.activities)
-    .createIndexes([{ key: { speakerId: 1 } }])
-  await db.collection(coll.foods).createIndexes([{ key: { speakerId: 1 } }])
-  await db.collection(coll.places).createIndexes([{ key: { speakerId: 1 } }])
+  const collectionNames = (await db.listCollections().toArray()).map(
+    (c) => c.name,
+  )
 
-  await db
-    .collection(coll.speakers)
-    .createIndexes([
-      { key: { isArchived: 1 } },
-      { key: { parentId: 1 } },
-      { key: { villagerIds: 1 } },
-    ])
+  async function ensureIndex(collectionName: string, indexes: any[]) {
+    if (!collectionNames.includes(collectionName)) {
+      console.log(
+        `Collection "${collectionName}" does not exist. Creating it...`,
+      )
+      await db.createCollection(collectionName)
+    }
+    await db.collection(collectionName).createIndexes(indexes)
+  }
 
-  await db
-    .collection(coll.villagers)
-    .createIndexes([{ key: { villagerId: 1 } }, { key: { speakerId: 1 } }])
-  await db
-    .collection(coll.vocabWords)
-    .createIndexes([{ key: { speakerId: 1 } }])
-  console.log('Indexes created successfully')
+  await ensureIndex(coll.activities, [{ key: { speakerId: 1 } }])
+  await ensureIndex(coll.foods, [{ key: { speakerId: 1 } }])
+  await ensureIndex(coll.places, [{ key: { speakerId: 1 } }])
+  await ensureIndex(coll.speakers, [
+    { key: { isArchived: 1 } },
+    { key: { parentId: 1 } },
+    { key: { villagerIds: 1 } },
+  ])
+  await ensureIndex(coll.villagers, [
+    { key: { villagerId: 1 } },
+    { key: { speakerId: 1 } },
+  ])
+  await ensureIndex(coll.vocabWords, [{ key: { speakerId: 1 } }])
+
+  console.log('Indexes ensured successfully for db: ', dbName)
 }

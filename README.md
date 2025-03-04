@@ -13,3 +13,8 @@ Built with:
 
 1. Supply values for the environment variables. A sample file can be found in `.env.sample`.
 1. That's it. Depnding on your hosting provider, the next steps vary wildly. I choose to host this on [Coolify](https://coolify.io/docs), which is a self-hosted version of Vercel, basically. But if you're new to next.js, I'd recommend trying out [Vercel](https://vercel.com/new).
+
+# Indexing your mongodb instance
+
+1. Supply your MONGO_CONNECTION_STRING in lib/mongoClient.ts
+1. Run `gulp create-indexes` to create indexes for the collections in your mongodb instance
