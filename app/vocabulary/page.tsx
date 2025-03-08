@@ -16,7 +16,7 @@ function VocabPage() {
         icon={<ListChecks />}
         title={`No vocab words added yet`}
         body={
-          'Add a vocab word that your speaker likes to use or wants tolearn!'
+          'Add a vocab word that your speaker likes to use or wants to learn!'
         }
       />
     ),
