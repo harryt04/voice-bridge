@@ -20,9 +20,9 @@ export const Hero = () => {
           <span className="border-gradient inline border-b-2 bg-gradient-to-r from-[#aa00ff] to-[#00cc99] bg-clip-text text-transparent">
             &nbsp;free and open source&nbsp;
           </span>
-          web app that helps children with autism communicate by offering visual
-          tools for daily activities, including navigating places, choosing
-          food, and accessing calming music playlists.
+          web app that helps children or adults with autism communicate by
+          offering visual tools for daily activities, including navigating
+          places, choosing food, and accessing calming music playlists.
         </p>
 
         <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">

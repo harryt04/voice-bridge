@@ -24,7 +24,7 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: 'VoiceBridge',
   description:
-    'VoiceBridge is a purpose-built barbershop and salon booking and payment collection app. Built by barbers for barbers.',
+    'VoiceBridge is a web app that helps children or adults with autism communicate by offering visual tools for daily activities, including navigating places, choosing food, and accessing calming music playlists.',
 }
 
 export default function RootLayout({
