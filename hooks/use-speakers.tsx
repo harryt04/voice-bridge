@@ -58,7 +58,12 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <SpeakerContext.Provider
-      value={{ speakers, selectedSpeaker, setSelectedSpeaker, isLoading }}
+      value={{
+        speakers,
+        selectedSpeaker,
+        setSelectedSpeaker,
+        isLoading,
+      }}
     >
       {children}
     </SpeakerContext.Provider>

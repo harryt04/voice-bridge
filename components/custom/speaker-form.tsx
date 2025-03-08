@@ -12,27 +12,28 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Speaker, SpeakerInput } from '@/models'
+import { BanIcon, SaveIcon, TrashIcon } from 'lucide-react'
+import './styles/speaker-form.css'
 
 export function SpeakerForm({
   onClose,
+  onDelete,
   onSubmit,
   speaker,
 }: {
   onClose: () => void
+  onDelete: (speaker: Speaker) => void
   onSubmit: (speaker: Speaker) => void
   speaker?: Speaker // Optional, for editing an existing speaker
 }) {
-  // Consolidate all state into a single object
   const [formState, setFormState] = useState<SpeakerInput>({
     name: speaker?.name || '',
   })
 
-  // Parse comma-separated list of email addresses into an array
   const [villagerIds, setVillagerIds] = useState<string>(
     speaker?.villagerIds?.join(', ') || '',
   )
 
-  // Update the state when `speaker` changes
   useEffect(() => {
     if (speaker) {
       setFormState({
@@ -55,17 +56,28 @@ export function SpeakerForm({
     setVillagerIds(e.target.value)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
     const villagerIdsArray = villagerIds
       .split(',')
       .map((email) => email.trim())
-      .filter((email) => email) // Filter out empty values
+      .filter((email) => email)
     onSubmit({
       ...speaker,
       ...formState,
       villagerIds: villagerIdsArray,
     } as Speaker)
     onClose()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSubmit(e)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      onClose()
+    }
   }
 
   return (
@@ -76,36 +88,59 @@ export function SpeakerForm({
             {speaker ? 'Edit Speaker' : 'Add Speaker'}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              value={formState.name}
-              onChange={handleChange('name')}
-              placeholder="Enter speaker name"
-              className="w-full"
-            />
+        <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={formState.name}
+                onChange={handleChange('name')}
+                placeholder="Enter speaker name"
+                className="w-full"
+              />
+            </div>
+            <div>
+              <Label htmlFor="villagerIds">
+                Users you&apos;ve shared access with
+              </Label>
+              <Input
+                id="villagerIds"
+                value={villagerIds}
+                onChange={handleVillagerIdsChange}
+                placeholder="Enter comma-separated User IDs"
+                className="w-full"
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="villagerIds">
-              Users you&apos;ve shared access with
-            </Label>
-            <Input
-              id="villagerIds"
-              value={villagerIds}
-              onChange={handleVillagerIdsChange}
-              placeholder="Enter comma-separated User IDs"
-              className="w-full"
-            />
-          </div>
-        </div>
-        <DialogFooter className="mt-6 flex justify-end gap-4">
-          <Button onClick={onClose} variant="ghost">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit}>Save</Button>
-        </DialogFooter>
+          <DialogFooter className="speaker-form-footer">
+            <div>
+              {!!speaker && (
+                <Button
+                  onClick={() => {
+                    if (speaker) {
+                      onDelete(speaker)
+                    }
+                  }}
+                  variant="destructive"
+                  type="button"
+                >
+                  <TrashIcon />
+                  Delete
+                </Button>
+              )}
+            </div>
+            <div className="spacer"></div>
+            <Button onClick={onClose} variant="outline" type="button">
+              <BanIcon />
+              Cancel
+            </Button>
+            <Button type="submit">
+              <SaveIcon />
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

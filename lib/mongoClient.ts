@@ -1,6 +1,8 @@
 import { MongoClient } from 'mongodb'
+const defaultConnectionString = '' // put your MONGO_CONNECTION_STRING here when running gulp create-indexes
 
-const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING as string
+const MONGO_CONNECTION_STRING =
+  process.env.MONGO_CONNECTION_STRING ?? defaultConnectionString
 
 if (!MONGO_CONNECTION_STRING) {
   throw new Error('MONGO_CONNECTION_STRING environment variable is not set.')
@@ -22,10 +24,13 @@ export async function getMongoClient(): Promise<MongoClient> {
 }
 
 export const mongoDBConfig = {
-  dbName: 'voicebridge',
+  dbName: `voicebridge-${process.env.NODE_ENV}`,
   collections: {
+    activities: 'activities',
+    foods: 'foods',
     places: 'places',
     speakers: 'speakers',
-    foods: 'foods',
+    villagers: 'villagers',
+    vocabWords: 'vocabWords',
   },
 }

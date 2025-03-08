@@ -1,8 +1,7 @@
 'use client'
 
-import { Food } from '@/models'
+import { useState } from 'react'
 import Image from 'next/image'
-import React, { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -15,20 +14,22 @@ import { speakText } from '@/utils/speech'
 import { AudioLines, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
-import { FoodForm } from './food-form'
+import { ItemForm } from './item-form'
 
-export const FoodComponent = ({
-  food,
+export const ItemComponent = ({
+  item,
   editMode,
   onDelete,
+  modelName,
 }: {
-  food: Food
+  item: any
   editMode: boolean
-  onDelete: (food: Food) => void
+  onDelete: (item: any) => void
+  modelName: string
 }) => {
   const [imageError, setImageError] = useState(false)
   const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
-  const [updatedFood, setUpdatedFood] = useState<Food>(food) // Local state to hold the updated food
+  const [updatedItem, setUpdatedItem] = useState<any>(item) // Local state to hold the updated item
   const fallbackImage = 'https://i.sstatic.net/fUChS.png'
 
   // Check if imageUrl is valid
@@ -43,12 +44,12 @@ export const FoodComponent = ({
   }
 
   const imageUrl = (
-    isValidUrl(updatedFood?.imageUrl as string)
-      ? updatedFood.imageUrl
+    isValidUrl(updatedItem?.imageUrl as string)
+      ? updatedItem.imageUrl
       : fallbackImage
   ) as string
 
-  const key = `food-${updatedFood._id}`
+  const key = `${modelName}-${updatedItem._id}`
 
   const handleEditClick = () => {
     setIsEditing(true)
@@ -58,19 +59,19 @@ export const FoodComponent = ({
     setIsEditing(false)
   }
 
-  const handleSubmit = async (updatedFoodData: Food) => {
-    setUpdatedFood(updatedFoodData)
+  const handleSubmit = async (updatedItemData: any) => {
+    setUpdatedItem(updatedItemData)
     setIsEditing(false)
-    fetch(`/api/food?id=${updatedFoodData._id}`, {
+    fetch(`/api/${modelName}?id=${updatedItemData._id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedFoodData),
+      body: JSON.stringify(updatedItemData),
     })
   }
 
   const handleDeleteClick = async () => {
-    onDelete(updatedFood)
-    fetch(`/api/food?id=${updatedFood._id}`, {
+    onDelete(updatedItem)
+    fetch(`/api/${modelName}?id=${updatedItem._id}`, {
       method: 'DELETE',
     })
   }
@@ -80,18 +81,18 @@ export const FoodComponent = ({
       className={cn('min-h-full cursor-pointer')}
       onClick={() => {
         if (!editMode) {
-          speakText(updatedFood.name)
+          speakText(updatedItem.name)
         }
       }}
     >
       <CardHeader>
         <CardTitle>
           <div className="flex items-center gap-4">
-            {updatedFood.name}
+            {updatedItem.name}
             {!editMode && <AudioLines />}
           </div>
         </CardTitle>
-        <CardDescription>{updatedFood.description}</CardDescription>
+        <CardDescription>{updatedItem.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {imageError ? (
@@ -109,10 +110,7 @@ export const FoodComponent = ({
         )}
         {editMode && !isEditing && (
           <div className="flex flex-row gap-4 p-4">
-            <Button
-              variant="outline"
-              onClick={handleEditClick} // Open the edit form
-            >
+            <Button variant="outline" onClick={handleEditClick}>
               <Pencil1Icon /> Edit
             </Button>
             <Button variant="destructive" onClick={handleDeleteClick}>
@@ -121,10 +119,11 @@ export const FoodComponent = ({
           </div>
         )}
         {isEditing && (
-          <FoodForm
-            onClose={handleCloseEdit} // Close the form
-            onSubmit={handleSubmit} // Submit the form with updated data
-            food={updatedFood} // Pass the current updated food to pre-populate the form
+          <ItemForm
+            onClose={handleCloseEdit}
+            onSubmit={handleSubmit}
+            item={updatedItem}
+            modelName={modelName}
           />
         )}
       </CardContent>

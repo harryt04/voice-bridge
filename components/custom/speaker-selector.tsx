@@ -13,6 +13,9 @@ import {
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
 import { toast } from 'sonner'
+import { Speaker } from '@/models'
+import { Skeleton } from '../ui/skeleton'
+import { Progress } from '@radix-ui/react-progress'
 
 export const SpeakerSelector = () => {
   const {
@@ -68,7 +71,25 @@ export const SpeakerSelector = () => {
     setIsFormOpen(false)
   }
 
-  if (isLoadingSpeakers) return <div>Loading speakers...</div>
+  const handleDeleteSpeaker = async (speaker: Speaker) => {
+    console.trace()
+    await fetch(`/api/speaker?id=${speaker._id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...speaker,
+        isArchived: true,
+      }),
+    })
+    window.location.assign('/places')
+  }
+
+  if (isLoadingSpeakers)
+    return (
+      <div className="min-h-36 p-4">
+        <Skeleton className="h-full" />
+      </div>
+    )
 
   return (
     <div className="px-4 py-6">
@@ -130,6 +151,7 @@ export const SpeakerSelector = () => {
       {isFormOpen && (
         <SpeakerForm
           onClose={handleCloseForm}
+          onDelete={handleDeleteSpeaker}
           onSubmit={handleFormSubmit}
           speaker={editingSpeaker}
         />

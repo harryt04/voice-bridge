@@ -1,0 +1,6 @@
+.speaker-form-footer {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  column-gap: 0.5rem;
+  padding-top: 1rem;
+}

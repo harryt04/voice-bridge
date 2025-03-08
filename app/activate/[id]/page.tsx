@@ -14,7 +14,7 @@ export default function Activate() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ speakerId: id }),
       }).then(() => {
-        window.open(`/places`)
+        window.location.assign(`/places`)
       })
     }
 
@@ -26,7 +26,7 @@ export default function Activate() {
   return (
     <>
       <SignedOut>
-        <RedirectToSignIn />
+        <RedirectToSignIn redirectUrl={`/activate/${id}`} />
       </SignedOut>
       <SignedIn>
         <div>

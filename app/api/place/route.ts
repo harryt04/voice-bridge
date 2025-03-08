@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
 
     const place = await placesCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!place) {
@@ -66,13 +65,12 @@ export async function POST(req: NextRequest) {
     const existingPlace = id
       ? await placesCollection.findOne({
           _id: new ObjectId(id),
-          userId: user.userId,
         })
       : false
 
     const updatedPlace = {
       ...body,
-      userId: user.userId,
+      lastUpdatedBy: user.userId,
       updatedAt: new Date(),
     }
 
@@ -122,7 +120,6 @@ export async function DELETE(req: NextRequest) {
 
     const existingPlace = await placesCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!existingPlace) {

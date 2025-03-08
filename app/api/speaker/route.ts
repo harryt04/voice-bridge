@@ -70,11 +70,12 @@ export async function POST(req: NextRequest) {
       ? await speakersCollection.findOne({
           _id: new ObjectId(id),
         })
-      : false
+      : undefined
 
     const updatedSpeaker = {
+      parentId: existingSpeaker?.parentId ?? user.userId,
       ...body,
-      parentId: user.userId,
+      lastUpdatedBy: user.userId,
       updatedAt: new Date(),
     }
 
@@ -87,12 +88,16 @@ export async function POST(req: NextRequest) {
     } else {
       delete updatedSpeaker._id
       const result = await speakersCollection.updateOne(
-        { _id: new ObjectId(id as string) },
+        { _id: existingSpeaker._id },
         { $set: updatedSpeaker },
       )
 
       return NextResponse.json(
-        { success: true, updatedCount: result.modifiedCount, updatedSpeaker },
+        {
+          success: true,
+          updatedCount: result.modifiedCount,
+          updatedSpeaker: { ...updatedSpeaker, _id: existingSpeaker._id },
+        },
         { status: 200 },
       )
     }
@@ -124,7 +129,6 @@ export async function DELETE(req: NextRequest) {
 
     const existingSpeaker = await speakersCollection.findOne({
       _id: new ObjectId(id),
-      userId: user.userId,
     })
 
     if (!existingSpeaker) {
