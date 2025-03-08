@@ -2,6 +2,7 @@ VoiceBridge is a free and open source web app that helps children with autism co
 
 Built with:
 
+- [shadcn/ui](https://ui.shadcn.com)
 - Next.js
 - Tailwind CSS
 - Clerk
