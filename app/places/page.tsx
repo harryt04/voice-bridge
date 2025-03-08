@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react'
 import { PlaceComponent } from '@/components/custom/place-component'
 import { Button } from '@/components/ui/button'
-import { PlusIcon } from 'lucide-react'
+import { LandPlot, PlusIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
-import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Switch } from '@/components/ui/switch'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
+import { NoResultsComponent } from '@/components/custom/no-results-component'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -72,6 +72,28 @@ export default function Places() {
     setPlaces(places.filter((p) => p._id !== place._id))
   }
 
+  const placesList =
+    places?.length > 0 ? (
+      places.map((place) => (
+        <div
+          key={place._id}
+          className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+        >
+          <PlaceComponent
+            place={place}
+            editMode={editMode}
+            onDelete={handleDeletePlace}
+          ></PlaceComponent>
+        </div>
+      ))
+    ) : (
+      <NoResultsComponent
+        icon={<LandPlot />}
+        title="No places added yet"
+        body={'Add a place that your speaker likes to go to!'}
+      />
+    )
+
   return (
     <>
       <SignedOut>
@@ -104,18 +126,7 @@ export default function Places() {
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              places.map((place) => (
-                <div
-                  key={place._id}
-                  className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
-                >
-                  <PlaceComponent
-                    place={place}
-                    editMode={editMode}
-                    onDelete={handleDeletePlace}
-                  ></PlaceComponent>
-                </div>
-              ))
+              placesList
             )}
           </div>
         </div>

@@ -15,6 +15,7 @@ export type GenericPageInfo = {
   editModelName: string
   singularLabel: string
   pluralLabel: string
+  noResultsComponent: JSX.Element
 }
 
 export default function GenericItemsPage({
@@ -91,6 +92,23 @@ export default function GenericItemsPage({
     }
   }
 
+  const itemsList =
+    items?.length > 0
+      ? items.map((item) => (
+          <div
+            key={item._id}
+            className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
+          >
+            <ItemComponent
+              item={item}
+              editMode={editMode}
+              onDelete={handleDeleteItem}
+              modelName={pageInfo.editModelName as string}
+            />
+          </div>
+        ))
+      : pageInfo.noResultsComponent
+
   return (
     <>
       <SignedOut>
@@ -121,19 +139,7 @@ export default function GenericItemsPage({
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              items.map((item) => (
-                <div
-                  key={item._id}
-                  className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
-                >
-                  <ItemComponent
-                    item={item}
-                    editMode={editMode}
-                    onDelete={handleDeleteItem}
-                    modelName={pageInfo.editModelName as string}
-                  />
-                </div>
-              ))
+              itemsList
             )}
           </div>
         </div>
