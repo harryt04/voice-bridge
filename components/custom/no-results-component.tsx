@@ -14,14 +14,14 @@ export const NoResultsComponent: FC<NoResultsProps> = ({
 }) => {
   return (
     <Card className="p-6 text-center">
-      <CardHeader className="flex flex-col items-center justify-center self-center justify-self-center rounded-lg shadow-md">
+      <CardHeader className="flex flex-col items-center justify-center self-center justify-self-center">
         <div className="mb-4 text-4xl">{icon}</div>
         <CardTitle>
           <h2 className="mb-2 text-xl font-semibold">{title}</h2>
         </CardTitle>
       </CardHeader>
       <CardDescription className="text-center text-sm">
-        <p className="pt-2">{body}</p>
+        <p>{body}</p>
 
         <p className="pt-4">
           {`Images are included as a URL (right-click on an image in google
