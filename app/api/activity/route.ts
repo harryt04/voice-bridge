@@ -1,5 +1,5 @@
-import { mongoDBConfig } from '@/lib/mongoClient'
-import { handleDatabaseOperation } from '@/utils/mongo-utils'
+import { mongoDBConfig } from '@/lib/mongo-client'
+import { handleDatabaseOperation } from '@/lib/mongo-utils'
 import { NextRequest } from 'next/server'
 
 export async function GET(req: NextRequest) {

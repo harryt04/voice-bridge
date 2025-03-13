@@ -1,6 +1,6 @@
 import { getAuth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
+import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { ObjectId } from 'mongodb'
 
 export async function POST(req: NextRequest) {

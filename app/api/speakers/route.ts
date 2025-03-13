@@ -1,6 +1,6 @@
 import { getAuth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { getMongoClient, mongoDBConfig } from '@/lib/mongoClient'
+import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 
 export async function GET(req: NextRequest) {
   const user = getAuth(req)
