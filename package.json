@@ -36,7 +36,7 @@
     "next": "^14.2.26",
     "next-themes": "^0.3.0",
     "posthog-js": "^1.234.1",
-    "posthog-node": "^4.10.2",
+    "posthog-node": "^4.11.1",
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
