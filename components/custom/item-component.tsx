@@ -43,11 +43,12 @@ export const ItemComponent = ({
     }
   }
 
-  const imageUrl = (
-    isValidUrl(updatedItem?.imageUrl as string)
+  // Prioritize base64 image if available, otherwise use the URL
+  const imageSource =
+    updatedItem.imageBase64 ||
+    (isValidUrl(updatedItem?.imageUrl as string)
       ? updatedItem.imageUrl
-      : fallbackImage
-  ) as string
+      : fallbackImage)
 
   const key = `${modelName}-${updatedItem._id}`
 
@@ -101,7 +102,7 @@ export const ItemComponent = ({
           <Image
             height={300}
             width={300}
-            src={imageUrl}
+            src={imageSource}
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
