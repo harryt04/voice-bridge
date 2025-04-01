@@ -18,9 +18,7 @@ export const NoResultsComponent: FC<NoResultsProps> = ({
   title,
   body,
 }) => {
-  body.push(
-    `Images are included as a URL (right-click on an image in google images and select 'Copy Image Address', then paste it in the form).`,
-  )
+  const extraMessage = `Images are included as a URL (right-click on an image in google images and select 'Copy Image Address', then paste it in the form).`
   return (
     <Card className="p-2 text-center">
       <CardHeader className="flex flex-col items-center justify-center self-center justify-self-center">
@@ -33,6 +31,7 @@ export const NoResultsComponent: FC<NoResultsProps> = ({
             {line}
           </p>
         ))}
+        <p className="py-2">{extraMessage}</p>
       </CardContent>
     </Card>
   )

@@ -88,8 +88,8 @@ export const ItemComponent = ({
       <CardHeader>
         <CardTitle className="flex items-center gap-4">
           {updatedItem.name}
+          {!editMode && <AudioLines />}
         </CardTitle>
-        {!editMode && <AudioLines />}
         <CardDescription>{updatedItem.description}</CardDescription>
       </CardHeader>
       <CardContent>
