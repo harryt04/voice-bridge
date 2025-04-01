@@ -2,7 +2,7 @@ import GenericItemsPage, {
   GenericPageInfo,
 } from '@/components/custom/generic-items-page'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
-import { ActivityIcon, DrumIcon } from 'lucide-react'
+import { DrumIcon } from 'lucide-react'
 import React from 'react'
 
 function ActivitiesPage() {
