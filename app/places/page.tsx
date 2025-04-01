@@ -9,9 +9,9 @@ import { PlaceForm } from '@/components/custom/place-form'
 import { Switch } from '@/components/ui/switch'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import { Input } from '@/components/ui/input'
+import MySidebarTrigger from '@/components/custom/sidebar-trigger'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -22,7 +22,6 @@ export default function Places() {
   const [searchQuery, setSearchQuery] = useState('')
 
   const { selectedSpeaker } = useSpeakerContext()
-  const { open, isMobile } = useSidebar()
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -142,7 +141,7 @@ export default function Places() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+        <MySidebarTrigger />
         <div className="flex w-full flex-col">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {places.length > 0 && (

@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button'
 import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { Input } from '@/components/ui/input'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
+import MySidebarTrigger from './sidebar-trigger'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -31,7 +31,6 @@ export default function GenericItemsPage({
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const { open, isMobile } = useSidebar()
   const { selectedSpeaker } = useSpeakerContext()
 
   useEffect(() => {
@@ -159,7 +158,7 @@ export default function GenericItemsPage({
       </SignedOut>
 
       <SignedIn>
-        {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+        <MySidebarTrigger />
 
         <div className="flex w-full flex-col">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">

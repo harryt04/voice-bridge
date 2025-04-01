@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { PlusIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
+import MySidebarTrigger from './sidebar-trigger'
 
 export type ItemsListProps = {
   initialItems: any[]
@@ -30,7 +30,6 @@ export default function ItemsList({
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
-  const { open, isMobile } = useSidebar()
 
   const handleUpsertItem = async (newItem: any) => {
     if (!pageInfo.editModelName || !speakerId) return
@@ -100,7 +99,7 @@ export default function ItemsList({
 
   return (
     <>
-      {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
+      <MySidebarTrigger />
 
       <div className="flex flex-col">
         <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
