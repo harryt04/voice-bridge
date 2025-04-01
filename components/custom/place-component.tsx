@@ -110,8 +110,9 @@ export const PlaceComponent = ({
               variant="outline"
               onClick={(event) => {
                 event.stopPropagation()
+
                 openGoogleMapsDirections(
-                  (updatedPlace.address ?? updatedPlace.name) as string,
+                  (updatedPlace.address || updatedPlace.name) as string,
                 )
               }}
             >
