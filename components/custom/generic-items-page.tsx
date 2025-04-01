@@ -6,10 +6,11 @@ import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
-import { PlusIcon, SearchIcon } from 'lucide-react'
+import { PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { Input } from '@/components/ui/input'
+import { NoResultsComponent } from '@/components/custom/no-results-component'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -109,22 +110,47 @@ export default function GenericItemsPage({
 
   const filteredItems = filterItems(items)
 
-  const itemsList =
-    filteredItems?.length > 0
-      ? filteredItems.map((item) => (
-          <div
-            key={item._id}
-            className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
-          >
-            <ItemComponent
-              item={item}
-              editMode={editMode}
-              onDelete={handleDeleteItem}
-              modelName={pageInfo.editModelName as string}
-            />
-          </div>
-        ))
-      : pageInfo.noResultsComponent
+  const itemsContent = () => {
+    if (loading) {
+      return <p>Loading {pageInfo.pluralLabel}...</p>
+    }
+
+    if (error) {
+      return <p className="text-red-500">{error}</p>
+    }
+
+    if (items.length === 0) {
+      return pageInfo.noResultsComponent
+    }
+
+    if (searchQuery.trim() && filteredItems.length === 0) {
+      return (
+        <NoResultsComponent
+          icon={<XCircleIcon />}
+          title="No search results"
+          body={[
+            `No ${pageInfo.pluralLabel} match your search "${searchQuery}"`,
+            `Try a different search term or clear your search`,
+          ]}
+          showImageUrlInstructions={false}
+        />
+      )
+    }
+
+    return filteredItems.map((item) => (
+      <div
+        key={item._id}
+        className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
+      >
+        <ItemComponent
+          item={item}
+          editMode={editMode}
+          onDelete={handleDeleteItem}
+          modelName={pageInfo.editModelName as string}
+        />
+      </div>
+    ))
+  }
 
   return (
     <>
@@ -135,7 +161,7 @@ export default function GenericItemsPage({
       <SignedIn>
         {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
 
-        <div className="flex flex-col">
+        <div className="flex w-full flex-col">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {items.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
@@ -146,6 +172,16 @@ export default function GenericItemsPage({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="h-9"
                 />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSearchQuery('')}
+                    size="icon"
+                    className="w-12"
+                  >
+                    <XCircleIcon />
+                  </Button>
+                )}
               </div>
             )}
 
@@ -169,13 +205,7 @@ export default function GenericItemsPage({
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 p-8">
-            {loading ? (
-              <p>Loading {pageInfo.pluralLabel}...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : (
-              itemsList
-            )}
+            {itemsContent()}
           </div>
         </div>
 

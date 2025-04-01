@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { PlaceComponent } from '@/components/custom/place-component'
 import { Button } from '@/components/ui/button'
-import { LandPlot, PlusIcon, SearchIcon } from 'lucide-react'
+import { LandPlot, PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
 import { Switch } from '@/components/ui/switch'
@@ -89,27 +89,52 @@ export default function Places() {
 
   const filteredPlaces = filterPlaces(places)
 
-  const placesList =
-    filteredPlaces?.length > 0 ? (
-      filteredPlaces.map((place) => (
-        <div
-          key={place._id}
-          className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
-        >
-          <PlaceComponent
-            place={place}
-            editMode={editMode}
-            onDelete={handleDeletePlace}
-          ></PlaceComponent>
-        </div>
-      ))
-    ) : (
-      <NoResultsComponent
-        icon={<LandPlot />}
-        title="No places added yet"
-        body={['Add a place that your speaker likes to go to!']}
-      />
-    )
+  const placesContent = () => {
+    if (loading) {
+      return <p>Loading places...</p>
+    }
+
+    if (error) {
+      return <p className="text-red-500">{error}</p>
+    }
+
+    if (places.length === 0) {
+      return (
+        <NoResultsComponent
+          icon={<LandPlot />}
+          title="No places added yet"
+          body={['Add a place that your speaker likes to go to!']}
+        />
+      )
+    }
+
+    if (searchQuery.trim() && filteredPlaces.length === 0) {
+      return (
+        <NoResultsComponent
+          icon={<XCircleIcon />}
+          title="No search results"
+          body={[
+            `No places match your search "${searchQuery}"`,
+            `Try a different search term or clear your search`,
+          ]}
+          showImageUrlInstructions={false}
+        />
+      )
+    }
+
+    return filteredPlaces.map((place) => (
+      <div
+        key={place._id}
+        className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+      >
+        <PlaceComponent
+          place={place}
+          editMode={editMode}
+          onDelete={handleDeletePlace}
+        ></PlaceComponent>
+      </div>
+    ))
+  }
 
   return (
     <>
@@ -118,7 +143,7 @@ export default function Places() {
       </SignedOut>
       <SignedIn>
         {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
-        <div className="flex flex-col">
+        <div className="flex w-full flex-col">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {places.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
@@ -129,6 +154,16 @@ export default function Places() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="h-9"
                 />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSearchQuery('')}
+                    size="icon"
+                    className="w-12"
+                  >
+                    <XCircleIcon />
+                  </Button>
+                )}
               </div>
             )}
 
@@ -152,13 +187,7 @@ export default function Places() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 p-8">
-            {loading ? (
-              <p>Loading places...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : (
-              placesList
-            )}
+            {placesContent()}
           </div>
         </div>
         {isFormOpen && (

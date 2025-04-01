@@ -11,14 +11,16 @@ export interface NoResultsProps {
   icon: JSX.Element
   title: string
   body: string[]
+  showImageUrlInstructions?: boolean
 }
 
 export const NoResultsComponent: FC<NoResultsProps> = ({
   icon,
   title,
   body,
+  showImageUrlInstructions = true,
 }) => {
-  const extraMessage = `Images are included as a URL (right-click on an image in google images and select 'Copy Image Address', then paste it in the form).`
+  const imageUrlInstructions = `Images are included as a URL (right-click on an image in google images and select 'Copy Image Address', then paste it in the form).`
   return (
     <Card className="p-2 text-center">
       <CardHeader className="flex flex-col items-center justify-center self-center justify-self-center">
@@ -31,7 +33,9 @@ export const NoResultsComponent: FC<NoResultsProps> = ({
             {line}
           </p>
         ))}
-        <p className="py-2">{extraMessage}</p>
+        {showImageUrlInstructions && (
+          <p className="py-2">{imageUrlInstructions}</p>
+        )}
       </CardContent>
     </Card>
   )
