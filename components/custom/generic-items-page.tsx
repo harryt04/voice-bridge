@@ -6,9 +6,10 @@ import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon, SearchIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { useSpeakerContext } from '@/hooks/use-speakers'
+import { Input } from '@/components/ui/input'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -28,6 +29,7 @@ export default function GenericItemsPage({
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { open, isMobile } = useSidebar()
   const { selectedSpeaker } = useSpeakerContext()
 
@@ -92,9 +94,24 @@ export default function GenericItemsPage({
     }
   }
 
+  const filterItems = (items: any[]) => {
+    if (!searchQuery.trim()) return items
+
+    return items.filter((item) => {
+      return Object.values(item).some(
+        (value) =>
+          value &&
+          typeof value === 'string' &&
+          value.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
+    })
+  }
+
+  const filteredItems = filterItems(items)
+
   const itemsList =
-    items?.length > 0
-      ? items.map((item) => (
+    filteredItems?.length > 0
+      ? filteredItems.map((item) => (
           <div
             key={item._id}
             className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
@@ -119,21 +136,39 @@ export default function GenericItemsPage({
         {(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}
 
         <div className="flex flex-col">
-          <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
-            <Button variant="default" onClick={() => setIsFormOpen(true)}>
-              <PlusIcon /> Add {pageInfo.singularLabel}
+          <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
+            {items.length > 0 && (
+              <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
+                <SearchIcon className="h-5 w-5 text-muted-foreground" />
+                <Input
+                  placeholder={`Search ${pageInfo.pluralLabel}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-9"
+                />
+              </div>
+            )}
+
+            <Button
+              variant="default"
+              onClick={() => setIsFormOpen(true)}
+              className="w-full md:w-auto"
+            >
+              <PlusIcon className="mr-1" /> Add {pageInfo.singularLabel}
             </Button>
+
             {items.length > 0 && (
               <div
-                className="float-right flex items-center gap-2 px-8 py-2 md:absolute md:right-0"
+                className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 md:w-auto"
                 onClick={() => setEditMode(!editMode)}
               >
-                <Switch checked={editMode}></Switch>
-                Edit mode
+                <Switch checked={editMode} />
+                <span>Edit mode</span>
               </div>
             )}
           </div>
-          <div className="-ml-12 flex flex-wrap justify-center gap-8 p-8 md:ml-auto">
+
+          <div className="flex flex-wrap justify-center gap-8 p-8">
             {loading ? (
               <p>Loading {pageInfo.pluralLabel}...</p>
             ) : error ? (
