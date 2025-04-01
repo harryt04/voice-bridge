@@ -41,9 +41,12 @@ export const PlaceComponent = ({
     }
   }
 
-  const imageUrl = isValidUrl(updatedPlace.imageUrl)
-    ? updatedPlace.imageUrl
-    : fallbackImage
+  // Prioritize base64 image if available, otherwise use the URL
+  const imageSource =
+    updatedPlace.imageBase64 ||
+    (isValidUrl(updatedPlace.imageUrl || '')
+      ? updatedPlace.imageUrl
+      : fallbackImage)
 
   const key = `place-${updatedPlace._id}`
 
@@ -99,7 +102,7 @@ export const PlaceComponent = ({
           <Image
             height={500}
             width={500}
-            src={imageUrl}
+            src={imageSource as string}
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />

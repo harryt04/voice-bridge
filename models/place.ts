@@ -1,10 +1,11 @@
 export type PlaceInput = {
   name: string
-  imageUrl: string
   speakerId: string
   description?: string
   dictationUrl?: string
   address?: string
+  imageUrl?: string
+  imageBase64?: string
 }
 
 export type Place = PlaceInput & {
