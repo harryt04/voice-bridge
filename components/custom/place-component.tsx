@@ -104,7 +104,7 @@ export const PlaceComponent = ({
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
         )}
-        {!editMode && updatedPlace.address && (
+        {!editMode && (
           <div className="flex flex-row gap-4 py-4">
             <Button
               variant="outline"
