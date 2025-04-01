@@ -83,10 +83,10 @@ export const PlaceComponent = ({
     >
       <CardHeader>
         <CardTitle>
-          <div className="flex items-center gap-4">
+          <span className="flex items-center gap-4">
             {updatedPlace.name}
             {!editMode && <AudioLines />}
-          </div>
+          </span>
         </CardTitle>
         <CardDescription>{updatedPlace.description}</CardDescription>
       </CardHeader>

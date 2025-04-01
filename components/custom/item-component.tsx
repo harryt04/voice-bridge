@@ -86,12 +86,10 @@ export const ItemComponent = ({
       }}
     >
       <CardHeader>
-        <CardTitle>
-          <div className="flex items-center gap-4">
-            {updatedItem.name}
-            {!editMode && <AudioLines />}
-          </div>
+        <CardTitle className="flex items-center gap-4">
+          {updatedItem.name}
         </CardTitle>
+        {!editMode && <AudioLines />}
         <CardDescription>{updatedItem.description}</CardDescription>
       </CardHeader>
       <CardContent>

@@ -15,7 +15,7 @@ function ActivitiesPage() {
       <NoResultsComponent
         icon={<DrumIcon />}
         title={`No activities added yet`}
-        body={'Add an activity that your speaker likes!'}
+        body={['Add an activity that your speaker likes!']}
       />
     ),
   }

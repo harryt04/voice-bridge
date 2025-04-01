@@ -90,7 +90,7 @@ export default function Places() {
       <NoResultsComponent
         icon={<LandPlot />}
         title="No places added yet"
-        body={'Add a place that your speaker likes to go to!'}
+        body={['Add a place that your speaker likes to go to!']}
       />
     )
 

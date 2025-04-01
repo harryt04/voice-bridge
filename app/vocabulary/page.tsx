@@ -15,9 +15,9 @@ function VocabPage() {
       <NoResultsComponent
         icon={<ListChecks />}
         title={`No vocab words added yet`}
-        body={
-          'Add a vocab word that your speaker likes to use or wants to learn!'
-        }
+        body={[
+          'Add a vocab word that your speaker likes to use or wants to learn!',
+        ]}
       />
     ),
   }

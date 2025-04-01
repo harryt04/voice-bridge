@@ -15,9 +15,9 @@ function PeoplePage() {
       <NoResultsComponent
         icon={<UsersIcon />}
         title={`No people added yet`}
-        body={
-          'Add a person that your speaker likes to interact with or talk to!'
-        }
+        body={[
+          'Add a person that your speaker likes to interact with or talk to!',
+        ]}
       />
     ),
   }
