@@ -110,7 +110,9 @@ export const PlaceComponent = ({
               variant="outline"
               onClick={(event) => {
                 event.stopPropagation()
-                openGoogleMapsDirections(updatedPlace.address as string)
+                openGoogleMapsDirections(
+                  (updatedPlace.address ?? updatedPlace.name) as string,
+                )
               }}
             >
               <LandPlotIcon /> Directions
