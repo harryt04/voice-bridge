@@ -60,7 +60,7 @@ function LandingPage() {
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <a
-                  href="https://github.com/harryt04/VoiceBridge" // Updated GitHub link
+                  href="https://github.com/harryt04/voice-bridge" // Updated GitHub link
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -173,7 +173,7 @@ function LandingPage() {
             </a>
             . The source code is available on {/* Updated Footer GitHub Link */}
             <a
-              href="https://github.com/harryt04/VoiceBridge"
+              href="https://github.com/harryt04/voice-bridge"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
