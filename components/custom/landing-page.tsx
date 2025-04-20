@@ -139,8 +139,8 @@ function LandingPage() {
               </h2>
               {/* Updated CTA Text */}
               <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-                Sign up or log in to start using VoiceBridge's visual tools.
-                It's free forever.
+                Sign up or log in to start using VoiceBridge&apos;s visual
+                tools. It&apos;s free forever.
               </p>
               {/* Updated CTA Button */}
               <Button
