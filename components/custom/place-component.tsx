@@ -16,6 +16,7 @@ import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { PlaceForm } from './place-form'
 import { openGoogleMapsDirections } from '@/utils/directions'
+import { Muted } from '../ui/typography'
 
 export const PlaceComponent = ({
   place,
@@ -29,7 +30,6 @@ export const PlaceComponent = ({
   const [imageError, setImageError] = useState(false)
   const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
   const [updatedPlace, setUpdatedPlace] = useState<Place>(place) // Local state to hold the updated place
-  const fallbackImage = 'https://i.sstatic.net/fUChS.png'
 
   // Check if imageUrl is valid
   const isValidUrl = (url: string) => {
@@ -44,9 +44,7 @@ export const PlaceComponent = ({
   // Prioritize base64 image if available, otherwise use the URL
   const imageSource =
     updatedPlace.imageBase64 ||
-    (isValidUrl(updatedPlace.imageUrl || '')
-      ? updatedPlace.imageUrl
-      : fallbackImage)
+    (isValidUrl(updatedPlace.imageUrl || '') ? updatedPlace.imageUrl : null)
 
   const key = `place-${updatedPlace._id}`
 
@@ -94,11 +92,12 @@ export const PlaceComponent = ({
         <CardDescription>{updatedPlace.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        {imageError ? (
+        {imageError && (
           <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
             Image not available
           </div>
-        ) : (
+        )}{' '}
+        {!!imageSource && (
           <Image
             height={500}
             width={500}
@@ -106,6 +105,9 @@ export const PlaceComponent = ({
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
+        )}
+        {!imageSource && (
+          <Muted>Image not provided. Edit this item to add one.</Muted>
         )}
         {!editMode && (
           <div className="flex flex-row gap-4 py-4">

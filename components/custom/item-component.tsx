@@ -15,6 +15,7 @@ import { AudioLines, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { ItemForm } from './item-form'
+import { Muted } from '../ui/typography'
 
 export const ItemComponent = ({
   item,
@@ -30,7 +31,6 @@ export const ItemComponent = ({
   const [imageError, setImageError] = useState(false)
   const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
   const [updatedItem, setUpdatedItem] = useState<any>(item) // Local state to hold the updated item
-  const fallbackImage = 'https://i.sstatic.net/fUChS.png'
 
   // Check if imageUrl is valid
   const isValidUrl = (url: string) => {
@@ -46,9 +46,7 @@ export const ItemComponent = ({
   // Prioritize base64 image if available, otherwise use the URL
   const imageSource =
     updatedItem.imageBase64 ||
-    (isValidUrl(updatedItem?.imageUrl as string)
-      ? updatedItem.imageUrl
-      : fallbackImage)
+    (isValidUrl(updatedItem?.imageUrl as string) ? updatedItem.imageUrl : null)
 
   const key = `${modelName}-${updatedItem._id}`
 
@@ -94,11 +92,13 @@ export const ItemComponent = ({
         <CardDescription>{updatedItem.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        {imageError ? (
+        {imageError && (
           <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
             Image not available
           </div>
-        ) : (
+        )}
+
+        {!!imageSource && (
           <Image
             height={300}
             width={300}
@@ -106,6 +106,10 @@ export const ItemComponent = ({
             alt={key}
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
+        )}
+
+        {!imageSource && (
+          <Muted>Image not provided. Edit this item to add one.</Muted>
         )}
         {editMode && !isEditing && (
           <div className="flex flex-row gap-4 p-4">
