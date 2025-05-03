@@ -141,7 +141,7 @@ export default function Places() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        <VBSidebarTrigger />
+        <VBSidebarTrigger title={'Places'} />
         <div className="mt-20 flex w-full flex-col md:mt-0">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {places.length > 0 && (

@@ -7,6 +7,7 @@ import { ItemComponent } from '@/components/custom/item-component'
 import { PlusIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import VBSidebarTrigger from './sidebar-trigger'
+import { capitalizeFirstLetter } from '@/lib/utils'
 
 export type ItemsListProps = {
   initialItems: any[]
@@ -99,7 +100,7 @@ export default function ItemsList({
 
   return (
     <>
-      <VBSidebarTrigger />
+      <VBSidebarTrigger title={capitalizeFirstLetter(pageInfo.pluralLabel)} />
 
       <div className="mt-20 flex flex-col md:mt-0">
         <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">

@@ -11,6 +11,7 @@ import { useSpeakerContext } from '@/hooks/use-speakers'
 import { Input } from '@/components/ui/input'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import VBSidebarTrigger from './sidebar-trigger'
+import { capitalizeFirstLetter } from '@/lib/utils'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -158,7 +159,7 @@ export default function GenericItemsPage({
       </SignedOut>
 
       <SignedIn>
-        <VBSidebarTrigger />
+        <VBSidebarTrigger title={capitalizeFirstLetter(pageInfo.pluralLabel)} />
 
         <div className="mt-20 flex w-full flex-col md:mt-0">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
