@@ -11,7 +11,7 @@ import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import { Input } from '@/components/ui/input'
-import MySidebarTrigger from '@/components/custom/sidebar-trigger'
+import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -141,8 +141,8 @@ export default function Places() {
         <RedirectToSignIn />
       </SignedOut>
       <SignedIn>
-        <MySidebarTrigger />
-        <div className="flex w-full flex-col">
+        <VBSidebarTrigger />
+        <div className="mt-20 flex w-full flex-col md:mt-0">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {places.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">

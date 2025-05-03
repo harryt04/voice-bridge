@@ -1,12 +1,23 @@
 'use client'
 import React from 'react'
 import { SidebarTrigger, useSidebar } from '../ui/sidebar'
+import { Card } from '../ui/card'
 
-function MySidebarTrigger() {
+function VBSidebarTrigger({}) {
   const { open, isMobile } = useSidebar()
+  const mobileClasses = isMobile
+    ? 'background-translucent translucent-bg fixed h-20'
+    : ''
   return (
-    <>{(!open || isMobile) && <SidebarTrigger className="ml-2 mt-5 p-5" />}</>
+    <>
+      {(!open || isMobile) && (
+        <Card className={`${mobileClasses} w-full rounded-none`}>
+          <SidebarTrigger className="mx-2 my-5 p-5" />
+          VoiceBridge
+        </Card>
+      )}
+    </>
   )
 }
 
-export default MySidebarTrigger
+export default VBSidebarTrigger

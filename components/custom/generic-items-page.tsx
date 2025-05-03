@@ -10,7 +10,7 @@ import { Switch } from '@/components/ui/switch'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { Input } from '@/components/ui/input'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
-import MySidebarTrigger from './sidebar-trigger'
+import VBSidebarTrigger from './sidebar-trigger'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -158,9 +158,9 @@ export default function GenericItemsPage({
       </SignedOut>
 
       <SignedIn>
-        <MySidebarTrigger />
+        <VBSidebarTrigger />
 
-        <div className="flex w-full flex-col">
+        <div className="mt-20 flex w-full flex-col md:mt-0">
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {items.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
