@@ -21,7 +21,7 @@ export default function Places() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
 
   const { selectedSpeaker } = useSpeakerContext()
 
@@ -144,7 +144,9 @@ export default function Places() {
       </SignedOut>
       <SignedIn>
         <VBSidebarTrigger title={'Places'} />
-        <div className={`flex w-full flex-col ${!open ? 'mt-20' : ''}`}>
+        <div
+          className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
+        >
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {places.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">

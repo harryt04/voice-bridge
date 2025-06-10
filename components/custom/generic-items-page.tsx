@@ -34,7 +34,7 @@ export default function GenericItemsPage({
   const [editMode, setEditMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { selectedSpeaker } = useSpeakerContext()
-  const { open } = useSidebar()
+  const { open, isMobile } = useSidebar()
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -163,7 +163,9 @@ export default function GenericItemsPage({
       <SignedIn>
         <VBSidebarTrigger title={capitalizeFirstLetter(pageInfo.pluralLabel)} />
 
-        <div className={`flex w-full flex-col ${!open ? 'mt-20' : ''}`}>
+        <div
+          className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
+        >
           <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
             {items.length > 0 && (
               <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
