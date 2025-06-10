@@ -8,6 +8,7 @@ import { PlusIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import VBSidebarTrigger from './sidebar-trigger'
 import { capitalizeFirstLetter } from '@/lib/utils'
+import { useSidebar } from '../ui/sidebar'
 
 export type ItemsListProps = {
   initialItems: any[]
@@ -31,6 +32,7 @@ export default function ItemsList({
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
+  const { open } = useSidebar()
 
   const handleUpsertItem = async (newItem: any) => {
     if (!pageInfo.editModelName || !speakerId) return
@@ -102,7 +104,7 @@ export default function ItemsList({
     <>
       <VBSidebarTrigger title={capitalizeFirstLetter(pageInfo.pluralLabel)} />
 
-      <div className="mt-20 flex flex-col md:mt-0">
+      <div className={`flex w-full flex-col ${!open ? 'mt-20' : ''}`}>
         <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
           <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add {pageInfo.singularLabel}
