@@ -164,7 +164,7 @@ function LandingPage() {
           <p className="w-full text-center text-sm leading-loose text-muted-foreground">
             Built by{' '}
             <a
-              href="https://harryt.dev"
+              href="https://github.com/harryt04?tab=repositories"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
