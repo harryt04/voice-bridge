@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import posthog from 'posthog-js'
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
-import { sampleByEvent } from 'posthog-js/lib/src/customizations'
+import { sampleByEvent } from 'posthog-js/lib/src/customizations/before-send.js'
 
 if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) {
   throw new Error('NEXT_PUBLIC_POSTHOG_KEY is not set')
