@@ -6,9 +6,11 @@ import React, {
   useState,
   ReactNode,
   useEffect,
+  useMemo,
 } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Speaker } from '@/models/speaker'
+import { PRE_MADE_SPEAKER } from '@/lib/premade-cards'
 
 // Define the context type
 type SpeakerContextType = {
@@ -34,10 +36,16 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const {
-    data: speakers = [] as Speaker[],
+    data: fetchedSpeakers = [] as Speaker[],
     isLoading,
     isError,
   } = useQuery({ queryKey: ['speakers'], queryFn: fetchSpeakers })
+
+  // Always include the pre-made speaker at the end of the list
+  const speakers = useMemo(
+    () => [...fetchedSpeakers, PRE_MADE_SPEAKER],
+    [fetchedSpeakers],
+  )
 
   const [selectedSpeaker, setSelectedSpeakerState] = useState<Speaker | null>(
     null,

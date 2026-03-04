@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
-import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { RedirectToSignIn, Show } from '@clerk/nextjs'
 import { PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
 import { useSpeakerContext } from '@/hooks/use-speakers'
@@ -13,6 +13,7 @@ import { NoResultsComponent } from '@/components/custom/no-results-component'
 import VBSidebarTrigger from './sidebar-trigger'
 import { capitalizeFirstLetter } from '@/lib/utils'
 import { useSidebar } from '../ui/sidebar'
+import { isPremadeSpeaker, getPremadeCards } from '@/lib/premade-cards'
 
 export type GenericPageInfo = {
   listModelName: string
@@ -35,8 +36,17 @@ export default function GenericItemsPage({
   const [searchQuery, setSearchQuery] = useState('')
   const { selectedSpeaker } = useSpeakerContext()
   const { open, isMobile } = useSidebar()
+  const premade = isPremadeSpeaker(selectedSpeaker)
 
   useEffect(() => {
+    // When the pre-made speaker is selected, load static cards instead of fetching
+    if (premade) {
+      const cards = getPremadeCards(pageInfo.listModelName) || []
+      setItems(cards as any[])
+      setLoading(false)
+      return
+    }
+
     const fetchItems = async () => {
       if (!pageInfo.listModelName || !selectedSpeaker?._id) return
 
@@ -61,7 +71,7 @@ export default function GenericItemsPage({
     }
 
     fetchItems()
-  }, [pageInfo, selectedSpeaker])
+  }, [pageInfo, selectedSpeaker, premade])
 
   const handleUpsertItem = async (newItem: any) => {
     if (!pageInfo.editModelName || !selectedSpeaker?._id) return
@@ -146,7 +156,7 @@ export default function GenericItemsPage({
       >
         <ItemComponent
           item={item}
-          editMode={editMode}
+          editMode={editMode && !premade}
           onDelete={handleDeleteItem}
           modelName={pageInfo.editModelName as string}
         />
@@ -156,11 +166,10 @@ export default function GenericItemsPage({
 
   return (
     <>
-      <SignedOut>
+      <Show when="signed-out">
         <RedirectToSignIn />
-      </SignedOut>
-
-      <SignedIn>
+      </Show>
+      <Show when="signed-in">
         <VBSidebarTrigger title={capitalizeFirstLetter(pageInfo.pluralLabel)} />
 
         <div
@@ -192,12 +201,12 @@ export default function GenericItemsPage({
             <Button
               variant="default"
               onClick={() => setIsFormOpen(true)}
-              className="w-full md:w-auto"
+              className={`w-full md:w-auto ${premade ? 'hidden' : ''}`}
             >
               <PlusIcon className="mr-1" /> Add {pageInfo.singularLabel}
             </Button>
 
-            {items.length > 0 && (
+            {items.length > 0 && !premade && (
               <div
                 className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 md:w-auto"
                 onClick={() => setEditMode(!editMode)}
@@ -220,7 +229,7 @@ export default function GenericItemsPage({
             modelName={pageInfo.singularLabel as string}
           />
         )}
-      </SignedIn>
+      </Show>
     </>
   )
 }

@@ -1,10 +1,10 @@
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { ObjectId } from 'mongodb'
 
 export async function POST(req: NextRequest) {
-  const user = getAuth(req)
+  const user = await auth()
   const { speakerId } = await req.json()
   try {
     if (!user?.userId) {

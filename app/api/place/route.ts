@@ -1,4 +1,4 @@
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { ObjectId } from 'mongodb'
@@ -11,7 +11,7 @@ function extractIdFromQuery(req: NextRequest): string | null {
 
 // GET, PATCH, DELETE for a specific place
 export async function GET(req: NextRequest) {
-  const user = getAuth(req)
+  const user = await auth()
   const id = extractIdFromQuery(req)
 
   if (!id) {
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const user = getAuth(req)
+  const user = await auth()
   const id = extractIdFromQuery(req)
 
   try {
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const user = getAuth(req)
+  const user = await auth()
   const id = extractIdFromQuery(req)
 
   if (!id) {

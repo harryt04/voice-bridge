@@ -1,4 +1,4 @@
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from './mongo-client'
 import { ObjectId } from 'mongodb'
@@ -23,7 +23,7 @@ export async function handleDatabaseOperation(
   collectionName: string,
   operation: 'GET' | 'POST' | 'DELETE',
 ) {
-  const user = getAuth(req)
+  const user = await auth()
   const id = new URL(req.url).searchParams.get('id')
 
   if (!user?.userId) {
@@ -34,7 +34,7 @@ export async function handleDatabaseOperation(
     return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
   }
 
-  speakerAuthCheck(req, id as string)
+  speakerAuthCheck(id as string)
 
   try {
     const client = await getMongoClient()
@@ -112,7 +112,7 @@ export async function fetchDataFromCollection(
   req: NextRequest,
   collectionName: string,
 ) {
-  const user = getAuth(req)
+  const user = await auth()
   const speakerId = extractParamFromUrl(req, 'speakerId')
 
   if (!user?.userId) {
@@ -125,7 +125,7 @@ export async function fetchDataFromCollection(
     const db = client.db(mongoDBConfig.dbName)
     const collection = db.collection(collectionName)
 
-    speakerAuthCheck(req, speakerId as string)
+    speakerAuthCheck(speakerId as string)
 
     // Fetch data from the specified collection
     const data = await collection.find({ speakerId: speakerId }).toArray()
@@ -146,19 +146,18 @@ export async function fetchDataFromCollection(
 /**
  * Checks if the authenticated user has access to the specified speaker.
  *
- * @param req - The incoming request object.
  * @param speakerId - The ID of the speaker to check authorization for.
  * @returns A JSON response indicating whether the speaker was found and if the user is authorized.
  *
  * The function performs the following steps:
- * 1. Retrieves the authenticated user from the request.
+ * 1. Retrieves the authenticated user via auth().
  * 2. Connects to the MongoDB client and accesses the speakers collection.
  * 3. Finds the speaker by the provided speaker ID.
  * 4. Checks if the speaker exists and if the authenticated user is either the parent of the speaker or a villager associated with the speaker.
  * 5. Returns a JSON response with an error message and a 404 status if the speaker is not found or the user is not authorized.
  */
-export const speakerAuthCheck = async (req: NextRequest, speakerId: string) => {
-  const user = getAuth(req)
+export const speakerAuthCheck = async (speakerId: string) => {
+  const user = await auth()
 
   const client = await getMongoClient()
   const db = client.db(mongoDBConfig.dbName)

@@ -17,6 +17,7 @@ import { Pencil1Icon } from '@radix-ui/react-icons'
 import { PlaceForm } from './place-form'
 import { openGoogleMapsDirections } from '@/utils/directions'
 import { Muted } from '../ui/typography'
+import { DynamicLucideIcon } from './dynamic-lucide-icon'
 
 export const PlaceComponent = ({
   place,
@@ -106,7 +107,15 @@ export const PlaceComponent = ({
             onError={() => setImageError(true)} // Trigger error state if image fails
           />
         )}
-        {!imageSource && (
+        {!imageSource && (updatedPlace as any).icon && (
+          <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+            <DynamicLucideIcon
+              name={(updatedPlace as any).icon}
+              className="h-24 w-24 text-muted-foreground"
+            />
+          </div>
+        )}
+        {!imageSource && !(updatedPlace as any).icon && (
           <Muted>Image not provided. Edit this item to add one.</Muted>
         )}
         {!editMode && (

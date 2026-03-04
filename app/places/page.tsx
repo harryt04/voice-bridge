@@ -7,12 +7,13 @@ import { LandPlot, PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
 import { Switch } from '@/components/ui/switch'
-import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { RedirectToSignIn, Show } from '@clerk/nextjs'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import { Input } from '@/components/ui/input'
 import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 import { useSidebar } from '@/components/ui/sidebar'
+import { isPremadeSpeaker, PREMADE_PLACES } from '@/lib/premade-cards'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -24,8 +25,16 @@ export default function Places() {
   const { open, isMobile } = useSidebar()
 
   const { selectedSpeaker } = useSpeakerContext()
+  const premade = isPremadeSpeaker(selectedSpeaker)
 
   useEffect(() => {
+    // When the pre-made speaker is selected, load static cards instead of fetching
+    if (premade) {
+      setPlaces(PREMADE_PLACES as any[])
+      setLoading(false)
+      return
+    }
+
     const fetchPlaces = async () => {
       setLoading(true)
       setError(null)
@@ -47,10 +56,10 @@ export default function Places() {
       }
     }
 
-    if (selectedSpeaker) {
+    if (selectedSpeaker && !premade) {
       fetchPlaces()
     }
-  }, [selectedSpeaker])
+  }, [selectedSpeaker, premade])
 
   const handleAddPlace = async (newPlace: Partial<Place>) => {
     try {
@@ -130,7 +139,7 @@ export default function Places() {
       >
         <PlaceComponent
           place={place}
-          editMode={editMode}
+          editMode={editMode && !premade}
           onDelete={handleDeletePlace}
         ></PlaceComponent>
       </div>
@@ -139,10 +148,10 @@ export default function Places() {
 
   return (
     <>
-      <SignedOut>
+      <Show when="signed-out">
         <RedirectToSignIn />
-      </SignedOut>
-      <SignedIn>
+      </Show>
+      <Show when="signed-in">
         <VBSidebarTrigger title={'Places'} />
         <div
           className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
@@ -173,12 +182,12 @@ export default function Places() {
             <Button
               variant="default"
               onClick={() => setIsFormOpen(true)}
-              className="w-full md:w-auto"
+              className={`w-full md:w-auto ${premade ? 'hidden' : ''}`}
             >
               <PlusIcon className="mr-1" /> Add place
             </Button>
 
-            {places.length > 0 && (
+            {places.length > 0 && !premade && (
               <div
                 className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 md:w-auto"
                 onClick={() => setEditMode(!editMode)}
@@ -199,7 +208,7 @@ export default function Places() {
             onSubmit={handleAddPlace}
           />
         )}
-      </SignedIn>
+      </Show>
     </>
   )
 }

@@ -16,6 +16,7 @@ import { Button } from '../ui/button'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { ItemForm } from './item-form'
 import { Muted } from '../ui/typography'
+import { DynamicLucideIcon } from './dynamic-lucide-icon'
 
 export const ItemComponent = ({
   item,
@@ -108,7 +109,16 @@ export const ItemComponent = ({
           />
         )}
 
-        {!imageSource && (
+        {!imageSource && updatedItem.icon && (
+          <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+            <DynamicLucideIcon
+              name={updatedItem.icon}
+              className="h-24 w-24 text-muted-foreground"
+            />
+          </div>
+        )}
+
+        {!imageSource && !updatedItem.icon && (
           <Muted>Image not provided. Edit this item to add one.</Muted>
         )}
         {editMode && !isEditing && (

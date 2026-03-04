@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
 import { useSpeakerContext } from '@/hooks/use-speakers'
-import { PencilIcon, PlusIcon, ShareIcon } from 'lucide-react'
+import { PackageIcon, PencilIcon, PlusIcon, ShareIcon } from 'lucide-react'
+import { isPremadeSpeaker } from '@/lib/premade-cards'
 import {
   Tooltip,
   TooltipContent,
@@ -104,49 +105,56 @@ export const SpeakerSelector = () => {
         <SelectContent>
           {speakers.map((speaker) => (
             <SelectItem key={speaker._id} value={speaker._id}>
-              {speaker.name}
+              <span className="flex items-center gap-2">
+                {isPremadeSpeaker(speaker) && (
+                  <PackageIcon className="h-4 w-4" />
+                )}
+                {speaker.name}
+              </span>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
 
-      {/* Add and Share Buttons */}
-      <div className="mt-4 flex flex-row justify-center gap-4">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" onClick={handleEditSpeaker}>
-                <PencilIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Edit Speaker</p>
-            </TooltipContent>
-          </Tooltip>
+      {/* Add and Share Buttons — hidden for pre-made speaker */}
+      {!isPremadeSpeaker(selectedSpeaker) && (
+        <div className="mt-4 flex flex-row justify-center gap-4">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" onClick={handleEditSpeaker}>
+                  <PencilIcon />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Edit Speaker</p>
+              </TooltipContent>
+            </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" onClick={handleAddSpeaker}>
-                <PlusIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add Speaker</p>
-            </TooltipContent>
-          </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" onClick={handleAddSpeaker}>
+                  <PlusIcon />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add Speaker</p>
+              </TooltipContent>
+            </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" onClick={handleShareLink}>
-                <ShareIcon />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Share this speaker</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" onClick={handleShareLink}>
+                  <ShareIcon />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Share this speaker</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      )}
 
       {isFormOpen && (
         <SpeakerForm

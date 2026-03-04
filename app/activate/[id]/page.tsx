@@ -1,6 +1,6 @@
 'use client'
 
-import { RedirectToSignIn, SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
+import { RedirectToSignIn, Show, useClerk } from '@clerk/nextjs'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -25,14 +25,14 @@ export default function Activate() {
 
   return (
     <>
-      <SignedOut>
-        <RedirectToSignIn redirectUrl={`/activate/${id}`} />
-      </SignedOut>
-      <SignedIn>
+      <Show when="signed-out">
+        <RedirectToSignIn signInFallbackRedirectUrl={`/activate/${id}`} />
+      </Show>
+      <Show when="signed-in">
         <div>
           <h1>Activating Speaker...</h1>
         </div>
-      </SignedIn>
+      </Show>
     </>
   )
 }

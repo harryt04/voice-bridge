@@ -1,4 +1,4 @@
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
+import { ClerkProvider, Show } from '@clerk/nextjs'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
@@ -34,15 +34,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider>
-        <PostHogProvider>
-          <body
-            suppressHydrationWarning={true}
-            className={cn(
-              'min-h-screen bg-background font-sans antialiased',
-              fontSans.variable,
-            )}
-          >
+      <body
+        suppressHydrationWarning={true}
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+        )}
+      >
+        <ClerkProvider>
+          <PostHogProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -51,17 +51,17 @@ export default function RootLayout({
             >
               <SidebarProvider>
                 <VBQueryClient>
-                  <SignedIn>
+                  <Show when="signed-in">
                     <AppSidebar />
-                  </SignedIn>
+                  </Show>
                   {children}
                   <Toaster />
                 </VBQueryClient>
               </SidebarProvider>
             </ThemeProvider>
-          </body>
-        </PostHogProvider>
-      </ClerkProvider>
+          </PostHogProvider>
+        </ClerkProvider>
+      </body>
     </html>
   )
 }
