@@ -135,13 +135,18 @@ export default function Places() {
     return filteredPlaces.map((place) => (
       <div
         key={place._id}
-        className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+        className={
+          premade
+            ? 'basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6 xl:basis-[12.5%]'
+            : 'flex-grow basis-full sm:basis-1/2 lg:basis-1/3'
+        }
       >
         <PlaceComponent
           place={place}
           editMode={editMode && !premade}
           onDelete={handleDeletePlace}
-        ></PlaceComponent>
+          compact={premade}
+        />
       </div>
     ))
   }
@@ -198,7 +203,9 @@ export default function Places() {
             )}
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 p-8">
+          <div
+            className={`flex flex-wrap justify-center ${premade ? 'gap-3 p-4' : 'gap-8 p-8'}`}
+          >
             {placesContent()}
           </div>
         </div>

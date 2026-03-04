@@ -23,10 +23,12 @@ export const PlaceComponent = ({
   place,
   editMode,
   onDelete,
+  compact = false,
 }: {
   place: Place
   editMode: boolean
   onDelete: (place: Place) => void
+  compact?: boolean
 }) => {
   const [imageError, setImageError] = useState(false)
   const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
@@ -76,85 +78,98 @@ export const PlaceComponent = ({
 
   return (
     <Card
-      className={cn('min-h-full cursor-pointer')}
+      className={cn('cursor-pointer', compact ? 'p-2' : 'min-h-full')}
       onClick={() => {
         if (!editMode) {
           speakText(updatedPlace.name)
         }
       }}
     >
-      <CardHeader>
-        <CardTitle>
-          <span className="flex items-center gap-4">
-            {updatedPlace.name}
-            {!editMode && <AudioLines />}
-          </span>
-        </CardTitle>
-        <CardDescription>{updatedPlace.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {imageError && (
-          <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
-            Image not available
-          </div>
-        )}{' '}
-        {!!imageSource && (
-          <Image
-            height={500}
-            width={500}
-            src={imageSource as string}
-            alt={key}
-            onError={() => setImageError(true)} // Trigger error state if image fails
-          />
-        )}
-        {!imageSource && (updatedPlace as any).icon && (
-          <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+      <CardHeader className={compact ? 'p-2' : ''}>
+        <CardTitle
+          className={cn(
+            'flex items-center gap-2',
+            compact ? 'text-sm font-medium' : 'gap-4',
+          )}
+        >
+          {compact && (updatedPlace as any).icon && (
             <DynamicLucideIcon
               name={(updatedPlace as any).icon}
-              className="h-24 w-24 text-muted-foreground"
+              className="h-5 w-5 shrink-0 text-muted-foreground"
             />
-          </div>
+          )}
+          {updatedPlace.name}
+          {!editMode && !compact && <AudioLines />}
+        </CardTitle>
+        {!compact && (
+          <CardDescription>{updatedPlace.description}</CardDescription>
         )}
-        {!imageSource && !(updatedPlace as any).icon && (
-          <Muted>Image not provided. Edit this item to add one.</Muted>
-        )}
-        {!editMode && (
-          <div className="flex flex-row gap-4 py-4">
-            <Button
-              variant="outline"
-              onClick={(event) => {
-                event.stopPropagation()
+      </CardHeader>
+      {!compact && (
+        <CardContent>
+          {imageError && (
+            <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
+              Image not available
+            </div>
+          )}{' '}
+          {!!imageSource && (
+            <Image
+              height={500}
+              width={500}
+              src={imageSource as string}
+              alt={key}
+              onError={() => setImageError(true)} // Trigger error state if image fails
+            />
+          )}
+          {!imageSource && (updatedPlace as any).icon && (
+            <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+              <DynamicLucideIcon
+                name={(updatedPlace as any).icon}
+                className="h-24 w-24 text-muted-foreground"
+              />
+            </div>
+          )}
+          {!imageSource && !(updatedPlace as any).icon && (
+            <Muted>Image not provided. Edit this item to add one.</Muted>
+          )}
+          {!editMode && (
+            <div className="flex flex-row gap-4 py-4">
+              <Button
+                variant="outline"
+                onClick={(event) => {
+                  event.stopPropagation()
 
-                openGoogleMapsDirections(
-                  (updatedPlace.address || updatedPlace.name) as string,
-                )
-              }}
-            >
-              <LandPlotIcon /> Directions
-            </Button>
-          </div>
-        )}
-        {editMode && !isEditing && (
-          <div className="flex flex-row gap-4 p-4">
-            <Button
-              variant="outline"
-              onClick={handleEditClick} // Open the edit form
-            >
-              <Pencil1Icon /> Edit
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteClick}>
-              <TrashIcon /> Delete
-            </Button>
-          </div>
-        )}
-        {isEditing && (
-          <PlaceForm
-            onClose={handleCloseEdit} // Close the form
-            onSubmit={handleSubmit} // Submit the form with updated data
-            place={updatedPlace} // Pass the current updated place to pre-populate the form
-          />
-        )}
-      </CardContent>
+                  openGoogleMapsDirections(
+                    (updatedPlace.address || updatedPlace.name) as string,
+                  )
+                }}
+              >
+                <LandPlotIcon /> Directions
+              </Button>
+            </div>
+          )}
+          {editMode && !isEditing && (
+            <div className="flex flex-row gap-4 p-4">
+              <Button
+                variant="outline"
+                onClick={handleEditClick} // Open the edit form
+              >
+                <Pencil1Icon /> Edit
+              </Button>
+              <Button variant="destructive" onClick={handleDeleteClick}>
+                <TrashIcon /> Delete
+              </Button>
+            </div>
+          )}
+          {isEditing && (
+            <PlaceForm
+              onClose={handleCloseEdit} // Close the form
+              onSubmit={handleSubmit} // Submit the form with updated data
+              place={updatedPlace} // Pass the current updated place to pre-populate the form
+            />
+          )}
+        </CardContent>
+      )}
     </Card>
   )
 }

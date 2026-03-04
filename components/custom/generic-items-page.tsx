@@ -152,13 +152,18 @@ export default function GenericItemsPage({
     return filteredItems.map((item) => (
       <div
         key={item._id}
-        className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
+        className={
+          premade
+            ? 'basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6 xl:basis-[12.5%]'
+            : 'flex-grow basis-full sm:basis-1/4 lg:basis-1/5'
+        }
       >
         <ItemComponent
           item={item}
           editMode={editMode && !premade}
           onDelete={handleDeleteItem}
           modelName={pageInfo.editModelName as string}
+          compact={premade}
         />
       </div>
     ))
@@ -217,7 +222,9 @@ export default function GenericItemsPage({
             )}
           </div>
 
-          <div className="flex flex-wrap justify-center gap-8 p-8">
+          <div
+            className={`flex flex-wrap justify-center ${premade ? 'gap-3 p-4' : 'gap-8 p-8'}`}
+          >
             {itemsContent()}
           </div>
         </div>

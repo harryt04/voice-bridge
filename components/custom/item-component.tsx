@@ -23,11 +23,13 @@ export const ItemComponent = ({
   editMode,
   onDelete,
   modelName,
+  compact = false,
 }: {
   item: any
   editMode: boolean
   onDelete: (item: any) => void
   modelName: string
+  compact?: boolean
 }) => {
   const [imageError, setImageError] = useState(false)
   const [isEditing, setIsEditing] = useState(false) // Track if the form is open for editing
@@ -78,68 +80,83 @@ export const ItemComponent = ({
 
   return (
     <Card
-      className={cn('min-h-full cursor-pointer')}
+      className={cn('cursor-pointer', compact ? 'p-2' : 'min-h-full')}
       onClick={() => {
         if (!editMode) {
           speakText(updatedItem.name)
         }
       }}
     >
-      <CardHeader>
-        <CardTitle className="flex items-center gap-4">
-          {updatedItem.name}
-          {!editMode && <AudioLines />}
-        </CardTitle>
-        <CardDescription>{updatedItem.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {imageError && (
-          <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
-            Image not available
-          </div>
-        )}
-
-        {!!imageSource && (
-          <Image
-            height={300}
-            width={300}
-            src={imageSource}
-            alt={key}
-            onError={() => setImageError(true)} // Trigger error state if image fails
-          />
-        )}
-
-        {!imageSource && updatedItem.icon && (
-          <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+      <CardHeader className={compact ? 'p-2' : ''}>
+        <CardTitle
+          className={cn(
+            'flex items-center gap-2',
+            compact ? 'text-sm font-medium' : 'gap-4',
+          )}
+        >
+          {compact && updatedItem.icon && (
             <DynamicLucideIcon
               name={updatedItem.icon}
-              className="h-24 w-24 text-muted-foreground"
+              className="h-5 w-5 shrink-0 text-muted-foreground"
             />
-          </div>
+          )}
+          {updatedItem.name}
+          {!editMode && !compact && <AudioLines />}
+        </CardTitle>
+        {!compact && (
+          <CardDescription>{updatedItem.description}</CardDescription>
         )}
+      </CardHeader>
+      {!compact && (
+        <CardContent>
+          {imageError && (
+            <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
+              Image not available
+            </div>
+          )}
 
-        {!imageSource && !updatedItem.icon && (
-          <Muted>Image not provided. Edit this item to add one.</Muted>
-        )}
-        {editMode && !isEditing && (
-          <div className="flex flex-row gap-4 p-4">
-            <Button variant="outline" onClick={handleEditClick}>
-              <Pencil1Icon /> Edit
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteClick}>
-              <TrashIcon /> Delete
-            </Button>
-          </div>
-        )}
-        {isEditing && (
-          <ItemForm
-            onClose={handleCloseEdit}
-            onSubmit={handleSubmit}
-            item={updatedItem}
-            modelName={modelName}
-          />
-        )}
-      </CardContent>
+          {!!imageSource && (
+            <Image
+              height={300}
+              width={300}
+              src={imageSource}
+              alt={key}
+              onError={() => setImageError(true)} // Trigger error state if image fails
+            />
+          )}
+
+          {!imageSource && updatedItem.icon && (
+            <div className="flex h-[300px] w-[300px] items-center justify-center rounded-md bg-muted">
+              <DynamicLucideIcon
+                name={updatedItem.icon}
+                className="h-24 w-24 text-muted-foreground"
+              />
+            </div>
+          )}
+
+          {!imageSource && !updatedItem.icon && (
+            <Muted>Image not provided. Edit this item to add one.</Muted>
+          )}
+          {editMode && !isEditing && (
+            <div className="flex flex-row gap-4 p-4">
+              <Button variant="outline" onClick={handleEditClick}>
+                <Pencil1Icon /> Edit
+              </Button>
+              <Button variant="destructive" onClick={handleDeleteClick}>
+                <TrashIcon /> Delete
+              </Button>
+            </div>
+          )}
+          {isEditing && (
+            <ItemForm
+              onClose={handleCloseEdit}
+              onSubmit={handleSubmit}
+              item={updatedItem}
+              modelName={modelName}
+            />
+          )}
+        </CardContent>
+      )}
     </Card>
   )
 }
