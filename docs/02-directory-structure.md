@@ -1,0 +1,396 @@
+# VoiceBridge Directory Structure
+
+## Root-Level Overview
+
+| Directory/File | Purpose |
+| -------------- | -------- |
+| `app/` | Next.js App Router pages and API routes |
+| `components/` | React components (UI + custom) |
+| `hooks/` | React hooks (state, context, utilities) |
+| `lib/` | Server-side utilities (MongoDB, analytics, helpers) |
+| `models/` | TypeScript type definitions (barrel export) |
+| `providers/` | React context providers |
+| `utils/` | Client-side utilities (speech, directions, images) |
+| `public/` | Static assets (images, fonts, favicons) |
+| `middleware.ts` | Next.js middleware (Clerk auth redirect) |
+| `tsconfig.json` | TypeScript config (strict mode enabled) |
+| `next.config.js` | Next.js build config |
+| `prettier.config.js` | Code formatting (no semicolons, single quotes, Tailwind sort) |
+| `.eslintrc.js` | ESLint rules (next/core-web-vitals, React, TypeScript) |
+| `tailwind.config.ts` | Tailwind CSS 3.4 theme config |
+| `components.json` | shadcn/ui CLI config (shadcn init generated) |
+| `postcss.config.mjs` | PostCSS (Tailwind processor) |
+| `gulpfile.ts` | Gulp tasks (MongoDB index creation) |
+
+---
+
+## Directory Structure (Detailed)
+
+### app/
+
+Next.js App Router: pages and API routes. Each subdirectory is a route.
+
+```
+app/
+├── api/                          # REST API routes
+│   ├── activities/               # List activities
+│   ├── activity/                 # CRUD single activity
+│   ├── foods/                    # List foods
+│   ├── food/                     # CRUD single food
+│   ├── places/                   # List places
+│   ├── place/                    # CRUD single place
+│   ├── speakers/                 # List speakers for current user
+│   ├── speaker/                  # CRUD single speaker
+│   ├── villagers/                # List villagers for speaker
+│   ├── villager/                 # CRUD single villager
+│   ├── vocabWords/               # List vocabulary words
+│   ├── vocabWord/                # CRUD single vocab word
+│   └── users/                    # Users endpoint (Clerk integration)
+│
+├── layout.tsx                    # Root layout (provider hierarchy)
+├── page.tsx                      # Home page (landing or redirect)
+├── globals.css                   # Global Tailwind styles
+├── globals-hex.css               # Hex color palette (supplemental)
+├── sitemap.ts                    # XML sitemap generation
+├── favicon.ico                   # Site icon
+│
+├── activate/page.tsx             # Activation flow page
+├── call/page.tsx                 # Call/video page
+├── food/page.tsx                 # Food page (uses GenericItemsPage)
+├── activities/page.tsx           # Activities page (uses GenericItemsPage)
+├── music/page.tsx                # Music/playlists page
+├── people/page.tsx               # People/villagers page (uses GenericItemsPage)
+├── places/page.tsx               # Places page (hand-rolled, custom PlaceComponent)
+├── vocabulary/page.tsx           # Vocabulary page (uses GenericItemsPage)
+└── login/page.tsx                # Login redirect page
+```
+
+**API Route Naming:**
+- Singular endpoints (`/api/{resource}`) handle GET (by id), POST (create/update), DELETE (by id)
+- Plural endpoints (`/api/{resources}`) handle GET with `?speakerId=` query param
+
+**Page Routing:**
+- Page routes mirror resource names (plural): `/food`, `/activities`, `/places`, etc.
+- Each page imports `GenericItemsPage` template or implements custom logic
+
+---
+
+### components/
+
+React components split into generated UI and custom app-specific components.
+
+```
+components/
+├── ui/                           # shadcn/ui generated components (DO NOT HAND-EDIT)
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── select.tsx
+│   ├── sidebar.tsx
+│   ├── switch.tsx
+│   ├── dialog.tsx
+│   ├── dropdown-menu.tsx
+│   ├── form.tsx
+│   ├── textarea.tsx
+│   └── [other shadcn components...]
+│
+└── custom/                       # App-specific components (hand-written)
+    ├── generic-items-page.tsx    # Reusable CRUD page template
+    ├── item-component.tsx        # Generic list item renderer
+    ├── item-form.tsx             # Generic form for creating/editing items
+    ├── place-component.tsx       # Typed Place component (with Directions button)
+    ├── place-form.tsx            # Place creation/edit form
+    ├── items-list.tsx            # List container (search, filter, display)
+    ├── no-results-component.tsx  # Empty state placeholder
+    ├── app-sidebar.tsx           # Main app sidebar navigation
+    ├── sidebar-trigger.tsx       # Sidebar toggle button
+    ├── speaker-selector.tsx      # Dropdown to switch speakers
+    ├── speaker-form.tsx          # Speaker creation form
+    ├── login-card.tsx            # Login UI card
+    ├── landing-page.tsx          # Home/landing page content
+    └── themeSwitcher.tsx         # Dark/light mode toggle
+```
+
+**Key distinctions:**
+- `ui/` files are auto-generated by shadcn CLI. Never modify manually; regenerate via `npx shadcn-ui@latest add <component>`
+- `custom/` files are hand-written, versionable, and safe to modify
+
+---
+
+### hooks/
+
+React hooks for state management and utilities.
+
+```
+hooks/
+├── use-query-client.tsx          # VBQueryClient provider (QueryClientProvider + SpeakerProvider)
+├── use-speakers.tsx              # SpeakerContext provider & useSpeakerContext hook
+└── use-mobile.tsx                # useIsMobile hook (responsive breakpoint check)
+```
+
+**useSpeakerContext()** (from `use-speakers.tsx`):
+- Returns `{ speakers, selectedSpeaker, setSelectedSpeaker, isLoading }`
+- Fetches speakers from `/api/speakers` on mount
+- Auto-selects first speaker if none selected
+- Available after `SpeakerProvider` mounts (inside VBQueryClient)
+
+---
+
+### lib/
+
+Server-side utilities and core infrastructure.
+
+```
+lib/
+├── mongo-client.ts               # MongoDB singleton connection
+│                                 # Exports: getMongoClient(), mongoDBConfig
+│
+├── mongo-utils.ts                # MongoDB CRUD operations
+│                                 # Exports: handleDatabaseOperation(), fetchDataFromCollection(),
+│                                 #          speakerAuthCheck()
+│
+├── posthog-server.ts             # PostHog analytics (server-side)
+│
+└── utils.ts                      # General server utilities
+                                  # Exports: cn(), extractParamFromUrl(), capitalizeFirstLetter()
+```
+
+**Key exports:**
+- `getMongoClient()`: Async function returning MongoDB client singleton
+- `mongoDBConfig`: Object with `dbName` and `collections` mapping
+- `handleDatabaseOperation(req, collectionName, operation)`: Unified CRUD handler for singular endpoints
+- `fetchDataFromCollection(req, collectionName)`: List handler for plural endpoints (respects `?speakerId=` param)
+- `speakerAuthCheck(req, speakerId)`: Verifies user authorization (parent or villager of speaker)
+
+---
+
+### models/
+
+TypeScript type definitions for domain entities. Uses barrel export pattern.
+
+```
+models/
+├── index.ts                      # Barrel export (export * from './...')
+├── speaker.ts                    # Speaker, SpeakerInput types
+├── food.ts                       # Food, FoodInput types
+├── place.ts                      # Place, PlaceInput types
+└── hst-users.ts                  # HST-related types
+```
+
+**Type Definition Pattern:**
+```ts
+export type [Resource]Input = {
+  name: string
+  // other fields...
+}
+
+export type [Resource] = [Resource]Input & {
+  _id: string
+  speakerId: string
+  // timestamps, etc.
+}
+```
+
+**Import from models via barrel:**
+```ts
+import { Speaker, SpeakerInput, Food, Place } from '@/models'
+```
+
+---
+
+### providers/
+
+React context providers (non-shadcn).
+
+```
+providers/
+├── posthogProvider.tsx           # PostHog analytics context
+└── themeProvider.tsx             # next-themes dark/light mode context
+```
+
+**Note:** `SpeakerProvider` lives in `hooks/use-speakers.tsx` (not in `providers/`).
+
+Provider hierarchy in root layout: `PostHogProvider → ThemeProvider → (SidebarProvider) → VBQueryClient`
+
+---
+
+### utils/
+
+Client-side utilities (browser-safe, no server-only code).
+
+```
+utils/
+├── directions.ts                 # Geolocation & directions helper
+│                                 # Exports: getDirections()
+│
+├── speech.ts                     # Text-to-speech utility
+│                                 # Exports: speakText()
+│
+└── imageUtils.ts                 # Client-side image compression
+                                  # Exports: compressImage()
+```
+
+These are called from component click handlers, not during SSR.
+
+---
+
+### public/
+
+Static assets served directly by Next.js.
+
+```
+public/
+├── favicon.ico                   # Site favicon
+├── images/                       # Image assets
+└── [other static files...]
+```
+
+---
+
+## Special Notes
+
+### shadcn/ui Components
+
+Located in `components/ui/`. Generated by shadcn CLI:
+
+```bash
+npx shadcn-ui@latest add button
+npx shadcn-ui@latest add input
+# etc.
+```
+
+**DO NOT manually edit files in `components/ui/`**. Regenerate or update via CLI.
+
+### API Route Pattern
+
+**Singular CRUD Endpoint** (`/api/{resource}/route.ts`):
+```ts
+import { handleDatabaseOperation } from '@/lib/mongo-utils'
+
+export async function GET(req: NextRequest) {
+  return handleDatabaseOperation(req, mongoDBConfig.collections.foods, 'GET')
+}
+
+export async function POST(req: NextRequest) {
+  return handleDatabaseOperation(req, mongoDBConfig.collections.foods, 'POST')
+}
+
+export async function DELETE(req: NextRequest) {
+  return handleDatabaseOperation(req, mongoDBConfig.collections.foods, 'DELETE')
+}
+```
+
+**Plural List Endpoint** (`/api/{resources}/route.ts`):
+```ts
+import { fetchDataFromCollection } from '@/lib/mongo-utils'
+
+export async function GET(req: NextRequest) {
+  return fetchDataFromCollection(req, mongoDBConfig.collections.foods)
+}
+```
+
+---
+
+## Guide: Where to Add X?
+
+### Adding a New Page
+
+1. Create directory: `app/{pageName}/`
+2. Create file: `app/{pageName}/page.tsx`
+3. Export default React component
+4. If using GenericItemsPage, pass `GenericPageInfo` config
+5. If custom page, import hooks and components as needed
+
+### Adding a New Resource Type (E.g., "Recipe")
+
+1. **Model definition:**
+   - Create `models/recipe.ts` with `Recipe` and `RecipeInput` types
+   - Update `models/index.ts` to `export * from './recipe'`
+
+2. **Database:**
+   - Add collection to `mongoDBConfig.collections` in `lib/mongo-client.ts`
+   - Run `npx gulp create-indexes` to add indexes
+
+3. **API routes:**
+   - Create `app/api/recipe/route.ts` (singular CRUD)
+   - Create `app/api/recipes/route.ts` (plural list)
+   - Both use `handleDatabaseOperation` and `fetchDataFromCollection` from `lib/mongo-utils.ts`
+
+4. **Page:**
+   - Create `app/recipes/page.tsx`
+   - Use `GenericItemsPage` template with `GenericPageInfo` config
+
+5. **Components (optional):**
+   - Create `components/custom/recipe-component.tsx` (list item) if custom UI needed
+   - Create `components/custom/recipe-form.tsx` (edit form) if custom validation needed
+
+### Adding a New Component
+
+1. If **UI component** (button, input, select, etc.):
+   - Use shadcn: `npx shadcn-ui@latest add <component-name>`
+   - File auto-generated to `components/ui/<component-name>.tsx`
+
+2. If **custom app component** (not shadcn):
+   - Create file: `components/custom/{componentName}.tsx`
+   - Use `'use client'` if client-side state needed
+   - Export as default or named export
+
+### Adding a New Utility
+
+1. If **server-side** (database, auth, etc.):
+   - Create `lib/{utilName}.ts`
+   - Export functions with JSDoc comments
+
+2. If **client-side** (browser APIs, speech, images, etc.):
+   - Create `utils/{utilName}.ts`
+   - Export functions, ensure no server-only dependencies
+
+### Adding Environment Variables
+
+1. Add to `.env.sample` (documentation only)
+2. Add to `.env.local` (local development)
+3. Reference in code via `process.env.VARIABLE_NAME`
+4. For client-side access, prefix with `NEXT_PUBLIC_` (visible in browser)
+
+---
+
+## Build & Verification Commands
+
+```bash
+npm run dev           # Start dev server (next dev)
+npm run build         # Production build + type check
+npm run start         # Start production server
+npm run lint          # ESLint check
+npm run prettify      # Format all files with Prettier
+npx gulp create-indexes  # Create MongoDB indexes (requires DB connection)
+```
+
+**Type checking** is part of `npm run build`. Run before committing.
+
+---
+
+## Import Path Aliases
+
+All internal imports use `@/` alias (maps to project root):
+
+```ts
+// Good
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Speaker } from '@/models'
+import { useSpeakerContext } from '@/hooks/use-speakers'
+
+// Avoid relative imports for non-local code
+// Do NOT: import { Button } from '../../../components/ui/button'
+```
+
+Path alias defined in `tsconfig.json`:
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+```

@@ -6,6 +6,25 @@ VoiceBridge is a full-stack Next.js 16 (App Router) web app helping individuals 
 communicate using visual tools. Stack: TypeScript, React 18, shadcn/ui, Tailwind CSS 3.4,
 MongoDB (direct driver), Clerk auth, TanStack React Query, PostHog analytics.
 
+## Comprehensive Codebase Documentation
+
+For detailed codebase documentation, reference:
+- **[`/docs/index.md`](docs/index.md)** — Main documentation hub (start here)
+- **[`CODEBASE_MAP.md`](CODEBASE_MAP.md)** — Quick navigation and overview
+
+The `/docs/` directory contains 11 comprehensive markdown files covering:
+- System architecture and design patterns
+- Complete API endpoint specifications  
+- All React components and their behavior
+- React hooks and state management
+- Database patterns and MongoDB operations
+- Authentication and authorization flows
+- Styling configuration and best practices
+- Naming conventions and contribution guidelines
+
+Refer to the docs when building or modifying any feature. If you have made changes that make something in the documentation outdated, please update the documentation. **This is the primary reference for AI agents working in this repository.**
+
+
 ## Build / Lint / Format Commands
 
 ```bash
