@@ -1,13 +1,13 @@
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { ObjectId } from 'mongodb'
 
 export async function POST(req: NextRequest) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   const { speakerId } = await req.json()
   try {
-    if (!user?.userId) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       _id: new ObjectId(speakerId),
     })
 
-    if (!existingSpeaker || !user?.userId) {
+    if (!existingSpeaker) {
       return NextResponse.json(
         { error: 'Speaker not found or unauthorized' },
         { status: 404 },
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const result = await speakersCollection.updateOne(
       { _id: new ObjectId(speakerId) },
       {
-        $addToSet: { villagerIds: user.userId },
+        $addToSet: { villagerIds: session.user.id },
       },
     )
 

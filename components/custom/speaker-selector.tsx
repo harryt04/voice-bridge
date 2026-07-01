@@ -49,9 +49,8 @@ export const SpeakerSelector = () => {
   }
 
   const handleShareLink = () => {
-    const isDev = process.env.NODE_ENV === 'development'
-    const baseURL = isDev ? 'http://localhost:3000' : 'https://vb.harryt.dev'
-    const magicLink = `${baseURL}/activate/${selectedSpeaker?._id}` // dev
+    const baseURL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const magicLink = `${baseURL}/activate/${selectedSpeaker?._id}`
     navigator.clipboard.writeText(magicLink)
     toast('Share link copied to clipboard')
   }

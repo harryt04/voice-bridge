@@ -1,13 +1,20 @@
 'use client'
 
-import { RedirectToSignIn, SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
-import { useParams } from 'next/navigation'
+import { useSession } from '@/lib/auth-client'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function Activate() {
-  const { user } = useClerk()
+  const { data: session } = useSession()
   const { id } = useParams()
+  const router = useRouter()
+
   useEffect(() => {
+    if (!session?.user) {
+      router.push(`/login?redirect=/activate/${id}`)
+      return
+    }
+
     const activateMutation = async () => {
       await fetch(`/api/speaker/activate`, {
         method: 'POST',
@@ -18,21 +25,14 @@ export default function Activate() {
       })
     }
 
-    if (user && id) {
+    if (id) {
       activateMutation()
     }
-  }, [user, id])
+  }, [session?.user, id, router])
 
   return (
-    <>
-      <SignedOut>
-        <RedirectToSignIn redirectUrl={`/activate/${id}`} />
-      </SignedOut>
-      <SignedIn>
-        <div>
-          <h1>Activating Speaker...</h1>
-        </div>
-      </SignedIn>
-    </>
+    <div>
+      <h1>Activating Speaker...</h1>
+    </div>
   )
 }

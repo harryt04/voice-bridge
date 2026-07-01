@@ -18,8 +18,10 @@ This document provides comprehensive details on all custom components in the Voi
 10. [VBSidebarTrigger](#vbsidebartrigger)
 11. [NoResultsComponent](#noresultscomponent)
 12. [LandingPage](#landingpage)
-13. [LoginCard](#logincard)
-14. [ThemeSwitcher](#themeswitcher)
+13. [LoginForm](#loginform)
+14. [RegisterForm](#registerform)
+15. [UserMenu](#usermenu)
+16. [ThemeSwitcher](#themeswitcher)
 
 ---
 
@@ -84,7 +86,7 @@ export default function GenericItemsPage({
 
 ### Key Rendering Patterns
 
-- **Auth:** Wrapped in `<SignedIn>` / `<SignedOut>` / `<RedirectToSignIn>` (Clerk)
+- **Auth:** Checks session via better-auth and conditionally renders content
 - **Header:** `VBSidebarTrigger` with plural label
 - **Controls:** Search bar (if items exist), Add button, Edit mode switch
 - **Grid:** Flex wrap with responsive basis classes: `basis-full sm:basis-1/4 lg:basis-1/5`

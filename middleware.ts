@@ -1,6 +1,10 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-export default clerkMiddleware()
+// Using Option B (fallback): nextJsMiddleware not available in better-auth@1.6.23; using pass-through middleware (verified 2026-07-01)
+// Session handling is delegated to per-route auth checks and the API catch-all handler
+export function middleware() {
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [

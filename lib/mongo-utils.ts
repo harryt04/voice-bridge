@@ -1,4 +1,4 @@
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from './mongo-client'
 import { ObjectId } from 'mongodb'
@@ -23,10 +23,10 @@ export async function handleDatabaseOperation(
   collectionName: string,
   operation: 'GET' | 'POST' | 'DELETE',
 ) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   const id = new URL(req.url).searchParams.get('id')
 
-  if (!user?.userId) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -56,7 +56,7 @@ export async function handleDatabaseOperation(
           : null
         const updatedItem = {
           ...body,
-          lastUpdatedBy: user.userId,
+          lastUpdatedBy: session.user.id,
           updatedAt: new Date(),
         }
 
@@ -112,10 +112,10 @@ export async function fetchDataFromCollection(
   req: NextRequest,
   collectionName: string,
 ) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   const speakerId = extractParamFromUrl(req, 'speakerId')
 
-  if (!user?.userId) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -158,7 +158,7 @@ export async function fetchDataFromCollection(
  * 5. Returns a JSON response with an error message and a 404 status if the speaker is not found or the user is not authorized.
  */
 export const speakerAuthCheck = async (req: NextRequest, speakerId: string) => {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
 
   const client = await getMongoClient()
   const db = client.db(mongoDBConfig.dbName)
@@ -170,9 +170,9 @@ export const speakerAuthCheck = async (req: NextRequest, speakerId: string) => {
 
   if (
     !speaker ||
-    !user?.userId ||
-    (speaker.parentId !== user.userId &&
-      !speaker.villagerIds?.includes(user.userId))
+    !session ||
+    (speaker.parentId !== session.user.id &&
+      !speaker.villagerIds?.includes(session.user.id))
   ) {
     return NextResponse.json(
       { error: 'Speaker not found or unauthorized' },

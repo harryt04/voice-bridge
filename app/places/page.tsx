@@ -7,12 +7,13 @@ import { LandPlot, PlusIcon, SearchIcon, XCircleIcon } from 'lucide-react'
 import { Place } from '@/models'
 import { PlaceForm } from '@/components/custom/place-form'
 import { Switch } from '@/components/ui/switch'
-import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/nextjs'
+import { useSession } from '@/lib/auth-client'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import { Input } from '@/components/ui/input'
 import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 import { useSidebar } from '@/components/ui/sidebar'
+import { useRouter } from 'next/navigation'
 
 export default function Places() {
   const [places, setPlaces] = useState<Place[]>([])
@@ -22,8 +23,16 @@ export default function Places() {
   const [editMode, setEditMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { open, isMobile } = useSidebar()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   const { selectedSpeaker } = useSpeakerContext()
+
+  useEffect(() => {
+    if (!session?.user) {
+      router.push('/login')
+    }
+  }, [session?.user, router])
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -137,69 +146,68 @@ export default function Places() {
     ))
   }
 
+  if (!session?.user) {
+    return null
+  }
+
   return (
     <>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-      <SignedIn>
-        <VBSidebarTrigger title={'Places'} />
-        <div
-          className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
-        >
-          <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
-            {places.length > 0 && (
-              <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
-                <SearchIcon className="h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search places..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-9"
-                />
-                {searchQuery && (
-                  <Button
-                    variant="ghost"
-                    onClick={() => setSearchQuery('')}
-                    size="icon"
-                    className="w-12"
-                  >
-                    <XCircleIcon />
-                  </Button>
-                )}
-              </div>
-            )}
+      <VBSidebarTrigger title={'Places'} />
+      <div
+        className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
+      >
+        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
+          {places.length > 0 && (
+            <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
+              <SearchIcon className="h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search places..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-9"
+              />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  onClick={() => setSearchQuery('')}
+                  size="icon"
+                  className="w-12"
+                >
+                  <XCircleIcon />
+                </Button>
+              )}
+            </div>
+          )}
 
-            <Button
-              variant="default"
-              onClick={() => setIsFormOpen(true)}
-              className="w-full md:w-auto"
+          <Button
+            variant="default"
+            onClick={() => setIsFormOpen(true)}
+            className="w-full md:w-auto"
+          >
+            <PlusIcon className="mr-1" /> Add place
+          </Button>
+
+          {places.length > 0 && (
+            <div
+              className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 md:w-auto"
+              onClick={() => setEditMode(!editMode)}
             >
-              <PlusIcon className="mr-1" /> Add place
-            </Button>
-
-            {places.length > 0 && (
-              <div
-                className="flex w-full cursor-pointer items-center justify-center gap-2 py-2 md:w-auto"
-                onClick={() => setEditMode(!editMode)}
-              >
-                <Switch checked={editMode} />
-                <span>Edit mode</span>
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-8 p-8">
-            {placesContent()}
-          </div>
+              <Switch checked={editMode} />
+              <span>Edit mode</span>
+            </div>
+          )}
         </div>
-        {isFormOpen && (
-          <PlaceForm
-            onClose={() => setIsFormOpen(false)}
-            onSubmit={handleAddPlace}
-          />
-        )}
-      </SignedIn>
+
+        <div className="flex flex-wrap justify-center gap-8 p-8">
+          {placesContent()}
+        </div>
+      </div>
+      {isFormOpen && (
+        <PlaceForm
+          onClose={() => setIsFormOpen(false)}
+          onSubmit={handleAddPlace}
+        />
+      )}
     </>
   )
 }

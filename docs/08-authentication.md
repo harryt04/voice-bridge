@@ -1,16 +1,16 @@
 # 08. Authentication Layer
 
-VoiceBridge uses Clerk for all user authentication. Clerk handles sign-up, sign-in, and session management, while the app enforces access control on specific resources via speaker ownership and villager relationships.
+VoiceBridge uses better-auth for all user authentication. better-auth handles sign-up, sign-in, and session management, while the app enforces access control on specific resources via speaker ownership and villager relationships.
 
-## Clerk Integration
+## better-auth Integration
 
 ### Provider Hierarchy
 
-Clerk is the outermost provider in the app hierarchy (root layout). This ensures Clerk context is available to all child components:
+better-auth is wrapped in a `SessionProvider` at the app hierarchy (root layout). This ensures session context is available to all child components:
 
 ```tsx
 // app/layout.tsx
-import { ClerkProvider } from '@clerk/nextjs'
+import { SessionProvider } from '@/lib/auth-client'
 import { PostHogProvider } from '@/providers/posthog-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
 
@@ -22,14 +22,14 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <ClerkProvider>
+        <SessionProvider>
           <PostHogProvider>
             <ThemeProvider>
               {/* Other providers and children */}
               {children}
             </ThemeProvider>
           </PostHogProvider>
-        </ClerkProvider>
+        </SessionProvider>
       </body>
     </html>
   )
@@ -38,7 +38,7 @@ export default function RootLayout({
 
 **Provider Order (Outermost to Innermost):**
 
-1. `ClerkProvider` — Clerk authentication context
+1. `SessionProvider` — better-auth session context
 2. `PostHogProvider` — Analytics context
 3. `ThemeProvider` — Dark/light mode context
 4. `SidebarProvider` — Layout sidebar state
@@ -46,48 +46,55 @@ export default function RootLayout({
 
 ### User Representation
 
-- **User Identity:** Clerk's unique `userId` (format: `user_...`)
-- **User Email:** Stored in Clerk's managed system, not in VoiceBridge database
+- **User Identity:** better-auth's unique `user.id` (format: app-specific)
+- **User Email:** Stored in better-auth's managed system, accessible via `session.user.email`
 - **Marketing Analytics:** Email is extracted and sent to PostHog for retention tracking
-- **Database Scoping:** All user-owned data (speakers, foods, etc.) is keyed by Clerk `userId`
+- **Database Scoping:** All user-owned data (speakers, foods, etc.) is keyed by better-auth `user.id`
 
-**Clerk User Object:**
+**better-auth User Object:**
 
 ```ts
-interface ClerkUser {
-  userId: string          // e.g., "user_1234567890"
+interface AuthUser {
+  id: string                  // Unique user ID from better-auth
   email: string
-  firstName?: string
-  lastName?: string
+  name?: string
+  image?: string
   // ... other fields
 }
 ```
 
-### Clerk Configuration
+### better-auth Configuration
 
-Clerk credentials are stored in environment variables:
+better-auth credentials and URLs are stored in environment variables:
 
 ```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...  # Public key (safe in client code)
-CLERK_SECRET_KEY=sk_test_...                    # Secret key (server-only)
+BETTER_AUTH_SECRET=xyz789...              # Server-side secret (min 32 chars)
+BETTER_AUTH_URL=http://localhost:3000     # Server-side auth base URL
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000  # Client-side auth URL
+GOOGLE_CLIENT_ID=abc123...                # Google OAuth client ID
+GOOGLE_CLIENT_SECRET=xyz789...            # Google OAuth client secret
+NEXT_PUBLIC_APP_URL=https://vb.harryt.dev # Public app URL for callbacks
 ```
 
-These are injected by Clerk and required for:
-- `ClerkProvider` initialization
-- `getAuth()` on the server
-- Clerk hosted UI for sign-in/sign-out
+These are injected by environment configuration and required for:
+- Server-side session extraction via `auth.api.getSession()`
+- Client-side API calls via `authClient`
+- Google OAuth sign-in
+- Hardcoded URL references (sitemap, activation links)
 
 ## Middleware
 
-Clerk middleware is applied globally via `middleware.ts` to make Clerk context available to all routes and API endpoints.
+better-auth middleware is applied globally via `middleware.ts` to provide session context to all routes.
 
 ### Configuration
 
 ```ts
 // middleware.ts
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-export default clerkMiddleware()
+export function middleware(req) {
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
@@ -107,43 +114,39 @@ export const config = {
 
 **Middleware Behavior:**
 
-- `clerkMiddleware()` does **NOT** enforce authentication
-- It only makes Clerk context available for downstream checks
-- Individual pages and API routes implement their own auth guards
+- Middleware is a pass-through (Option B fallback, since `nextJsMiddleware` is not available in better-auth@1.6.23)
+- Session extraction happens in individual API routes via `auth.api.getSession()`
 - No automatic redirects or access denials at the middleware level
-
-### Usage in Routes
-
-Middleware enables the use of `getAuth(req)` in API routes and `<SignedIn>`/`<SignedOut>` components on pages.
+- Pages implement their own auth guards
 
 ## API Route Auth Pattern
 
-All API routes follow a consistent authentication pattern using `getAuth()` from Clerk.
+All API routes follow a consistent authentication pattern using `auth.api.getSession()`.
 
-### getAuth() Function
+### getSession() Function
 
 ```ts
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
 // In any API route handler
 export async function GET(req: NextRequest) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   
-  if (!user?.userId) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // User is authenticated; proceed with business logic
+  // User is authenticated; use session.user.id and session.user.email
   // ...
 }
 ```
 
 **Characteristics:**
 
-- **Synchronous operation** (not async) — uses headers, no network calls
-- **Header-based:** Extracts auth state from request headers set by middleware
-- **Returns user object:** `{ userId, email, orgId, ... }` or `null` if not signed in
-- **Null-safe:** Always check `user?.userId` before proceeding
+- **Asynchronous operation** (async/await) — uses headers for session extraction
+- **Header-based:** Extracts session from request headers set by better-auth
+- **Returns session object:** `{ user: { id, email, name, ... }, ... }` or `null` if not signed in
+- **Null-safe:** Always check `!session` before proceeding
 
 ### Standard Pattern
 
@@ -152,15 +155,15 @@ All API routes implement this pattern:
 ```ts
 // app/api/foods/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { mongoDBConfig } from '@/lib/mongo-client'
 import { fetchDataFromCollection } from '@/lib/mongo-utils'
 
 export async function GET(req: NextRequest) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
 
   // Check 1: User must be authenticated
-  if (!user?.userId) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -175,19 +178,19 @@ Some routes check auth twice:
 1. In the route handler itself
 2. In the delegated utility function (`fetchDataFromCollection`)
 
-This is redundant but harmless — both checks verify `user?.userId`.
+This is redundant but harmless — both checks verify session exists.
 
 ### Injecting userId into Data
 
-All writes inject the authenticated user's `userId`:
+All writes inject the authenticated user's ID:
 
 ```ts
-const user = getAuth(req)
+const session = await auth.api.getSession({ headers: req.headers })
 const body = await req.json()
 
 const updatedItem = {
   ...body,
-  lastUpdatedBy: user.userId,  // Clerk userId
+  lastUpdatedBy: session.user.id,  // better-auth user ID
   updatedAt: new Date(),
 }
 
@@ -198,68 +201,136 @@ This creates an audit trail of who last modified each document.
 
 ## Page-Level Auth
 
-Pages use Clerk's UI components to guard content and trigger sign-in flows.
+Pages use server-side session checks or client-side hooks to guard content and trigger auth flows.
 
-### Clerk UI Components
+### Server-Side Session Check
 
-#### <SignedIn>
-
-Renders content **only if** the user is authenticated:
+For server components, check session at render time:
 
 ```tsx
-// app/speakers/page.tsx
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs'
+// app/login/page.tsx (server component)
+import { auth } from '@/lib/auth'
 
-export default function SpeakersPage() {
+export default async function LoginPage() {
+  const session = await auth.api.getSession({ headers: {} })
+  
+  if (session) {
+    // User is already signed in, redirect to app
+    redirect('/places')
+  }
+
   return (
-    <>
-      <SignedIn>
-        <SpeakersContent />  {/* Only visible if signed in */}
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />  {/* Redirect if not signed in */}
-      </SignedOut>
-    </>
+    <div>
+      <LoginForm />
+    </div>
   )
 }
 ```
 
-#### <SignedOut>
+### Client-Side Session Hook
 
-Renders content **only if** the user is NOT authenticated:
-
-```tsx
-<SignedOut>
-  <div>Please sign in to continue.</div>
-</SignedOut>
-```
-
-#### <RedirectToSignIn>
-
-Triggers Clerk's hosted sign-in UI and redirects to it:
+For client components, use the `useSession()` hook:
 
 ```tsx
-<SignedOut>
-  <RedirectToSignIn />
-</SignedOut>
-```
+// components/custom/user-menu.tsx
+'use client'
 
-After sign-in, the user is redirected back to the original page (via `redirectUrl`).
+import { useSession, signOut } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
 
-#### <UserButton>
+export function UserMenu() {
+  const session = useSession()
+  const router = useRouter()
 
-Renders a profile menu with sign-out, profile, and other options:
+  if (!session) {
+    return null
+  }
 
-```tsx
-// app/layout.tsx
-import { UserButton } from '@clerk/nextjs'
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/login')
+  }
 
-export function Header() {
   return (
-    <header>
-      <h1>VoiceBridge</h1>
-      <UserButton afterSignOutUrl="/" />
-    </header>
+    <div>
+      <p>Welcome, {session.user.email}</p>
+      <button onClick={handleSignOut}>Sign Out</button>
+    </div>
+  )
+}
+```
+
+## Auth Forms
+
+VoiceBridge provides custom authentication forms:
+
+### LoginForm
+
+Located at `components/custom/login-form.tsx`, handles email/password and Google OAuth sign-in:
+
+```tsx
+'use client'
+
+import { useForm } from 'react-hook-form'
+import { signIn } from '@/lib/auth-client'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+export function LoginForm() {
+  const { register, handleSubmit } = useForm()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const onSubmit = async (data) => {
+    const response = await signIn.email({
+      email: data.email,
+      password: data.password,
+    })
+
+    if (response) {
+      const redirect = searchParams.get('redirect') || '/places'
+      router.push(redirect)
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    await signIn.social({ provider: 'google' })
+  }
+
+  return (
+    // Form JSX
+  )
+}
+```
+
+### RegisterForm
+
+Located at `components/custom/register-form.tsx`, handles email/password sign-up only:
+
+```tsx
+'use client'
+
+import { useForm } from 'react-hook-form'
+import { signUp } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
+
+export function RegisterForm() {
+  const { register, handleSubmit } = useForm()
+  const router = useRouter()
+
+  const onSubmit = async (data) => {
+    const response = await signUp.email({
+      email: data.email,
+      password: data.password,
+      name: data.name,
+    })
+
+    if (response) {
+      router.push('/places')
+    }
+  }
+
+  return (
+    // Form JSX
   )
 }
 ```
@@ -271,8 +342,8 @@ Speakers are the core entity that organizes access control. Two types of users c
 ### Access Rules
 
 A user has access to a speaker if:
-1. **Owner:** `speaker.parentId === user.userId` (they created the speaker)
-2. **Villager:** `speaker.villagerIds.includes(user.userId)` (they were invited)
+1. **Owner:** `speaker.parentId === session.user.id` (they created the speaker)
+2. **Villager:** `speaker.villagerIds.includes(session.user.id)` (they were invited)
 
 ### Data Structure
 
@@ -281,8 +352,8 @@ A user has access to a speaker if:
 {
   _id: ObjectId,
   name: string,
-  parentId: string,              // Clerk userId of owner
-  villagerIds: string[],         // Array of Clerk userIds with read access
+  parentId: string,              // better-auth user ID of owner
+  villagerIds: string[],         // Array of better-auth user IDs with read access
   speakerId?: string,
   // ... other fields
 }
@@ -293,12 +364,12 @@ A user has access to a speaker if:
 The `speakerAuthCheck()` utility verifies access:
 
 ```ts
-// lib/mongo-utils.ts:160-182
+// lib/mongo-utils.ts
 export const speakerAuthCheck = async (
   req: NextRequest,
   speakerId: string,
 ): Promise<NextResponse | undefined> => {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   const client = await getMongoClient()
   const db = client.db(mongoDBConfig.dbName)
   const speakersCollection = db.collection(mongoDBConfig.collections.speakers)
@@ -310,9 +381,9 @@ export const speakerAuthCheck = async (
   // Authorization check: owner OR villager
   if (
     !speaker ||
-    !user?.userId ||
-    (speaker.parentId !== user.userId &&
-      !speaker.villagerIds?.includes(user.userId))
+    !session ||
+    (speaker.parentId !== session.user.id &&
+      !speaker.villagerIds?.includes(session.user.id))
   ) {
     return NextResponse.json(
       { error: 'Speaker not found or unauthorized' },
@@ -355,10 +426,10 @@ The activation flow allows a parent to invite other users (villagers) to access 
 Parent visits `/speakers/<speakerId>` and generates an invite link:
 
 ```
-https://voicebridge.app/activate/507f1f77bcf86cd799439011
+https://vb.harryt.dev/activate/507f1f77bcf86cd799439011
 ```
 
-The link contains the `speakerId` as a route parameter.
+The link contains the `speakerId` as a route parameter. The base URL is pulled from `process.env.NEXT_PUBLIC_APP_URL`.
 
 #### 2. Parent Shares Link
 
@@ -366,17 +437,17 @@ Parent shares the link via email, messaging, or any channel.
 
 #### 3. Recipient Opens Link (Not Signed In)
 
-Recipient clicks the link. If not signed in, Clerk redirects to sign-in while preserving the `redirectUrl`:
+Recipient clicks the link. If not signed in, they are redirected to the login page:
 
 ```
-https://voicebridge.app/activate/507f1f77bcf86cd799439011
+https://vb.harryt.dev/activate/507f1f77bcf86cd799439011
   ↓ (if not signed in)
-https://clerk.voicebridge.app/sign-in?redirectUrl=/activate/507f1f77bcf86cd799439011
+https://vb.harryt.dev/login?redirect=/activate/507f1f77bcf86cd799439011
 ```
 
 #### 4. Recipient Signs In
 
-Recipient completes sign-in (new account or existing). Clerk redirects back to the preserved URL.
+Recipient completes sign-in (new account or existing). After authentication, they are redirected back to the preserved activation URL.
 
 #### 5. Recipient Lands on Activation Page
 
@@ -386,12 +457,15 @@ Recipient completes sign-in (new account or existing). Clerk redirects back to t
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/nextjs'
+import { useSession } from '@/lib/auth-client'
 
 export default function ActivatePage({ params: { id } }: Props) {
   const router = useRouter()
+  const session = useSession()
 
   useEffect(() => {
+    if (!session) return
+
     const activate = async () => {
       const response = await fetch('/api/speaker/activate', {
         method: 'POST',
@@ -405,18 +479,9 @@ export default function ActivatePage({ params: { id } }: Props) {
     }
 
     activate()
-  }, [id])
+  }, [id, session])
 
-  return (
-    <>
-      <SignedIn>
-        <p>Activating access...</p>
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </>
-  )
+  return session ? <p>Activating access...</p> : null
 }
 ```
 
@@ -433,16 +498,18 @@ Content-Type: application/json
 
 #### 7. Backend Adds User to Villager List
 
-The API route updates the speaker document, adding the user's `userId` to `villagerIds`:
+The API route updates the speaker document, adding the user's ID to `villagerIds`:
 
 ```ts
 // app/api/speaker/activate/route.ts
+import { auth } from '@/lib/auth'
+
 export async function POST(req: NextRequest) {
-  const user = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   const { speakerId } = await req.json()
 
   // Auth check
-  if (!user?.userId) {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -464,7 +531,7 @@ export async function POST(req: NextRequest) {
   // Add user to villagerIds using $addToSet (prevents duplicates)
   const result = await speakersCollection.updateOne(
     { _id: new ObjectId(speakerId) },
-    { $addToSet: { villagerIds: user.userId } },
+    { $addToSet: { villagerIds: session.user.id } },
   )
 
   return NextResponse.json(result, { status: 200 })
@@ -487,13 +554,13 @@ if (response.ok) {
 
 ### Subsequent Logins
 
-On future logins, the same Clerk userId automatically has access to the speaker:
+On future logins, the same better-auth user ID automatically has access to the speaker:
 
 ```ts
 // speakerAuthCheck logic
 if (
-  speaker.parentId === user.userId ||          // Owner
-  speaker.villagerIds.includes(user.userId)    // Villager
+  speaker.parentId === session.user.id ||          // Owner
+  speaker.villagerIds.includes(session.user.id)    // Villager
 ) {
   // Access granted
 }
@@ -519,13 +586,13 @@ speakerAuthCheck(req, id as string)  // Return ignored
 
 ### 2. GET /api/speaker Auth Check Logic
 
-**Issue:** The auth check in `app/api/speaker/route.ts:34-38` uses OR instead of AND:
+**Issue:** The auth check in `app/api/speaker/route.ts` may use OR instead of AND:
 
 ```ts
 if (
   !speaker ||
-  !speaker.villagerIds.includes(user.userId) ||  // OR
-  speaker.parentId !== user.userId
+  !speaker.villagerIds.includes(session.user.id) ||  // OR
+  speaker.parentId !== session.user.id
 ) {
   // Reject
 }
@@ -538,8 +605,8 @@ This logic is **broken**: a speaker with `villagerIds = []` and `parentId = "oth
 ```ts
 if (
   !speaker ||
-  (speaker.parentId !== user.userId &&
-    !speaker.villagerIds.includes(user.userId))
+  (speaker.parentId !== session.user.id &&
+    !speaker.villagerIds.includes(session.user.id))
 ) {
   // Reject (AND logic)
 }
@@ -562,56 +629,47 @@ const data = await collection.find({ speakerId: speakerId }).toArray()
 
 **Proper Fix:** Derive `speakerId` from the authenticated speaker (stored on user's auth session), not from query parameters.
 
-## Clerk Configuration
+## better-auth Configuration
 
 ### Environment Variables
 
-Required Clerk credentials in `.env.local`:
+Required better-auth credentials in `.env.local`:
 
 ```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_abc123...
-CLERK_SECRET_KEY=sk_test_xyz789...
+BETTER_AUTH_SECRET=xyz789abcdef1234567890abcdef1234  # Min 32 characters
+BETTER_AUTH_URL=http://localhost:3000                 # Server-side URL
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000     # Client-side URL
+GOOGLE_CLIENT_ID=abc123...                            # From Google Cloud
+GOOGLE_CLIENT_SECRET=xyz789...                        # From Google Cloud
+NEXT_PUBLIC_APP_URL=https://vb.harryt.dev             # Public app URL
 ```
 
 **Notes:**
 
-- `NEXT_PUBLIC_` prefix makes the publishable key available in browser code (safe)
-- `CLERK_SECRET_KEY` must be kept secret (server-only)
-- Both are provided by Clerk dashboard after creating an application
+- `BETTER_AUTH_SECRET` must be at least 32 characters (randomize it)
+- `BETTER_AUTH_URL` and `NEXT_PUBLIC_BETTER_AUTH_URL` are usually the same
+- `NEXT_PUBLIC_` prefix makes values available in browser code (safe for public URLs)
+- `GOOGLE_CLIENT_SECRET` must be kept secret (server-only)
+- Both Google credentials are provided by Google Cloud Console after creating an OAuth 2.0 application
 
-### Hosted Sign-In UI
+### Custom Auth Pages
 
-VoiceBridge uses Clerk's hosted sign-in UI (not a custom login form):
+VoiceBridge uses custom login and register pages instead of a hosted provider UI:
 
-```tsx
-<RedirectToSignIn />
-```
+- `/login` — Custom login form with email/password and Google OAuth
+- `/register` — Custom register form with email/password only
+- Forms are located in `components/custom/login-form.tsx` and `components/custom/register-form.tsx`
 
-This redirects to Clerk's managed domain (e.g., `https://clerk.voicebridge.app/sign-in`) for authentication. Benefits:
-
-- No custom auth form to maintain
-- Automatic password reset, email verification
-- Built-in security measures (rate limiting, etc.)
-- SSO support (Google, GitHub, etc.) if enabled
+Benefits:
+- Full control over UI/UX
+- Consistent branding
+- Custom validation
+- Integrated error handling
 
 ### Session Management
 
-Clerk automatically manages the session:
-- **Sign-In:** Sets secure cookies after successful authentication
-- **Session Duration:** Configurable in Clerk dashboard (default 24 hours)
-- **Sign-Out:** `<UserButton>` component clears session
-- **Middleware:** `clerkMiddleware()` validates session on every request
-
-No custom session logic is needed; Clerk handles all session state server-side.
-
-## Summary: Auth Flow for New User
-
-1. Unauthenticated user visits `/places`
-2. `<SignedOut>` component renders `<RedirectToSignIn />`
-3. Clerk redirects to hosted sign-in UI
-4. User completes sign-up with email + password (or OAuth)
-5. Clerk redirects back to `/places` with active session
-6. `<SignedIn>` component renders page content
-7. API routes use `getAuth(req)` to confirm `user.userId`
-8. User can create speakers or receive activation links to join existing speakers
-9. `speakerAuthCheck()` (when properly enforced) verifies speaker access on each request
+better-auth automatically manages the session via HTTP-only cookies and headers. The session is:
+- Created on successful sign-in
+- Validated on each request via `auth.api.getSession()`
+- Destroyed on sign-out
+- Persisted across browser refreshes

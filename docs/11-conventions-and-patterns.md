@@ -85,11 +85,11 @@ import { useFormState } from './form-context'
 #### Server Component with API call:
 
 ```typescript
-import { currentUser } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { Food } from '@/models'
 import { handleDatabaseOperation } from '@/lib/mongo-utils'
-import { speakerAuthCheck } from '@/lib/auth-check'
+import { speakerAuthCheck } from '@/lib/mongo-utils'
 ```
 
 ### Preferences
@@ -132,7 +132,7 @@ type FoodInput = {
 ```typescript
 type Food = FoodInput & {
   _id: string        // MongoDB ObjectId as string
-  userId: string     // Clerk userId of creator
+  userId: string     // better-auth user ID of creator
   lastUpdatedBy?: string
   updatedAt?: Date | string
 }
@@ -271,23 +271,22 @@ All API routes follow a consistent structure.
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server'
-import { currentUser } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { handleDatabaseOperation } from '@/lib/mongo-utils'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // For list routes: delegate to fetchDataFromCollection
     // For single routes: implement custom logic or use handleDatabaseOperation
     const result = await handleDatabaseOperation(
-      'GET',
+      request,
       'foods',
-      { speakerId },
-      { user: user.id },
+      'GET',
     )
 
     return NextResponse.json(result)
@@ -302,18 +301,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-
     const result = await handleDatabaseOperation(
-      'POST',
+      request,
       'foods',
-      body,
-      { user: user.id },
+      'POST',
     )
 
     return NextResponse.json({ success: true, item: result })
@@ -328,18 +324,15 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await request.json()
-
     const result = await handleDatabaseOperation(
-      'DELETE',
+      request,
       'foods',
-      { _id: id },
-      { user: user.id },
+      'DELETE',
     )
 
     return NextResponse.json({ success: true })
@@ -422,13 +415,13 @@ Create `app/api/animals/route.ts`:
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server'
-import { currentUser } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { fetchDataFromCollection } from '@/lib/mongo-utils'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -443,9 +436,8 @@ export async function GET(request: NextRequest) {
     }
 
     const items = await fetchDataFromCollection(
+      request,
       'animals',
-      { speakerId },
-      user.id,
     )
 
     return NextResponse.json({ items })
@@ -465,24 +457,20 @@ Create `app/api/animal/route.ts`:
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server'
-import { currentUser } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { handleDatabaseOperation } from '@/lib/mongo-utils'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
-
     const item = await handleDatabaseOperation(
-      'GET',
+      request,
       'animals',
-      { _id: id },
-      { user: user.id },
+      'GET',
     )
 
     return NextResponse.json({ item })
@@ -497,18 +485,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const session = await auth.api.getSession({ headers: request.headers })
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-
     const item = await handleDatabaseOperation(
-      'POST',
+      request,
       'animals',
-      body,
-      { user: user.id },
+      'POST',
     )
 
     return NextResponse.json({ success: true, item })
@@ -523,7 +508,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await currentUser()
+    const session = await auth.api.getSession({ headers: request.headers })
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }

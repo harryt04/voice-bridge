@@ -32,7 +32,7 @@ Navigate to each section using the links below:
 - **UI Library**: React 18
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
-- **Authentication**: Clerk
+- **Authentication**: better-auth
 - **Styling**: Tailwind CSS 3.4
 - **State Management**: TanStack React Query + React Context
 - **Forms**: react-hook-form + zod
@@ -100,13 +100,13 @@ All resources (foods, places, activities, etc.) belong to exactly one Speaker. E
 
 ### Provider Hierarchy
 
-Root layout nests 5 providers: Clerk → PostHog → Theme → Sidebar → VBQueryClient (Query + Speaker context).
+Root layout nests 5 providers: SessionProvider → PostHog → Theme → Sidebar → VBQueryClient (Query + Speaker context).
 
 **See:** [01: Architecture §2](01-architecture.md#2-provider-hierarchy)
 
 ### Authentication & Authorization
 
-Clerk handles user identity. Speaker ownership enforced via `speakerAuthCheck()`. Three roles: Parent (full access), Speaker (limited), Villager (read-only).
+better-auth handles user identity. Speaker ownership enforced via `speakerAuthCheck()`. Three roles: Parent (full access), Speaker (limited), Villager (read-only).
 
 **See:** [08: Authentication](08-authentication.md)
 

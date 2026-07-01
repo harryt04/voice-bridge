@@ -1,17 +1,16 @@
-import { getAuth, clerkClient } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 
 export async function GET(req: NextRequest) {
-  const auth = getAuth(req)
+  const session = await auth.api.getSession({ headers: req.headers })
   try {
-    if (!auth?.userId) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Fetch user details from Clerk
-    const user = await clerkClient.users.getUser(auth.userId)
-    const email = user.emailAddresses?.[0]?.emailAddress
+    // Get email directly from session
+    const email = session.user.email
 
     if (email) {
       fetch('https://harryt.dev/api/user', {
@@ -34,8 +33,8 @@ export async function GET(req: NextRequest) {
         $and: [
           {
             $or: [
-              { parentId: auth.userId }, // Condition to match parentId
-              { villagerIds: auth.userId }, // Condition to match user.id in villagerIds array
+              { parentId: session.user.id }, // Condition to match parentId
+              { villagerIds: session.user.id }, // Condition to match user.id in villagerIds array
             ],
           },
           { isArchived: { $ne: true } }, // Ensure isArchived is not true
@@ -46,7 +45,7 @@ export async function GET(req: NextRequest) {
     if (speakers.length === 0) {
       const newSpeaker = {
         name: 'Default',
-        parentId: auth.userId,
+        parentId: session.user.id,
       }
       speakers.push(newSpeaker as any)
       speakersCollection.insertOne(newSpeaker)

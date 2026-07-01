@@ -1,10 +1,10 @@
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
 import type { Metadata } from 'next'
-import { Inter as FontSans } from 'next/font/google'
+import { Inter as FontSans, Outfit as FontDisplay } from 'next/font/google'
 
 import './globals.css'
 
 import { cn } from '@/lib/utils'
+import { SessionProvider } from '@/lib/auth-client'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
 import {
@@ -12,13 +12,19 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/app-sidebar'
+import { AuthGatedSidebar } from '@/components/custom/auth-gated-sidebar'
 import { VBQueryClient } from '@/hooks/use-query-client'
 import { Toaster } from 'sonner'
 
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
+})
+
+const fontDisplay = FontDisplay({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -34,34 +40,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider>
+      <SessionProvider>
         <PostHogProvider>
-          <body
-            suppressHydrationWarning={true}
-            className={cn(
-              'min-h-screen bg-background font-sans antialiased',
-              fontSans.variable,
-            )}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
           >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <SidebarProvider>
+            <SidebarProvider>
+              <body
+                suppressHydrationWarning={true}
+                className={cn(
+                  'min-h-screen bg-background font-sans antialiased',
+                  fontSans.variable,
+                  fontDisplay.variable,
+                )}
+              >
                 <VBQueryClient>
-                  <SignedIn>
-                    <AppSidebar />
-                  </SignedIn>
+                  <AuthGatedSidebar />
                   {children}
                   <Toaster />
                 </VBQueryClient>
-              </SidebarProvider>
-            </ThemeProvider>
-          </body>
+              </body>
+            </SidebarProvider>
+          </ThemeProvider>
         </PostHogProvider>
-      </ClerkProvider>
+      </SessionProvider>
     </html>
   )
 }

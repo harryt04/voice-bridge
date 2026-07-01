@@ -1,6 +1,6 @@
 # API Routes
 
-All API routes require Clerk authentication and use `getAuth()` from `@clerk/nextjs/server`.
+All API routes require better-auth authentication and use `auth.api.getSession()` with request headers.
 
 ## Naming Convention
 
@@ -9,13 +9,13 @@ All API routes require Clerk authentication and use `getAuth()` from `@clerk/nex
 
 ## Auth Pattern
 
-All routes require Clerk authentication.
+All routes require better-auth authentication.
 
 ```ts
-import { getAuth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 
-const user = getAuth(req)
-if (!user?.userId) {
+const session = await auth.api.getSession({ headers: req.headers })
+if (!session) {
   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 }
 ```

@@ -121,6 +121,7 @@ export async function handleDatabaseOperation(
 - Requires query parameter: `?id=<ObjectId>`
 - Returns the document or 404 if not found
 - Returns: `{ _id, name, speakerId, ... }`
+- Uses better-auth `auth.api.getSession()` for authentication
 
 ```ts
 // app/api/food/route.ts
@@ -136,7 +137,7 @@ export async function GET(req: NextRequest) {
 
 - If `?id=<ObjectId>` is provided: calls `updateOne($set)` with new fields
 - If no `id`: calls `insertOne()` to create a new document
-- Injects `lastUpdatedBy` (Clerk userId) and `updatedAt` (current timestamp)
+- Injects `lastUpdatedBy` (better-auth user ID) and `updatedAt` (current timestamp)
 - Does NOT preserve `_id` on updates (deleted from payload before $set)
 
 ```ts

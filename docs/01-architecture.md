@@ -28,7 +28,7 @@ No resource exists outside a Speaker scope.
 Root layout (`app/layout.tsx`) establishes provider nesting from outermost to innermost:
 
 ```
-ClerkProvider
+SessionProvider
 └── PostHogProvider
     └── ThemeProvider
         └── SidebarProvider
@@ -39,7 +39,7 @@ ClerkProvider
 
 ### Provider Responsibilities
 
-- **ClerkProvider**: Authentication (Clerk.com)
+- **SessionProvider**: Authentication (better-auth)
 - **PostHogProvider**: Analytics tracking
 - **ThemeProvider**: Dark/light mode theme switching
 - **SidebarProvider**: Sidebar UI state (open/closed)

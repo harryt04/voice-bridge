@@ -22,7 +22,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { UserButton } from '@clerk/nextjs'
+import { UserMenu } from '@/components/custom/user-menu'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
@@ -67,18 +67,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="my-4">
+          <SidebarGroupLabel className="my-4 font-display">
             <SidebarTrigger className="-ml-2 mr-4 p-5" />
             VoiceBridge
             <div className={cn('flex w-full flex-row justify-end gap-4')}>
               <div className="h-full w-fit pt-1.5">
-                <UserButton
-                  appearance={{
-                    elements: {
-                      userButtonPopoverCard: { pointerEvents: 'initial' },
-                    },
-                  }}
-                />
+                <UserMenu />
               </div>
               <ThemeSwitcher />
             </div>

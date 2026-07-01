@@ -4,7 +4,7 @@
 
 VoiceBridge is a full-stack Next.js 16 (App Router) web app helping individuals with autism
 communicate using visual tools. Stack: TypeScript, React 18, shadcn/ui, Tailwind CSS 3.4,
-MongoDB (direct driver), Clerk auth, TanStack React Query, PostHog analytics.
+MongoDB (direct driver), better-auth, TanStack React Query, PostHog analytics.
 
 ## Comprehensive Codebase Documentation
 
@@ -115,7 +115,7 @@ adjust Tailwind class order — the plugin handles it.
 - shadcn/ui components live in `components/ui/` — these are generated, avoid modifying
 - Custom components live in `components/custom/`
 - Use `GenericItemsPage` with a `GenericPageInfo` config for standard CRUD pages
-- Auth UI: `<SignedIn>`, `<SignedOut>`, `<RedirectToSignIn>` from `@clerk/nextjs`
+- Auth UI: `LoginForm`, `RegisterForm`, `UserMenu` custom components
 
 ### State Management
 
@@ -123,7 +123,7 @@ adjust Tailwind class order — the plugin handles it.
 - **Local state**: `useState` / `useEffect`
 - **Global state**: React Context (`SpeakerContext`) wrapping React Query
 - **Provider hierarchy** (in root layout):
-  `ClerkProvider > PostHogProvider > ThemeProvider > SidebarProvider > VBQueryClient`
+  `SessionProvider > PostHogProvider > ThemeProvider > SidebarProvider > VBQueryClient`
 
 ### Error Handling
 
@@ -186,11 +186,15 @@ Extends: `next/core-web-vitals`, `eslint:recommended`, `plugin:react/recommended
 Required (see `.env.sample`):
 
 ```
-NEXT_PUBLIC_POSTHOG_KEY      # PostHog analytics key
-NEXT_PUBLIC_POSTHOG_HOST     # PostHog host URL
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY  # Clerk auth public key
-CLERK_SECRET_KEY             # Clerk auth secret
-MONGO_CONNECTION_STRING      # MongoDB connection URI
+NEXT_PUBLIC_POSTHOG_KEY       # PostHog analytics key
+NEXT_PUBLIC_POSTHOG_HOST      # PostHog host URL
+BETTER_AUTH_SECRET            # better-auth secret (min 32 chars)
+BETTER_AUTH_URL               # Server-side auth base URL
+NEXT_PUBLIC_BETTER_AUTH_URL   # Client-side auth base URL
+GOOGLE_CLIENT_ID              # Google OAuth client ID
+GOOGLE_CLIENT_SECRET          # Google OAuth client secret
+NEXT_PUBLIC_APP_URL           # Public app URL for callbacks and links
+MONGO_CONNECTION_STRING       # MongoDB connection URI
 ```
 
 ## Git Conventions
@@ -201,7 +205,7 @@ MONGO_CONNECTION_STRING      # MongoDB connection URI
 
 ## Key Dependencies to Know
 
-- `@clerk/nextjs` — all authentication
+- `better-auth` — authentication (with MongoDB adapter)
 - `mongodb` — database (direct driver, no ORM)
 - `@tanstack/react-query` — server state / caching
 - `zod` + `react-hook-form` — form validation

@@ -1,9 +1,9 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { LoginForm } from '@/components/custom/login-form'
+import { RegisterForm } from '@/components/custom/register-form'
 
-export default async function LoginPage() {
+export default async function RegisterPage() {
   // Check if user is already authenticated
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -15,7 +15,7 @@ export default async function LoginPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-4">
-      <LoginForm />
+      <RegisterForm />
     </main>
   )
 }
