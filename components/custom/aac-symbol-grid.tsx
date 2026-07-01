@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ImageOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type AacSymbolGridProps = {
@@ -95,6 +95,7 @@ function AacSymbolCell({
   onSymbolTap,
 }: AacSymbolCellProps) {
   const [isLongPressing, setIsLongPressing] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const longPressTimer = useRef<NodeJS.Timeout | null>(null)
 
   const handleTap = useCallback(() => {
@@ -146,12 +147,20 @@ function AacSymbolCell({
               </span>
             )}
 
-            <img
-              src={symbol.imageUrl}
-              alt={symbol.label}
-              loading="lazy"
-              className="aspect-square w-full object-contain dark:invert"
-            />
+            {imgError ? (
+              <ImageOff
+                className="aspect-square w-full text-muted-foreground/50"
+                strokeWidth={1.5}
+              />
+            ) : (
+              <img
+                src={symbol.imageUrl}
+                alt={symbol.label}
+                loading="lazy"
+                onError={() => setImgError(true)}
+                className="aspect-square w-full object-contain dark:invert"
+              />
+            )}
 
             {labelPosition === 'below' && showLabel && (
               <span className="w-full truncate text-center font-sans text-sm font-semibold leading-tight text-foreground">
@@ -169,11 +178,15 @@ function AacSymbolCell({
         {isLongPressing && (
           <TooltipContent side="top" className="gap-2">
             <div className="flex flex-col items-center gap-2">
-              <img
-                src={symbol.imageUrl}
-                alt={symbol.label}
-                className="h-24 w-24 object-contain dark:invert"
-              />
+              {imgError ? (
+                <ImageOff className="h-24 w-24 text-muted-foreground/50" strokeWidth={1.5} />
+              ) : (
+                <img
+                  src={symbol.imageUrl}
+                  alt={symbol.label}
+                  className="h-24 w-24 object-contain dark:invert"
+                />
+              )}
               <span className="font-display text-base font-semibold text-center">
                 {symbol.label}
               </span>

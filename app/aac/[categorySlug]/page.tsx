@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useMemo } from 'react'
+import { use, useContext, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -28,8 +28,9 @@ import {
 export default function AacCategoryPage({
   params,
 }: {
-  params: { categorySlug: string }
+  params: Promise<{ categorySlug: string }>
 }) {
+  const { categorySlug } = use(params)
   const router = useRouter()
   const { selectedSpeaker } = useSpeakerContext()
   const preferencesContext = useContext(AacPreferencesContext)
@@ -37,15 +38,15 @@ export default function AacCategoryPage({
   const preferencesContextValue = preferencesContext as AacPreferencesContextValue
 
   // Find category label from slug
-  const category = AAC_CATEGORIES.find((cat) => cat.slug === params.categorySlug)
+  const category = AAC_CATEGORIES.find((cat) => cat.slug === categorySlug)
 
   // Safely extract preferences from context
   const preferences = preferencesContextValue?.preferences
 
   // Fetch symbols for this category (useMemo to avoid re-fetching)
   const symbols = useMemo(() => {
-    return mulberryProvider.getSymbolsByCategory(params.categorySlug)
-  }, [params.categorySlug])
+    return mulberryProvider.getSymbolsByCategory(categorySlug)
+  }, [categorySlug])
 
   if (!category) {
     return (
