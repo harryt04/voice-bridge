@@ -120,6 +120,14 @@ npm run lint         # Checks for ESLint violations
 npm run dev          # Test locally in browser
 ```
 
+**Before opening a PR**, run the complete validation suite to ensure your branch is ready to merge:
+
+```bash
+npm run ci           # Runs all checks: format, lint, and build
+```
+
+This command prepares and validates your changes comprehensively, catching any formatting, linting, or TypeScript issues before you push.
+
 ### 4. Commit Your Work
 
 We loosely follow conventional commits:
