@@ -6,7 +6,6 @@ import { useSession } from '@/lib/auth-client'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { useAacPreferences } from '@/hooks/use-aac-preferences'
 import type { AacUserPreferences } from '@/models'
-import { AacSentenceBar } from '@/components/custom/aac-sentence-bar'
 
 /**
  * SentenceWord: A word in the AAC sentence bar
@@ -116,7 +115,9 @@ export default function AacLayout({ children }: { children: React.ReactNode }) {
   return (
     <AacSentenceContext.Provider value={sentenceContextValue}>
       <AacPreferencesContext.Provider value={preferencesContextValue}>
-        <AacSentenceBar />
+        {/* AacSentenceBar intentionally not rendered: symbol taps don't call addWord yet,
+            so the bar is permanently empty. Wire it up (see aac-phrase-grid.tsx for the
+            pattern) before re-enabling. */}
         {children}
       </AacPreferencesContext.Provider>
     </AacSentenceContext.Provider>

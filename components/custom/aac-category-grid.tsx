@@ -8,10 +8,10 @@ import { useTheme } from 'next-themes'
 import * as LucideIcons from 'lucide-react'
 
 /**
- * AacCategoryGrid: 12-tile category grid with responsive columns
+ * AacCategoryGrid: category tiles in a centered, wrapping flex row
  *
- * Grid: 2 mobile, 3 sm, 4 lg
- * Each tile: aspect-square, min-h-80px, inline style colors from CATEGORY_COLORS
+ * Fixed-size tiles (not aspect-ratio-on-a-grid-track) so every tile is
+ * identically sized regardless of label length or viewport width.
  * Dark mode: brightness filter via Tailwind dark: variant
  */
 export function AacCategoryGrid() {
@@ -19,7 +19,7 @@ export function AacCategoryGrid() {
   const isDark = theme === 'dark'
 
   return (
-    <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="flex flex-wrap justify-center gap-4 p-4">
       {AAC_CATEGORIES.map((category) => (
         <AacCategoryTile
           key={category.slug}
@@ -43,9 +43,9 @@ function AacCategoryTile({ category, isDark = false }: AacCategoryTileProps) {
   if (!colors) return null
 
   return (
-    <Link href={`/aac/${category.slug}`}>
+    <Link href={`/aac/${category.slug}`} className="shrink-0">
       <button
-        className={`flex aspect-square min-h-20 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all duration-150 hover:shadow-md active:scale-[0.97] ${
+        className={`flex h-32 w-32 shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all duration-150 hover:shadow-md active:scale-[0.97] sm:h-36 sm:w-36 lg:h-40 lg:w-40 ${
           isDark ? 'dark:[filter:brightness(0.72)_saturate(1.1)]' : ''
         }`}
         style={{

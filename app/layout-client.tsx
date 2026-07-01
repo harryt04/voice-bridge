@@ -4,6 +4,7 @@ import { SessionProvider } from '@/lib/auth-client'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
 import {
+  SidebarInset,
   SidebarProvider,
 } from '@/components/ui/sidebar'
 import { AuthGatedSidebar } from '@/components/custom/auth-gated-sidebar'
@@ -28,7 +29,7 @@ export function RootLayoutClient({
           <SidebarProvider>
             <VBQueryClient>
               <AuthGatedSidebar />
-              {children}
+              <SidebarInset>{children}</SidebarInset>
               <Toaster />
             </VBQueryClient>
           </SidebarProvider>
