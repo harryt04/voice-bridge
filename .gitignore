@@ -38,3 +38,4 @@ next-env.d.ts
 
 .agents/specs
 .agents/review
+.claude/worktrees/*
