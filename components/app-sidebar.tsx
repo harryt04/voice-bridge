@@ -5,8 +5,10 @@ import {
   Apple,
   BugIcon,
   Drum,
+  Grid2x2,
   LandPlot,
   ListChecks,
+  MessageSquare,
   UsersRoundIcon,
 } from 'lucide-react'
 import {
@@ -64,7 +66,11 @@ export function AppSidebar() {
   const pathname = usePathname() // Get the current route.
 
   return (
-    <Sidebar>
+    <Sidebar className="bg-sidebar text-sidebar-foreground">
+      {/* Light sidebar background was too similar to light content, requiring glassmorphism (.translucent-bg)
+          to be readable. Dark sidebar (hsl(230 20% 16%)) creates a persistent, high-contrast visual frame
+          that helps users with cognitive differences locate navigation reliably without competing with content.
+          It also eliminates the need for .translucent-bg, improving maintainability. */}
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="my-4 font-display">
@@ -78,6 +84,31 @@ export function AppSidebar() {
             </div>
           </SidebarGroupLabel>
           <SpeakerSelector />
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>AAC Board</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/aac'}>
+                  <Link href="/aac">
+                    <Grid2x2 size={16} />
+                    Symbol Board
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/aac/phrases'}>
+                  <Link href="/aac/phrases">
+                    <MessageSquare size={16} />
+                    Quick Phrases
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-2 px-2">
               {items

@@ -1,3 +1,5 @@
+export * from './aac-phrase'
+export * from './aac-preferences'
 export * from './food'
 export * from './hst-users'
 export * from './place'

@@ -1,0 +1,1066 @@
+[
+  {
+    "id": "mulberry-want",
+    "label": "want",
+    "imageUrl": "/symbols/mulberry/want.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["desire", "need"]
+  },
+  {
+    "id": "mulberry-hello",
+    "label": "hello",
+    "imageUrl": "/symbols/mulberry/hello.svg",
+    "category": "social",
+    "source": "mulberry",
+    "tags": ["greet", "greeting"]
+  },
+  {
+    "id": "mulberry-thank-you",
+    "label": "thank you",
+    "imageUrl": "/symbols/mulberry/thank-you.svg",
+    "category": "social",
+    "source": "mulberry",
+    "tags": ["thanks", "grateful"]
+  },
+  {
+    "id": "mulberry-please",
+    "label": "please",
+    "imageUrl": "/symbols/mulberry/please.svg",
+    "category": "social",
+    "source": "mulberry",
+    "tags": ["request", "polite"]
+  },
+  {
+    "id": "mulberry-yes",
+    "label": "yes",
+    "imageUrl": "/symbols/mulberry/yes.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["affirmative", "agree"]
+  },
+  {
+    "id": "mulberry-no",
+    "label": "no",
+    "imageUrl": "/symbols/mulberry/no.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["negative", "refuse"]
+  },
+  {
+    "id": "mulberry-happy",
+    "label": "happy",
+    "imageUrl": "/symbols/mulberry/happy.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["joy", "glad", "smile"]
+  },
+  {
+    "id": "mulberry-sad",
+    "label": "sad",
+    "imageUrl": "/symbols/mulberry/sad.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["unhappy", "cry"]
+  },
+  {
+    "id": "mulberry-angry",
+    "label": "angry",
+    "imageUrl": "/symbols/mulberry/angry.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["mad", "upset"]
+  },
+  {
+    "id": "mulberry-tired",
+    "label": "tired",
+    "imageUrl": "/symbols/mulberry/tired.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["sleepy", "exhausted"]
+  },
+  {
+    "id": "mulberry-hungry",
+    "label": "hungry",
+    "imageUrl": "/symbols/mulberry/hungry.svg",
+    "category": "needs",
+    "source": "mulberry",
+    "tags": ["eat", "food"]
+  },
+  {
+    "id": "mulberry-thirsty",
+    "label": "thirsty",
+    "imageUrl": "/symbols/mulberry/thirsty.svg",
+    "category": "needs",
+    "source": "mulberry",
+    "tags": ["drink", "water"]
+  },
+  {
+    "id": "mulberry-help",
+    "label": "help",
+    "imageUrl": "/symbols/mulberry/help.svg",
+    "category": "needs",
+    "source": "mulberry",
+    "tags": ["assist", "support"]
+  },
+  {
+    "id": "mulberry-bathroom",
+    "label": "bathroom",
+    "imageUrl": "/symbols/mulberry/bathroom.svg",
+    "category": "needs",
+    "source": "mulberry",
+    "tags": ["toilet", "restroom"]
+  },
+  {
+    "id": "mulberry-break",
+    "label": "break",
+    "imageUrl": "/symbols/mulberry/break.svg",
+    "category": "needs",
+    "source": "mulberry",
+    "tags": ["rest", "pause"]
+  },
+  {
+    "id": "mulberry-pain",
+    "label": "pain",
+    "imageUrl": "/symbols/mulberry/pain.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["hurt", "ache"]
+  },
+  {
+    "id": "mulberry-sick",
+    "label": "sick",
+    "imageUrl": "/symbols/mulberry/sick.svg",
+    "category": "feelings",
+    "source": "mulberry",
+    "tags": ["ill", "unwell"]
+  },
+  {
+    "id": "mulberry-mom",
+    "label": "mom",
+    "imageUrl": "/symbols/mulberry/mom.svg",
+    "category": "people",
+    "source": "mulberry",
+    "tags": ["mother", "parent"]
+  },
+  {
+    "id": "mulberry-dad",
+    "label": "dad",
+    "imageUrl": "/symbols/mulberry/dad.svg",
+    "category": "people",
+    "source": "mulberry",
+    "tags": ["father", "parent"]
+  },
+  {
+    "id": "mulberry-friend",
+    "label": "friend",
+    "imageUrl": "/symbols/mulberry/friend.svg",
+    "category": "people",
+    "source": "mulberry",
+    "tags": ["buddy", "pal"]
+  },
+  {
+    "id": "mulberry-teacher",
+    "label": "teacher",
+    "imageUrl": "/symbols/mulberry/teacher.svg",
+    "category": "people",
+    "source": "mulberry",
+    "tags": ["school", "educate"]
+  },
+  {
+    "id": "mulberry-doctor",
+    "label": "doctor",
+    "imageUrl": "/symbols/mulberry/doctor.svg",
+    "category": "people",
+    "source": "mulberry",
+    "tags": ["medical", "health"]
+  },
+  {
+    "id": "mulberry-eat",
+    "label": "eat",
+    "imageUrl": "/symbols/mulberry/eat.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["food", "consume"]
+  },
+  {
+    "id": "mulberry-drink",
+    "label": "drink",
+    "imageUrl": "/symbols/mulberry/drink.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["beverage", "liquid"]
+  },
+  {
+    "id": "mulberry-sleep",
+    "label": "sleep",
+    "imageUrl": "/symbols/mulberry/sleep.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["rest", "bed"]
+  },
+  {
+    "id": "mulberry-play",
+    "label": "play",
+    "imageUrl": "/symbols/mulberry/play.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["game", "fun"]
+  },
+  {
+    "id": "mulberry-walk",
+    "label": "walk",
+    "imageUrl": "/symbols/mulberry/walk.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["move", "go"]
+  },
+  {
+    "id": "mulberry-run",
+    "label": "run",
+    "imageUrl": "/symbols/mulberry/run.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["fast", "sprint"]
+  },
+  {
+    "id": "mulberry-sit",
+    "label": "sit",
+    "imageUrl": "/symbols/mulberry/sit.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["chair", "seat"]
+  },
+  {
+    "id": "mulberry-stand",
+    "label": "stand",
+    "imageUrl": "/symbols/mulberry/stand.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["up", "upright"]
+  },
+  {
+    "id": "mulberry-talk",
+    "label": "talk",
+    "imageUrl": "/symbols/mulberry/talk.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["speak", "say"]
+  },
+  {
+    "id": "mulberry-listen",
+    "label": "listen",
+    "imageUrl": "/symbols/mulberry/listen.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["hear", "sound"]
+  },
+  {
+    "id": "mulberry-look",
+    "label": "look",
+    "imageUrl": "/symbols/mulberry/look.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["see", "watch"]
+  },
+  {
+    "id": "mulberry-write",
+    "label": "write",
+    "imageUrl": "/symbols/mulberry/write.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["draw", "pen"]
+  },
+  {
+    "id": "mulberry-read",
+    "label": "read",
+    "imageUrl": "/symbols/mulberry/read.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["book", "text"]
+  },
+  {
+    "id": "mulberry-sing",
+    "label": "sing",
+    "imageUrl": "/symbols/mulberry/sing.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["song", "music"]
+  },
+  {
+    "id": "mulberry-dance",
+    "label": "dance",
+    "imageUrl": "/symbols/mulberry/dance.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["move", "rhythm"]
+  },
+  {
+    "id": "mulberry-jump",
+    "label": "jump",
+    "imageUrl": "/symbols/mulberry/jump.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["hop", "leap"]
+  },
+  {
+    "id": "mulberry-apple",
+    "label": "apple",
+    "imageUrl": "/symbols/mulberry/apple.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["fruit", "red"]
+  },
+  {
+    "id": "mulberry-banana",
+    "label": "banana",
+    "imageUrl": "/symbols/mulberry/banana.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["fruit", "yellow"]
+  },
+  {
+    "id": "mulberry-bread",
+    "label": "bread",
+    "imageUrl": "/symbols/mulberry/bread.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["grain", "carb"]
+  },
+  {
+    "id": "mulberry-milk",
+    "label": "milk",
+    "imageUrl": "/symbols/mulberry/milk.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["dairy", "white"]
+  },
+  {
+    "id": "mulberry-water",
+    "label": "water",
+    "imageUrl": "/symbols/mulberry/water.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["liquid", "drink"]
+  },
+  {
+    "id": "mulberry-juice",
+    "label": "juice",
+    "imageUrl": "/symbols/mulberry/juice.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["fruit drink", "orange"]
+  },
+  {
+    "id": "mulberry-cookie",
+    "label": "cookie",
+    "imageUrl": "/symbols/mulberry/cookie.svg",
+    "category": "food-drink",
+    "source": "mulberry",
+    "tags": ["treat", "dessert"]
+  },
+  {
+    "id": "mulberry-house",
+    "label": "house",
+    "imageUrl": "/symbols/mulberry/house.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["home", "building"]
+  },
+  {
+    "id": "mulberry-school",
+    "label": "school",
+    "imageUrl": "/symbols/mulberry/school.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["education", "class"]
+  },
+  {
+    "id": "mulberry-park",
+    "label": "park",
+    "imageUrl": "/symbols/mulberry/park.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["playground", "outside"]
+  },
+  {
+    "id": "mulberry-beach",
+    "label": "beach",
+    "imageUrl": "/symbols/mulberry/beach.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["ocean", "sand"]
+  },
+  {
+    "id": "mulberry-library",
+    "label": "library",
+    "imageUrl": "/symbols/mulberry/library.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["book", "read"]
+  },
+  {
+    "id": "mulberry-store",
+    "label": "store",
+    "imageUrl": "/symbols/mulberry/store.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["shop", "buy"]
+  },
+  {
+    "id": "mulberry-hospital",
+    "label": "hospital",
+    "imageUrl": "/symbols/mulberry/hospital.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["medical", "doctor"]
+  },
+  {
+    "id": "mulberry-church",
+    "label": "church",
+    "imageUrl": "/symbols/mulberry/church.svg",
+    "category": "places",
+    "source": "mulberry",
+    "tags": ["religion", "pray"]
+  },
+  {
+    "id": "mulberry-car",
+    "label": "car",
+    "imageUrl": "/symbols/mulberry/car.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["vehicle", "drive"]
+  },
+  {
+    "id": "mulberry-ball",
+    "label": "ball",
+    "imageUrl": "/symbols/mulberry/ball.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["round", "play"]
+  },
+  {
+    "id": "mulberry-doll",
+    "label": "doll",
+    "imageUrl": "/symbols/mulberry/doll.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["toy", "play"]
+  },
+  {
+    "id": "mulberry-book",
+    "label": "book",
+    "imageUrl": "/symbols/mulberry/book.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["read", "page"]
+  },
+  {
+    "id": "mulberry-phone",
+    "label": "phone",
+    "imageUrl": "/symbols/mulberry/phone.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["call", "technology"]
+  },
+  {
+    "id": "mulberry-computer",
+    "label": "computer",
+    "imageUrl": "/symbols/mulberry/computer.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["tech", "screen"]
+  },
+  {
+    "id": "mulberry-tv",
+    "label": "tv",
+    "imageUrl": "/symbols/mulberry/tv.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["watch", "screen"]
+  },
+  {
+    "id": "mulberry-bed",
+    "label": "bed",
+    "imageUrl": "/symbols/mulberry/bed.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["sleep", "furniture"]
+  },
+  {
+    "id": "mulberry-chair",
+    "label": "chair",
+    "imageUrl": "/symbols/mulberry/chair.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["sit", "furniture"]
+  },
+  {
+    "id": "mulberry-big",
+    "label": "big",
+    "imageUrl": "/symbols/mulberry/big.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["large", "size"]
+  },
+  {
+    "id": "mulberry-small",
+    "label": "small",
+    "imageUrl": "/symbols/mulberry/small.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["tiny", "size"]
+  },
+  {
+    "id": "mulberry-hot",
+    "label": "hot",
+    "imageUrl": "/symbols/mulberry/hot.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["warm", "temperature"]
+  },
+  {
+    "id": "mulberry-cold",
+    "label": "cold",
+    "imageUrl": "/symbols/mulberry/cold.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["cool", "temperature"]
+  },
+  {
+    "id": "mulberry-wet",
+    "label": "wet",
+    "imageUrl": "/symbols/mulberry/wet.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["water", "moist"]
+  },
+  {
+    "id": "mulberry-dry",
+    "label": "dry",
+    "imageUrl": "/symbols/mulberry/dry.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["arid", "moisture"]
+  },
+  {
+    "id": "mulberry-clean",
+    "label": "clean",
+    "imageUrl": "/symbols/mulberry/clean.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["wash", "tidy"]
+  },
+  {
+    "id": "mulberry-dirty",
+    "label": "dirty",
+    "imageUrl": "/symbols/mulberry/dirty.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["messy", "unclean"]
+  },
+  {
+    "id": "mulberry-fast",
+    "label": "fast",
+    "imageUrl": "/symbols/mulberry/fast.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["quick", "speed"]
+  },
+  {
+    "id": "mulberry-slow",
+    "label": "slow",
+    "imageUrl": "/symbols/mulberry/slow.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["sluggish", "speed"]
+  },
+  {
+    "id": "mulberry-beautiful",
+    "label": "beautiful",
+    "imageUrl": "/symbols/mulberry/beautiful.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["pretty", "lovely"]
+  },
+  {
+    "id": "mulberry-ugly",
+    "label": "ugly",
+    "imageUrl": "/symbols/mulberry/ugly.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["unattractive", "nasty"]
+  },
+  {
+    "id": "mulberry-sorry",
+    "label": "sorry",
+    "imageUrl": "/symbols/mulberry/sorry.svg",
+    "category": "social",
+    "source": "mulberry",
+    "tags": ["apologize", "regret"]
+  },
+  {
+    "id": "mulberry-excuse-me",
+    "label": "excuse me",
+    "imageUrl": "/symbols/mulberry/excuse-me.svg",
+    "category": "social",
+    "source": "mulberry",
+    "tags": ["pardon", "attention"]
+  },
+  {
+    "id": "mulberry-mine",
+    "label": "mine",
+    "imageUrl": "/symbols/mulberry/mine.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["possession", "belong"]
+  },
+  {
+    "id": "mulberry-yours",
+    "label": "yours",
+    "imageUrl": "/symbols/mulberry/yours.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["possession", "belong"]
+  },
+  {
+    "id": "mulberry-head",
+    "label": "head",
+    "imageUrl": "/symbols/mulberry/head.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["hair", "face"]
+  },
+  {
+    "id": "mulberry-hair",
+    "label": "hair",
+    "imageUrl": "/symbols/mulberry/hair.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["head", "style"]
+  },
+  {
+    "id": "mulberry-eyes",
+    "label": "eyes",
+    "imageUrl": "/symbols/mulberry/eyes.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["see", "vision"]
+  },
+  {
+    "id": "mulberry-nose",
+    "label": "nose",
+    "imageUrl": "/symbols/mulberry/nose.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["smell", "face"]
+  },
+  {
+    "id": "mulberry-mouth",
+    "label": "mouth",
+    "imageUrl": "/symbols/mulberry/mouth.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["eat", "speak"]
+  },
+  {
+    "id": "mulberry-ears",
+    "label": "ears",
+    "imageUrl": "/symbols/mulberry/ears.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["hear", "listen"]
+  },
+  {
+    "id": "mulberry-hands",
+    "label": "hands",
+    "imageUrl": "/symbols/mulberry/hands.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["touch", "hold"]
+  },
+  {
+    "id": "mulberry-feet",
+    "label": "feet",
+    "imageUrl": "/symbols/mulberry/feet.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["walk", "stand"]
+  },
+  {
+    "id": "mulberry-arms",
+    "label": "arms",
+    "imageUrl": "/symbols/mulberry/arms.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["lift", "hug"]
+  },
+  {
+    "id": "mulberry-legs",
+    "label": "legs",
+    "imageUrl": "/symbols/mulberry/legs.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["walk", "kick"]
+  },
+  {
+    "id": "mulberry-stomach",
+    "label": "stomach",
+    "imageUrl": "/symbols/mulberry/stomach.svg",
+    "category": "body",
+    "source": "mulberry",
+    "tags": ["belly", "digest"]
+  },
+  {
+    "id": "mulberry-morning",
+    "label": "morning",
+    "imageUrl": "/symbols/mulberry/morning.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["sunrise", "wake"]
+  },
+  {
+    "id": "mulberry-afternoon",
+    "label": "afternoon",
+    "imageUrl": "/symbols/mulberry/afternoon.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["day", "noon"]
+  },
+  {
+    "id": "mulberry-evening",
+    "label": "evening",
+    "imageUrl": "/symbols/mulberry/evening.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["sunset", "dark"]
+  },
+  {
+    "id": "mulberry-night",
+    "label": "night",
+    "imageUrl": "/symbols/mulberry/night.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["sleep", "dark"]
+  },
+  {
+    "id": "mulberry-today",
+    "label": "today",
+    "imageUrl": "/symbols/mulberry/today.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["present", "now"]
+  },
+  {
+    "id": "mulberry-tomorrow",
+    "label": "tomorrow",
+    "imageUrl": "/symbols/mulberry/tomorrow.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["future", "next day"]
+  },
+  {
+    "id": "mulberry-yesterday",
+    "label": "yesterday",
+    "imageUrl": "/symbols/mulberry/yesterday.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["past", "last day"]
+  },
+  {
+    "id": "mulberry-what",
+    "label": "what",
+    "imageUrl": "/symbols/mulberry/what.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["question", "inquiry"]
+  },
+  {
+    "id": "mulberry-when",
+    "label": "when",
+    "imageUrl": "/symbols/mulberry/when.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["time", "question"]
+  },
+  {
+    "id": "mulberry-where",
+    "label": "where",
+    "imageUrl": "/symbols/mulberry/where.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["location", "question"]
+  },
+  {
+    "id": "mulberry-why",
+    "label": "why",
+    "imageUrl": "/symbols/mulberry/why.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["reason", "question"]
+  },
+  {
+    "id": "mulberry-how",
+    "label": "how",
+    "imageUrl": "/symbols/mulberry/how.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["manner", "question"]
+  },
+  {
+    "id": "mulberry-who",
+    "label": "who",
+    "imageUrl": "/symbols/mulberry/who.svg",
+    "category": "questions",
+    "source": "mulberry",
+    "tags": ["person", "question"]
+  },
+  {
+    "id": "mulberry-more",
+    "label": "more",
+    "imageUrl": "/symbols/mulberry/more.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["additional", "again"]
+  },
+  {
+    "id": "mulberry-again",
+    "label": "again",
+    "imageUrl": "/symbols/mulberry/again.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["repeat", "more"]
+  },
+  {
+    "id": "mulberry-all",
+    "label": "all",
+    "imageUrl": "/symbols/mulberry/all.svg",
+    "category": "core",
+    "source": "mulberry",
+    "tags": ["everything", "total"]
+  },
+  {
+    "id": "mulberry-go",
+    "label": "go",
+    "imageUrl": "/symbols/mulberry/go.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["move", "leave"]
+  },
+  {
+    "id": "mulberry-come",
+    "label": "come",
+    "imageUrl": "/symbols/mulberry/come.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["arrive", "approach"]
+  },
+  {
+    "id": "mulberry-stop",
+    "label": "stop",
+    "imageUrl": "/symbols/mulberry/stop.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["halt", "cease"]
+  },
+  {
+    "id": "mulberry-do",
+    "label": "do",
+    "imageUrl": "/symbols/mulberry/do.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["act", "perform"]
+  },
+  {
+    "id": "mulberry-make",
+    "label": "make",
+    "imageUrl": "/symbols/mulberry/make.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["create", "build"]
+  },
+  {
+    "id": "mulberry-give",
+    "label": "give",
+    "imageUrl": "/symbols/mulberry/give.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["offer", "present"]
+  },
+  {
+    "id": "mulberry-take",
+    "label": "take",
+    "imageUrl": "/symbols/mulberry/take.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["grab", "receive"]
+  },
+  {
+    "id": "mulberry-get",
+    "label": "get",
+    "imageUrl": "/symbols/mulberry/get.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["obtain", "receive"]
+  },
+  {
+    "id": "mulberry-put",
+    "label": "put",
+    "imageUrl": "/symbols/mulberry/put.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["place", "set"]
+  },
+  {
+    "id": "mulberry-hold",
+    "label": "hold",
+    "imageUrl": "/symbols/mulberry/hold.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["grasp", "carry"]
+  },
+  {
+    "id": "mulberry-open",
+    "label": "open",
+    "imageUrl": "/symbols/mulberry/open.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["unlock", "unfold"]
+  },
+  {
+    "id": "mulberry-close",
+    "label": "close",
+    "imageUrl": "/symbols/mulberry/close.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["shut", "lock"]
+  },
+  {
+    "id": "mulberry-push",
+    "label": "push",
+    "imageUrl": "/symbols/mulberry/push.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["shove", "force"]
+  },
+  {
+    "id": "mulberry-pull",
+    "label": "pull",
+    "imageUrl": "/symbols/mulberry/pull.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["drag", "tug"]
+  },
+  {
+    "id": "mulberry-kick",
+    "label": "kick",
+    "imageUrl": "/symbols/mulberry/kick.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["strike", "hit"]
+  },
+  {
+    "id": "mulberry-throw",
+    "label": "throw",
+    "imageUrl": "/symbols/mulberry/throw.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["toss", "fling"]
+  },
+  {
+    "id": "mulberry-catch",
+    "label": "catch",
+    "imageUrl": "/symbols/mulberry/catch.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["grab", "seize"]
+  },
+  {
+    "id": "mulberry-wash",
+    "label": "wash",
+    "imageUrl": "/symbols/mulberry/wash.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["clean", "bathe"]
+  },
+  {
+    "id": "mulberry-brush",
+    "label": "brush",
+    "imageUrl": "/symbols/mulberry/brush.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["comb", "clean"]
+  },
+  {
+    "id": "mulberry-comb",
+    "label": "comb",
+    "imageUrl": "/symbols/mulberry/comb.svg",
+    "category": "actions",
+    "source": "mulberry",
+    "tags": ["brush", "hair"]
+  },
+  {
+    "id": "mulberry-rain",
+    "label": "rain",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/rain.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["weather", "wet"]
+  },
+  {
+    "id": "mulberry-snow",
+    "label": "snow",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/snow.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["weather", "cold"]
+  },
+  {
+    "id": "mulberry-sun",
+    "label": "sun",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/sun.svg",
+    "category": "describing",
+    "source": "mulberry",
+    "tags": ["weather", "bright"]
+  },
+  {
+    "id": "mulberry-moon",
+    "label": "moon",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/moon.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["night", "star"]
+  },
+  {
+    "id": "mulberry-star",
+    "label": "star",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/star.svg",
+    "category": "time",
+    "source": "mulberry",
+    "tags": ["night", "twinkle"]
+  },
+  {
+    "id": "mulberry-tree",
+    "label": "tree",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/tree.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["plant", "nature"]
+  },
+  {
+    "id": "mulberry-flower",
+    "label": "flower",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/flower.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["plant", "pretty"]
+  },
+  {
+    "id": "mulberry-grass",
+    "label": "grass",
+    "imageUrl": "https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/symbols/grass.svg",
+    "category": "objects",
+    "source": "mulberry",
+    "tags": ["green", "plant"]
+  }
+]

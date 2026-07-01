@@ -32,7 +32,7 @@ export default function Activate() {
 
   return (
     <div>
-      <h1>Activating Speaker...</h1>
+      <h1 className="font-display">Activating Speaker...</h1>
     </div>
   )
 }

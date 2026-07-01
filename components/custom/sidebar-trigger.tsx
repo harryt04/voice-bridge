@@ -9,7 +9,7 @@ function VBSidebarTrigger({ title }: { title?: string }) {
     <>
       {(!open || isMobile) && (
         <Card
-          className={`background-translucent translucent-bg fixed h-20 w-full rounded-none`}
+          className={`bg-sidebar fixed h-20 w-full rounded-none`}
         >
           <SidebarTrigger className="mx-2 my-5 p-5" />
           {title ?? 'VoiceBridge'}

@@ -218,6 +218,10 @@ export async function createMongoDbIndexes(dbName: string) {
     { key: { speakerId: 1 } },
   ])
   await ensureIndex(coll.vocabWords, [{ key: { speakerId: 1 } }])
+  await ensureIndex('aacPhrases', [{ key: { speakerId: 1 } }])
+  await ensureIndex('aacUserPreferences', [
+    { key: { speakerId: 1 }, unique: true },
+  ])
 
   console.log('Indexes ensured successfully for db: ', dbName)
 }

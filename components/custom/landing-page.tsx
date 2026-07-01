@@ -13,7 +13,7 @@ function LandingPage() {
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             {/* Updated App Name */}
-            <span className="inline bg-gradient-to-r from-[#aa00ff] to-[#00cc99] bg-clip-text font-bold text-transparent">
+            <span className="inline bg-gradient-to-r from-primary to-accent bg-clip-text font-bold text-transparent">
               VoiceBridge
             </span>
           </Link>
@@ -32,14 +32,14 @@ function LandingPage() {
           <div className="container grid place-items-center gap-6 text-center">
             {/* Updated Heading with Gradient */}
             <h1 className="inline text-4xl font-extrabold tracking-tight lg:text-5xl">
-              <span className="inline bg-gradient-to-r from-[#aa00ff] to-[#00cc99] bg-clip-text text-transparent">
+              <span className="inline bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 VoiceBridge
               </span>
             </h1>
             {/* Updated Description */}
             <p className="mx-auto max-w-[700px] text-lg text-muted-foreground">
               VoiceBridge is a
-              <span className="border-gradient inline border-b-2 bg-gradient-to-r from-[#aa00ff] to-[#00cc99] bg-clip-text text-transparent">
+              <span className="border-gradient inline border-b-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 &nbsp;free and open source&nbsp;
               </span>
               web app that helps children or adults with autism communicate by
@@ -51,7 +51,7 @@ function LandingPage() {
               <Button
                 asChild
                 size="lg"
-                className="border-gradient bg-gradient-to-r from-[#aa00ff] to-[#00cc99]"
+                className="border-gradient bg-gradient-to-r from-primary to-accent"
               >
                 <Link href="/login">
                   <CirclePlayIcon className="mr-2 h-5 w-5" />
@@ -146,7 +146,7 @@ function LandingPage() {
               <Button
                 asChild
                 size="lg"
-                className="border-gradient bg-gradient-to-r from-[#aa00ff] to-[#00cc99]"
+                className="border-gradient bg-gradient-to-r from-primary to-accent"
               >
                 <Link href="/login">
                   <CirclePlayIcon className="mr-2 h-5 w-5" />

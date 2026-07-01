@@ -1,76 +1,69 @@
-/* This file is for reference only, representing the theme in hex format */
+/* This file is for reference only, representing the Calm Functionalist theme in hex format */
 
 @layer base {
   :root {
-    --background: #f4f4fb;
-    --foreground: #333333;
-    --card: #f9f9fc;
-    --card-foreground: #333333;
-    --popover: #f9f9fc;
-    --popover-foreground: #333333;
-    --primary: #aa00ff;
-    --primary-foreground: #fafafa;
-    --secondary: #e6e6e6;
-    --secondary-foreground: #aa00ff;
-    --muted: #ededed;
-    --muted-foreground: #666666;
-    --accent: #00cc99;
-    --accent-foreground: #fafafa;
-    --destructive: #ff3333;
-    --destructive-foreground: #fafafa;
-    --radius: 1rem;
-    --border: #d9d9d9;
-    --input: #d9d9d9;
-    --ring: #aa00ff;
-    --chart-1: #aa00ff;
-    --chart-2: #00cc99;
-    --chart-3: #ffaa00;
-    --chart-4: #ff0055;
-    --chart-5: #0055ff;
-    --sidebar-background: #f4f4fb;
-    --sidebar-foreground: #333333;
-    --sidebar-primary: #aa00ff;
-    --sidebar-primary-foreground: #fafafa;
-    --sidebar-accent: #00cc99;
-    --sidebar-accent-foreground: #fafafa;
-    --sidebar-border: #d9d9d9;
-    --sidebar-ring: #aa00ff;
+    /* Light Mode */
+    --background: #f5f4f0;               /* 45 20% 96% */
+    --foreground: #2d2f3a;               /* 230 15% 20% */
+    --card: #f9f8f5;                     /* 45 20% 98% */
+    --card-foreground: #2d2f3a;          /* 230 15% 20% */
+    --popover: #f9f8f5;                  /* 45 20% 98% */
+    --popover-foreground: #2d2f3a;       /* 230 15% 20% */
+    --primary: #3d3db8;                  /* 245 60% 48% - blue-violet */
+    --primary-foreground: #faf9f6;       /* 45 20% 97% */
+    --secondary: #e8e7e2;                /* 45 15% 90% - warm light grey */
+    --secondary-foreground: #1f1f95;     /* 245 60% 40% */
+    --muted: #eeedea;                    /* 45 15% 92% */
+    --muted-foreground: #6b6d7a;         /* 230 10% 45% */
+    --accent: #f0a020;                   /* 38 90% 52% - amber-gold */
+    --accent-foreground: #1a1c24;        /* 230 15% 12% */
+    --destructive: #0080cc;              /* 205 80% 40% - sky-blue */
+    --destructive-foreground: #faf9f6;   /* 45 20% 97% */
+    --radius: 0.875rem;
+    --border: #d4d3cd;                   /* 45 15% 84% */
+    --input: #d4d3cd;                    /* 45 15% 84% */
+    --ring: #3d3db8;                     /* 245 60% 48% */
+    --chart-1: #3d3db8;                  /* 245 60% 48% */
+    --chart-2: #f0a020;                  /* 38 90% 52% */
+    --chart-3: #1499ff;                  /* 210 70% 52% */
+    --chart-4: #8844dd;                  /* 270 50% 55% */
+    --chart-5: #ff9933;                  /* 25 80% 55% */
+    --sidebar-background: #1f2230;       /* 230 20% 16% - dark sidebar */
+    --sidebar-foreground: #e6e4dc;       /* 45 20% 90% */
+    --sidebar-primary: #9999e6;          /* 245 60% 70% */
+    --sidebar-primary-foreground: #0f1319; /* 230 20% 10% */
+    --sidebar-accent: #ffb84d;           /* 38 90% 60% */
+    --sidebar-accent-foreground: #0f1319; /* 230 20% 10% */
+    --sidebar-border: #353748;           /* 230 15% 22% */
+    --sidebar-ring: #7777d9;             /* 245 60% 65% */
   }
 
   .dark {
-    --background: #1c1c26;
-    --foreground: #f4f4fb;
-    --card: #23232b;
-    --card-foreground: #f4f4fb;
-    --popover: #23232b;
-    --popover-foreground: #f4f4fb;
-    --primary: #d580ff;
-    --primary-foreground: #1a1a1a;
-    --secondary: #404040;
-    --secondary-foreground: #d580ff;
-    --muted: #393939;
-    --muted-foreground: #b3b3b3;
-    --accent: #00e6ac;
-    --accent-foreground: #1a1a1a;
-    --destructive: #ff3333;
-    --destructive-foreground: #fafafa;
-    --border: #404040;
-    --input: #404040;
-    --radius: 1rem;
-    --ring: #d580ff;
-    --chart-1: #d580ff;
-    --chart-2: #00e6ac;
-    --chart-3: #ffaa33;
-    --chart-4: #ff3377;
-    --chart-5: #3377ff;
-    --sidebar-background: #23232b;
-    --sidebar-foreground: #f4f4fb;
-    --sidebar-primary: #d580ff;
-    --sidebar-primary-foreground: #1a1a1a;
-    --sidebar-accent: #00e6ac;
-    --sidebar-accent-foreground: #1a1a1a;
-    --sidebar-border: #404040;
-    --sidebar-ring: #d580ff;
+    /* Dark Mode */
+    --background: #1a1b24;               /* 230 18% 13% */
+    --foreground: #e6e4dc;               /* 45 20% 92% */
+    --card: #1f2030;                     /* 230 18% 16% */
+    --card-foreground: #e6e4dc;          /* 45 20% 92% */
+    --popover: #1f2030;                  /* 230 18% 16% */
+    --popover-foreground: #e6e4dc;       /* 45 20% 92% */
+    --primary: #6b6be0;                  /* 245 70% 68% */
+    --primary-foreground: #0f1319;       /* 230 18% 10% */
+    --secondary: #333545;                /* 230 12% 22% */
+    --secondary-foreground: #9999e6;     /* 245 70% 80% */
+    --muted: #2a2c3a;                    /* 230 12% 19% */
+    --muted-foreground: #8e90a0;         /* 230 10% 60% */
+    --accent: #f0a832;                   /* 38 85% 58% */
+    --accent-foreground: #0f1319;        /* 230 18% 10% */
+    --destructive: #0099dd;              /* 205 70% 50% */
+    --destructive-foreground: #faf9f6;   /* 45 20% 97% */
+    --border: #353748;                   /* 230 12% 24% */
+    --input: #353748;                    /* 230 12% 24% */
+    --ring: #7777d9;                     /* 245 70% 65% */
+    --sidebar-background: #0f1319;       /* 230 22% 9% - deeper dark */
+    --sidebar-foreground: #dcdad2;       /* 45 20% 88% */
+    --sidebar-primary: #7777d9;          /* 245 70% 72% */
+    --sidebar-accent: #ffb84d;           /* 38 85% 62% */
+    --sidebar-border: #19202a;           /* 230 15% 14% */
   }
 }
 
