@@ -89,9 +89,12 @@ describe('MulberrySymbolProvider', () => {
       const symbols = provider.searchSymbols('food')
       expect(symbols.length).toBeGreaterThan(0)
       const hasMatchingTag = symbols.some((s) =>
-        s.tags?.some((t) => t.toLowerCase().includes('food'))
+        s.tags?.some((t) => t.toLowerCase().includes('food')),
       )
-      expect(hasMatchingTag || symbols.some((s) => s.label.toLowerCase().includes('food'))).toBe(true)
+      expect(
+        hasMatchingTag ||
+          symbols.some((s) => s.label.toLowerCase().includes('food')),
+      ).toBe(true)
     })
   })
 })

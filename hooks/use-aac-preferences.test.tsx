@@ -21,9 +21,7 @@ describe('useAacPreferences', () => {
   })
 
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )
 
   it('disables query when speakerId is falsy', () => {
@@ -50,7 +48,7 @@ describe('useAacPreferences', () => {
       Promise.resolve({
         ok: true,
         json: async () => mockPrefs,
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPreferences('speaker123'), {
@@ -69,14 +67,14 @@ describe('useAacPreferences', () => {
       Promise.resolve({
         ok: true,
         json: async () => ({}),
-      } as Response)
+      } as Response),
     )
 
     renderHook(() => useAacPreferences('speaker123'), { wrapper })
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('speakerId=speaker123')
+        expect.stringContaining('speakerId=speaker123'),
       )
     })
   })
@@ -86,7 +84,7 @@ describe('useAacPreferences', () => {
       Promise.resolve({
         ok: false,
         status: 404,
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPreferences('speaker123'), {
@@ -109,12 +107,12 @@ describe('useAacPreferences', () => {
       Promise.resolve({
         ok: true,
         json: async () => mockPrefs,
-      } as Response)
+      } as Response),
     )
 
     const { result, rerender } = renderHook(
       () => useAacPreferences('speaker123'),
-      { wrapper }
+      { wrapper },
     )
 
     await waitFor(() => {

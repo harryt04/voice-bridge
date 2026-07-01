@@ -21,9 +21,7 @@ describe('useAacPhrases', () => {
   })
 
   const wrapper = ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )
 
   it('disables query when speakerId is falsy', () => {
@@ -54,7 +52,7 @@ describe('useAacPhrases', () => {
       Promise.resolve({
         ok: true,
         json: async () => [mockPhrase],
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPhrases('speaker123'), {
@@ -73,14 +71,14 @@ describe('useAacPhrases', () => {
       Promise.resolve({
         ok: true,
         json: async () => [],
-      } as Response)
+      } as Response),
     )
 
     renderHook(() => useAacPhrases('speaker123'), { wrapper })
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('speakerId=speaker123')
+        expect.stringContaining('speakerId=speaker123'),
       )
     })
   })
@@ -91,7 +89,7 @@ describe('useAacPhrases', () => {
         ok: false,
         status: 403,
         json: async () => ({ error: 'Unauthorized' }),
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPhrases('speaker123'), {
@@ -108,7 +106,7 @@ describe('useAacPhrases', () => {
       Promise.resolve({
         ok: false,
         status: 404,
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPhrases('speaker123'), {
@@ -125,7 +123,7 @@ describe('useAacPhrases', () => {
       Promise.resolve({
         ok: true,
         json: async () => [],
-      } as Response)
+      } as Response),
     )
 
     const { result } = renderHook(() => useAacPhrases('speaker123'), {

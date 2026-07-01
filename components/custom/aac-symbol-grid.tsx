@@ -53,7 +53,7 @@ export function AacSymbolGrid({ symbols, onSymbolTap }: AacSymbolGridProps) {
           mobileGridColumns === 2 && 'grid-cols-2',
           mobileGridColumns === 3 && 'grid-cols-3',
           mobileGridColumns === 4 && 'grid-cols-4',
-          'sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6'
+          'sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6',
         )}
       >
         {visibleSymbols.map((symbol) => (
@@ -69,11 +69,7 @@ export function AacSymbolGrid({ symbols, onSymbolTap }: AacSymbolGridProps) {
       {/* Load-more button */}
       {hasMore && (
         <div className="flex justify-center pt-2">
-          <Button
-            onClick={handleLoadMore}
-            variant="outline"
-            className="gap-2"
-          >
+          <Button onClick={handleLoadMore} variant="outline" className="gap-2">
             Load More
             <ChevronDown size={16} />
           </Button>
@@ -138,7 +134,7 @@ function AacSymbolCell({
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseLeave={handleTouchEnd}
-            className="flex min-h-18 flex-col items-center gap-1 rounded-xl border border-border/50 bg-card p-1.5 transition-colors duration-100 hover:border-primary hover:bg-primary/5 active:scale-[0.96] active:bg-primary/10"
+            className="min-h-18 flex flex-col items-center gap-1 rounded-xl border border-border/50 bg-card p-1.5 transition-colors duration-100 hover:border-primary hover:bg-primary/5 active:scale-[0.96] active:bg-primary/10"
             aria-label={symbol.label}
           >
             {labelPosition === 'above' && showLabel && (
@@ -168,9 +164,7 @@ function AacSymbolCell({
               </span>
             )}
 
-            {!showLabel && (
-              <span className="sr-only">{symbol.label}</span>
-            )}
+            {!showLabel && <span className="sr-only">{symbol.label}</span>}
           </button>
         </TooltipTrigger>
 
@@ -179,7 +173,10 @@ function AacSymbolCell({
           <TooltipContent side="top" className="gap-2">
             <div className="flex flex-col items-center gap-2">
               {imgError ? (
-                <ImageOff className="h-24 w-24 text-muted-foreground/50" strokeWidth={1.5} />
+                <ImageOff
+                  className="h-24 w-24 text-muted-foreground/50"
+                  strokeWidth={1.5}
+                />
               ) : (
                 <img
                   src={symbol.imageUrl}
@@ -187,7 +184,7 @@ function AacSymbolCell({
                   className="h-24 w-24 object-contain dark:invert"
                 />
               )}
-              <span className="font-display text-base font-semibold text-center">
+              <span className="text-center font-display text-base font-semibold">
                 {symbol.label}
               </span>
             </div>

@@ -35,10 +35,7 @@ type AacSettingsFormProps = {
  * - Touch targets: sliders min-h-44px, controls 44px+
  * - Auto-save: 300ms debounce via useMutation
  */
-export function AacSettingsForm({
-  speakerId,
-  isOwner,
-}: AacSettingsFormProps) {
+export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
   const preferencesContext = useContext(AacPreferencesContext)
   const { voices, loading: voicesLoading } = useAvailableVoices()
   const debouncedSaveRef = React.useRef<NodeJS.Timeout | null>(null)
@@ -69,7 +66,7 @@ export function AacSettingsForm({
         saveMutation.mutate(prefs)
       }, 300)
     },
-    [saveMutation]
+    [saveMutation],
   )
 
   const handleChange = useCallback(
@@ -77,7 +74,7 @@ export function AacSettingsForm({
       if (!isOwner) return
       debouncedSave(updates)
     },
-    [isOwner, debouncedSave]
+    [isOwner, debouncedSave],
   )
 
   if (!preferencesContext) return null
@@ -85,7 +82,11 @@ export function AacSettingsForm({
   const { preferences, loading } = preferencesContext
 
   if (loading || !preferences) {
-    return <div className="flex items-center justify-center p-8">Loading settings...</div>
+    return (
+      <div className="flex items-center justify-center p-8">
+        Loading settings...
+      </div>
+    )
   }
 
   return (
@@ -194,7 +195,9 @@ export function AacSettingsForm({
 
         <div className="flex items-center justify-between rounded-lg border border-border p-3">
           <div className="flex flex-col gap-0.5">
-            <label className="font-sans text-sm font-medium">Speak on Tap</label>
+            <label className="font-sans text-sm font-medium">
+              Speak on Tap
+            </label>
             <p className="font-sans text-xs text-muted-foreground">
               Speak symbol immediately when tapped
             </p>
@@ -213,20 +216,32 @@ export function AacSettingsForm({
         <Separator />
 
         <div className="flex flex-col gap-1.5">
-          <label className="font-sans text-sm font-medium">When tapping a phrase:</label>
+          <label className="font-sans text-sm font-medium">
+            When tapping a phrase:
+          </label>
           <RadioGroup
             value={preferences.phraseTapBehavior}
-            onValueChange={(v) => handleChange({ phraseTapBehavior: v as 'speak' | 'append' })}
+            onValueChange={(v) =>
+              handleChange({ phraseTapBehavior: v as 'speak' | 'append' })
+            }
             disabled={!isOwner}
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="speak" id="phrase-speak" disabled={!isOwner} />
+              <RadioGroupItem
+                value="speak"
+                id="phrase-speak"
+                disabled={!isOwner}
+              />
               <Label htmlFor="phrase-speak" className="font-sans text-sm">
                 Speak immediately
               </Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="append" id="phrase-append" disabled={!isOwner} />
+              <RadioGroupItem
+                value="append"
+                id="phrase-append"
+                disabled={!isOwner}
+              />
               <Label htmlFor="phrase-append" className="font-sans text-sm">
                 Add to sentence first
               </Label>
@@ -271,23 +286,37 @@ export function AacSettingsForm({
           <label className="font-sans text-sm font-medium">Symbol Labels</label>
           <RadioGroup
             value={preferences.symbolLabelPosition}
-            onValueChange={(v) => handleChange({ symbolLabelPosition: v as any })}
+            onValueChange={(v) =>
+              handleChange({ symbolLabelPosition: v as any })
+            }
             disabled={!isOwner}
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="below" id="label-below" disabled={!isOwner} />
+              <RadioGroupItem
+                value="below"
+                id="label-below"
+                disabled={!isOwner}
+              />
               <Label htmlFor="label-below" className="font-sans text-sm">
                 Below symbol
               </Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="above" id="label-above" disabled={!isOwner} />
+              <RadioGroupItem
+                value="above"
+                id="label-above"
+                disabled={!isOwner}
+              />
               <Label htmlFor="label-above" className="font-sans text-sm">
                 Above symbol
               </Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="hidden" id="label-hidden" disabled={!isOwner} />
+              <RadioGroupItem
+                value="hidden"
+                id="label-hidden"
+                disabled={!isOwner}
+              />
               <Label htmlFor="label-hidden" className="font-sans text-sm">
                 Hidden
               </Label>
@@ -296,13 +325,17 @@ export function AacSettingsForm({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="font-sans text-sm font-medium">Grid Columns (Mobile)</label>
+          <label className="font-sans text-sm font-medium">
+            Grid Columns (Mobile)
+          </label>
           <p className="font-sans text-sm text-muted-foreground">
             How many symbol columns on small screens
           </p>
           <Select
             value={String(preferences.mobileGridColumns)}
-            onValueChange={(v) => handleChange({ mobileGridColumns: parseInt(v) as 2 | 3 | 4 })}
+            onValueChange={(v) =>
+              handleChange({ mobileGridColumns: parseInt(v) as 2 | 3 | 4 })
+            }
             disabled={!isOwner}
           >
             <SelectTrigger className="h-11">
@@ -319,7 +352,9 @@ export function AacSettingsForm({
 
       {/* Saving status */}
       {saveMutation.isPending && (
-        <p className="text-center font-sans text-sm text-muted-foreground">Saving...</p>
+        <p className="text-center font-sans text-sm text-muted-foreground">
+          Saving...
+        </p>
       )}
       {saveMutation.isError && (
         <p className="text-center font-sans text-sm text-destructive">

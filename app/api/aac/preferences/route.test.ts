@@ -82,9 +82,7 @@ describe('GET /api/aac/preferences', () => {
       updatedAt: new Date(),
     }
 
-    await db
-      .collection('aacUserPreferences')
-      .insertOne(customPrefs)
+    await db.collection('aacUserPreferences').insertOne(customPrefs)
 
     const url = `http://localhost/api/aac/preferences?speakerId=${speakerId.toString()}`
     const req = new NextRequest(url, { method: 'GET' })

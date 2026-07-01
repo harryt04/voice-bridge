@@ -4,10 +4,7 @@ import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { ObjectId } from 'mongodb'
 import { AacPhrase } from '@/models'
 import { AacPhraseInputSchema } from '@/lib/aac/aac-validators'
-import {
-  isValidObjectId,
-  aacMutationAuthCheck,
-} from '@/lib/aac/aac-auth'
+import { isValidObjectId, aacMutationAuthCheck } from '@/lib/aac/aac-auth'
 
 /**
  * GET /api/aac/phrase?id=<phraseId>
@@ -42,10 +39,7 @@ export async function GET(req: NextRequest) {
     })) as any as AacPhrase
 
     if (!phrase) {
-      return NextResponse.json(
-        { error: 'Phrase not found' },
-        { status: 404 },
-      )
+      return NextResponse.json({ error: 'Phrase not found' }, { status: 404 })
     }
 
     return NextResponse.json(phrase, { status: 200 })
@@ -101,10 +95,7 @@ export async function POST(req: NextRequest) {
 
     const result = await phrasesCollection.insertOne(phrase as any)
 
-    return NextResponse.json(
-      { insertedId: result.insertedId },
-      { status: 201 },
-    )
+    return NextResponse.json({ insertedId: result.insertedId }, { status: 201 })
   } catch (error) {
     console.error('POST /api/aac/phrase error:', error)
     return NextResponse.json(
@@ -164,17 +155,11 @@ export async function PUT(req: NextRequest) {
     })) as any as AacPhrase
 
     if (!phrase) {
-      return NextResponse.json(
-        { error: 'Phrase not found' },
-        { status: 404 },
-      )
+      return NextResponse.json({ error: 'Phrase not found' }, { status: 404 })
     }
 
     if (phrase.speakerId !== speakerId) {
-      return NextResponse.json(
-        { error: 'Not authorized' },
-        { status: 403 },
-      )
+      return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
     }
 
     const now = new Date()
@@ -189,10 +174,7 @@ export async function PUT(req: NextRequest) {
       { $set: updates },
     )
 
-    return NextResponse.json(
-      { updated: true },
-      { status: 200 },
-    )
+    return NextResponse.json({ updated: true }, { status: 200 })
   } catch (error) {
     console.error('PUT /api/aac/phrase error:', error)
     return NextResponse.json(
@@ -231,10 +213,7 @@ export async function DELETE(req: NextRequest) {
     })) as any as AacPhrase
 
     if (!phrase) {
-      return NextResponse.json(
-        { error: 'Phrase not found' },
-        { status: 404 },
-      )
+      return NextResponse.json({ error: 'Phrase not found' }, { status: 404 })
     }
 
     // Authorization check (caregiver only) for the speaker who owns this phrase

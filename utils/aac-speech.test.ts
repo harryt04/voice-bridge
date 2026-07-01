@@ -20,7 +20,10 @@ describe('speak utility', () => {
       getVoices: vi.fn(() => []),
     }
 
-    vi.stubGlobal('SpeechSynthesisUtterance', vi.fn(() => mockUtterance))
+    vi.stubGlobal(
+      'SpeechSynthesisUtterance',
+      vi.fn(() => mockUtterance),
+    )
     vi.stubGlobal('speechSynthesis', mockSynth)
 
     // speak() intentionally logs caught errors to console.error; several
@@ -82,9 +85,7 @@ describe('speak utility', () => {
   })
 
   it('sets voice to null when voice name not found', () => {
-    mockSynth.getVoices.mockReturnValue([
-      { name: 'Voice A', lang: 'en-US' },
-    ])
+    mockSynth.getVoices.mockReturnValue([{ name: 'Voice A', lang: 'en-US' }])
 
     speak('Hello', { voiceName: 'NonexistentVoice' })
     expect(mockUtterance.voice).toBeNull()

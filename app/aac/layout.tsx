@@ -39,15 +39,14 @@ export type AacPreferencesContextValue = {
  * AacSentenceContext: Provides sentence bar state to sub-pages
  */
 export const AacSentenceContext = createContext<AacSentenceContextValue | null>(
-  null
+  null,
 )
 
 /**
  * AacPreferencesContext: Provides AAC preferences to sub-pages
  */
-export const AacPreferencesContext = createContext<AacPreferencesContextValue | null>(
-  null
-)
+export const AacPreferencesContext =
+  createContext<AacPreferencesContextValue | null>(null)
 
 /**
  * AAC Layout: Client component that provides sentence and preferences contexts
@@ -64,7 +63,11 @@ export default function AacLayout({ children }: { children: React.ReactNode }) {
   const speakerId = selectedSpeaker?._id
 
   // Fetch preferences once per layout
-  const { data: preferences, isLoading, error } = useAacPreferences(speakerId ?? '')
+  const {
+    data: preferences,
+    isLoading,
+    error,
+  } = useAacPreferences(speakerId ?? '')
 
   // Auth guard: redirect to /login if no session
   useEffect(() => {

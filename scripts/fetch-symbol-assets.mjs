@@ -15,7 +15,8 @@ const REPO_TREE_URL =
   'https://api.github.com/repos/mulberrysymbols/mulberry-symbols/git/trees/master?recursive=1'
 const MULBERRY_RAW_BASE =
   'https://raw.githubusercontent.com/mulberrysymbols/mulberry-symbols/master/EN'
-const ARASAAC_SEARCH_URL = 'https://api.arasaac.org/api/pictograms/en/bestsearch'
+const ARASAAC_SEARCH_URL =
+  'https://api.arasaac.org/api/pictograms/en/bestsearch'
 const ARASAAC_IMAGE_BASE = 'https://static.arasaac.org/pictograms'
 
 const JSON_PATH = path.join(process.cwd(), 'lib/aac/mulberry-symbols.json')
@@ -51,7 +52,9 @@ async function fetchMulberryFilenames() {
   if (!res.ok) throw new Error(`GitHub tree fetch failed: ${res.status}`)
   const data = await res.json()
   const files = data.tree
-    .filter((entry) => entry.path.startsWith('EN/') && entry.path.endsWith('.svg'))
+    .filter(
+      (entry) => entry.path.startsWith('EN/') && entry.path.endsWith('.svg'),
+    )
     .map((entry) => entry.path.slice('EN/'.length, -'.svg'.length))
   return new Set(files)
 }
@@ -95,12 +98,18 @@ async function main() {
   const updated = []
 
   for (const symbol of symbols) {
-    const mulberryMatch = await resolveMulberryMatch(symbol.label, mulberryFilenames)
+    const mulberryMatch = await resolveMulberryMatch(
+      symbol.label,
+      mulberryFilenames,
+    )
 
     if (mulberryMatch) {
       const destPath = path.join(OUTPUT_DIR, `${symbol.id}.svg`)
       try {
-        await downloadFile(`${MULBERRY_RAW_BASE}/${encodeURIComponent(mulberryMatch)}.svg`, destPath)
+        await downloadFile(
+          `${MULBERRY_RAW_BASE}/${encodeURIComponent(mulberryMatch)}.svg`,
+          destPath,
+        )
         updated.push({
           ...symbol,
           imageUrl: `/symbols/mulberry/${symbol.id}.svg`,
@@ -109,7 +118,9 @@ async function main() {
         console.log(`[mulberry] ${symbol.label} -> ${mulberryMatch}`)
         continue
       } catch (err) {
-        console.warn(`[mulberry] download failed for ${symbol.label} (${mulberryMatch}): ${err.message}`)
+        console.warn(
+          `[mulberry] download failed for ${symbol.label} (${mulberryMatch}): ${err.message}`,
+        )
       }
     }
 
@@ -126,12 +137,16 @@ async function main() {
 
     unmatched.push(symbol.label)
     updated.push(symbol) // leave as-is; onError fallback in UI will catch it
-    console.warn(`[unmatched] ${symbol.label} - no source found, leaving original imageUrl`)
+    console.warn(
+      `[unmatched] ${symbol.label} - no source found, leaving original imageUrl`,
+    )
   }
 
   await fs.writeFile(JSON_PATH, JSON.stringify(updated, null, 2) + '\n')
 
-  console.log(`\nDone. ${updated.length - unmatched.length}/${updated.length} symbols resolved.`)
+  console.log(
+    `\nDone. ${updated.length - unmatched.length}/${updated.length} symbols resolved.`,
+  )
   if (unmatched.length > 0) {
     console.log('Unmatched (still pointing at original/broken imageUrl):')
     unmatched.forEach((label) => console.log(`  - ${label}`))

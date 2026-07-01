@@ -54,14 +54,14 @@ export default function AacPhrasesPage() {
 
   if (!selectedSpeaker) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4">
+      <div className="flex h-full flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">No speaker selected</p>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header with back button, title, edit toggle, and add button - exact JSX per TRD §7.7 */}
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">

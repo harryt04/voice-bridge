@@ -55,15 +55,21 @@ export function UserMenu() {
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
               {initials}
             </div>
-            <span className="text-sm font-medium">{session.user.name || session.user.email}</span>
+            <span className="text-sm font-medium">
+              {session.user.name || session.user.email}
+            </span>
           </div>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col space-y-1">
-          <span className="text-sm font-medium">{session.user.name || 'User'}</span>
-          <span className="text-xs text-muted-foreground">{session.user.email}</span>
+          <span className="text-sm font-medium">
+            {session.user.name || 'User'}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {session.user.email}
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">

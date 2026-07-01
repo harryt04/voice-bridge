@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { getDefaultPreferences, DEFAULT_PREFERENCES } from './default-preferences'
+import {
+  getDefaultPreferences,
+  DEFAULT_PREFERENCES,
+} from './default-preferences'
 
 describe('getDefaultPreferences', () => {
   it('returns object with speakerId bound', () => {

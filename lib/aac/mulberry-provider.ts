@@ -15,13 +15,17 @@ export class MulberrySymbolProvider implements SymbolProvider {
   }
 
   getSymbolsByCategory(categorySlug: string): AacSymbol[] {
-    return (symbolData as AacSymbol[]).filter(s => s.category === categorySlug)
+    return (symbolData as AacSymbol[]).filter(
+      (s) => s.category === categorySlug,
+    )
   }
 
   searchSymbols(query: string): AacSymbol[] {
     const q = query.toLowerCase()
     return (symbolData as AacSymbol[]).filter(
-      s => s.label.toLowerCase().includes(q) || s.tags?.some(t => t.toLowerCase().includes(q))
+      (s) =>
+        s.label.toLowerCase().includes(q) ||
+        s.tags?.some((t) => t.toLowerCase().includes(q)),
     )
   }
 }

@@ -41,7 +41,7 @@ export function AacSentenceBar() {
       e.stopPropagation()
       sentenceContext?.removeWord(id)
     },
-    [sentenceContext]
+    [sentenceContext],
   )
 
   if (!sentenceContext || !preferencesContext) {
@@ -76,14 +76,16 @@ export function AacSentenceBar() {
             sentence.map((word) => (
               <button
                 key={word.id}
-                className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-2 py-1 text-primary-foreground animate-in slide-in-from-right-2 fade-in duration-150"
+                className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-2 py-1 text-primary-foreground duration-150 animate-in fade-in slide-in-from-right-2"
               >
                 <img
                   src={word.imageUrl}
                   alt={word.label}
                   className="h-6 w-6 rounded-sm object-contain"
                 />
-                <span className="font-sans text-base font-medium">{word.label}</span>
+                <span className="font-sans text-base font-medium">
+                  {word.label}
+                </span>
                 <button
                   onClick={(e) => handleRemoveWord(e, word.id)}
                   className="flex h-11 w-11 items-center justify-center text-sm hover:text-primary-foreground/80"
@@ -114,7 +116,7 @@ export function AacSentenceBar() {
         <Button
           onClick={handleClear}
           disabled={sentence.length === 0}
-          className="flex h-12 w-12 items-center justify-center rounded-xl text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10 disabled:opacity-50"
+          className="flex h-12 w-12 items-center justify-center rounded-xl text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground disabled:opacity-50"
           variant="ghost"
           aria-label="Clear sentence"
         >

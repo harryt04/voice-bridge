@@ -30,7 +30,8 @@ export default function AacSettingsPage() {
   const { selectedSpeaker } = useSpeakerContext()
   const preferencesContext = useContext(AacPreferencesContext)
 
-  const preferencesContextValue = preferencesContext as AacPreferencesContextValue
+  const preferencesContextValue =
+    preferencesContext as AacPreferencesContextValue
 
   const speakerId = selectedSpeaker?._id
 
@@ -39,21 +40,17 @@ export default function AacSettingsPage() {
 
   if (!selectedSpeaker || !speakerId) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4">
+      <div className="flex h-full flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">No speaker selected</p>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header with back button and title - exact JSX per TRD §7.8 */}
       <div className="flex items-center gap-3 px-4 py-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => router.push('/aac')}
-        >
+        <Button variant="ghost" size="icon" onClick={() => router.push('/aac')}>
           <ChevronLeft size={20} />
         </Button>
         <h1 className="font-display text-2xl font-semibold">AAC Settings</h1>
@@ -62,8 +59,8 @@ export default function AacSettingsPage() {
       {/* Settings form with optional read-only notice */}
       <div className="flex-1 overflow-y-auto px-4 py-3">
         {!isParent && (
-          <div className="flex gap-3 p-3 mb-4 bg-muted rounded-lg border border-muted-foreground/20">
-            <AlertCircle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+          <div className="mb-4 flex gap-3 rounded-lg border border-muted-foreground/20 bg-muted p-3">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
               Only the caregiver can change these settings.
             </p>

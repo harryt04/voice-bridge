@@ -98,7 +98,10 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/aac/phrases'}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/aac/phrases'}
+                >
                   <Link href="/aac/phrases">
                     <MessageSquare size={16} />
                     Quick Phrases

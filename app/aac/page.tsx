@@ -19,7 +19,7 @@ export default function AacPage() {
   const router = useRouter()
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header with title and action buttons - exact JSX per TRD §7.5 */}
       <div className="flex items-center justify-between px-4 py-3">
         <h1 className="font-display text-2xl font-semibold">AAC Board</h1>

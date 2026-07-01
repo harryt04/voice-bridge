@@ -37,7 +37,9 @@ export function LoginForm() {
       })
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Google sign-in failed. Please try again.',
+        err instanceof Error
+          ? err.message
+          : 'Google sign-in failed. Please try again.',
       )
       setLoading(false)
     }
@@ -64,7 +66,9 @@ export function LoginForm() {
         router.push(getRedirectPath())
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Sign in failed. Please try again.',
+          err instanceof Error
+            ? err.message
+            : 'Sign in failed. Please try again.',
         )
         setLoading(false)
       }
@@ -76,14 +80,18 @@ export function LoginForm() {
     <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md">
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="font-display text-2xl font-bold text-primary">VoiceBridge</h1>
-        <p className="font-sans text-sm text-muted-foreground">Sign in to continue</p>
+        <h1 className="font-display text-2xl font-bold text-primary">
+          VoiceBridge
+        </h1>
+        <p className="font-sans text-sm text-muted-foreground">
+          Sign in to continue
+        </p>
       </div>
 
       {/* Error display */}
       {error && (
         <div className="flex gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3">
-          <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-destructive" />
           <p className="font-sans text-sm text-destructive">{error}</p>
         </div>
       )}
@@ -124,7 +132,9 @@ export function LoginForm() {
       {/* Divider */}
       <div className="relative flex items-center">
         <Separator className="flex-1" />
-        <span className="bg-card px-2 font-sans text-xs text-muted-foreground">or</span>
+        <span className="bg-card px-2 font-sans text-xs text-muted-foreground">
+          or
+        </span>
         <Separator className="flex-1" />
       </div>
 

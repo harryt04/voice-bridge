@@ -34,9 +34,7 @@ describe('DEFAULT_PHRASES', () => {
   })
 
   it('includes social phrases', () => {
-    const socialPhrases = DEFAULT_PHRASES.filter(
-      (p) => p.category === 'Social'
-    )
+    const socialPhrases = DEFAULT_PHRASES.filter((p) => p.category === 'Social')
     expect(socialPhrases.length).toBeGreaterThan(0)
   })
 
@@ -47,14 +45,14 @@ describe('DEFAULT_PHRASES', () => {
 
   it('includes feelings phrases', () => {
     const feelingsPhrases = DEFAULT_PHRASES.filter(
-      (p) => p.category === 'Feelings'
+      (p) => p.category === 'Feelings',
     )
     expect(feelingsPhrases.length).toBeGreaterThan(0)
   })
 
   it('includes emergency phrases', () => {
     const emergencyPhrases = DEFAULT_PHRASES.filter(
-      (p) => p.category === 'Emergency'
+      (p) => p.category === 'Emergency',
     )
     expect(emergencyPhrases.length).toBeGreaterThan(0)
   })

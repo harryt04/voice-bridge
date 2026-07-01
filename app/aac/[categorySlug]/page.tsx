@@ -35,7 +35,8 @@ export default function AacCategoryPage({
   const { selectedSpeaker } = useSpeakerContext()
   const preferencesContext = useContext(AacPreferencesContext)
 
-  const preferencesContextValue = preferencesContext as AacPreferencesContextValue
+  const preferencesContextValue =
+    preferencesContext as AacPreferencesContextValue
 
   // Find category label from slug
   const category = AAC_CATEGORIES.find((cat) => cat.slug === categorySlug)
@@ -50,7 +51,7 @@ export default function AacCategoryPage({
 
   if (!category) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4">
+      <div className="flex h-full flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">Category not found</p>
       </div>
     )
@@ -58,24 +59,22 @@ export default function AacCategoryPage({
 
   if (!selectedSpeaker) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4">
+      <div className="flex h-full flex-col items-center justify-center p-4">
         <p className="text-muted-foreground">No speaker selected</p>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Header with back button and category label - exact JSX per TRD §7.6 */}
       <div className="flex items-center gap-3 px-4 py-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => router.push('/aac')}
-        >
+        <Button variant="ghost" size="icon" onClick={() => router.push('/aac')}>
           <ChevronLeft size={20} />
         </Button>
-        <h1 className="font-display text-2xl font-semibold">{category.label}</h1>
+        <h1 className="font-display text-2xl font-semibold">
+          {category.label}
+        </h1>
       </div>
 
       {/* Symbol grid - component from WU-3-F */}

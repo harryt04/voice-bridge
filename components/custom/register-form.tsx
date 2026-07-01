@@ -39,7 +39,9 @@ export function RegisterForm() {
         router.push('/places')
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Sign up failed. Please try again.',
+          err instanceof Error
+            ? err.message
+            : 'Sign up failed. Please try again.',
         )
         setLoading(false)
       }
@@ -51,14 +53,18 @@ export function RegisterForm() {
     <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md">
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="font-display text-2xl font-bold text-primary">VoiceBridge</h1>
-        <p className="font-sans text-sm text-muted-foreground">Create your account</p>
+        <h1 className="font-display text-2xl font-bold text-primary">
+          VoiceBridge
+        </h1>
+        <p className="font-sans text-sm text-muted-foreground">
+          Create your account
+        </p>
       </div>
 
       {/* Error display */}
       {error && (
         <div className="flex gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3">
-          <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-destructive" />
           <p className="font-sans text-sm text-destructive">{error}</p>
         </div>
       )}

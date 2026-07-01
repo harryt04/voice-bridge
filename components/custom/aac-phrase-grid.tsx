@@ -51,17 +51,20 @@ export function AacPhraseGrid({
 
   // Merge default and custom phrases, group by category
   const allPhrases = [
-    ...DEFAULT_PHRASES.map((p) => ({
-      _id: `default-${p.text}`,
-      speakerId: '',
-      text: p.text,
-      icon: p.icon,
-      category: p.category,
-      backgroundColor: undefined,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastUpdatedBy: '',
-    } as AacPhrase)),
+    ...DEFAULT_PHRASES.map(
+      (p) =>
+        ({
+          _id: `default-${p.text}`,
+          speakerId: '',
+          text: p.text,
+          icon: p.icon,
+          category: p.category,
+          backgroundColor: undefined,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          lastUpdatedBy: '',
+        }) as AacPhrase,
+    ),
     ...customPhrases,
   ]
 
@@ -72,7 +75,7 @@ export function AacPhraseGrid({
       acc[cat].push(phrase)
       return acc
     },
-    {} as Record<string, AacPhrase[]>
+    {} as Record<string, AacPhrase[]>,
   )
 
   return (
@@ -135,7 +138,9 @@ function AacPhraseTile({
       // Append to sentence
       addWord({
         label: phrase.text,
-        imageUrl: phrase.icon ? `data:image/svg+xml,${phrase.icon}` : '/placeholder.svg',
+        imageUrl: phrase.icon
+          ? `data:image/svg+xml,${phrase.icon}`
+          : '/placeholder.svg',
       })
     } else {
       // Speak immediately
@@ -189,14 +194,17 @@ function AacPhraseTile({
 
         {/* Text with dynamic font size */}
         <span
-          className={cn('font-display font-semibold text-center leading-snug', fontSizeClass)}
+          className={cn(
+            'text-center font-display font-semibold leading-snug',
+            fontSizeClass,
+          )}
         >
           {phrase.text}
         </span>
 
         {/* Edit/Delete overlay - only for custom phrases and owner */}
         {isCustom && isOwner && (
-          <div className="absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+          <div className="absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -240,10 +248,7 @@ function AacPhraseTile({
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowEditDialog(false)}
-            >
+            <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancel
             </Button>
             <Button onClick={handleEditSave}>Save</Button>

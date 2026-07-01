@@ -89,7 +89,7 @@ describe('AacPreferencesInputSchema', () => {
 
   it('rejects empty speakerId', () => {
     expect(() =>
-      AacPreferencesInputSchema.parse({ ...validInput, speakerId: '' })
+      AacPreferencesInputSchema.parse({ ...validInput, speakerId: '' }),
     ).toThrow()
   })
 
@@ -111,13 +111,13 @@ describe('AacPreferencesInputSchema', () => {
 
   it('rejects speechRate below 0.5', () => {
     expect(() =>
-      AacPreferencesInputSchema.parse({ ...validInput, speechRate: 0.49 })
+      AacPreferencesInputSchema.parse({ ...validInput, speechRate: 0.49 }),
     ).toThrow()
   })
 
   it('rejects speechRate above 2', () => {
     expect(() =>
-      AacPreferencesInputSchema.parse({ ...validInput, speechRate: 2.01 })
+      AacPreferencesInputSchema.parse({ ...validInput, speechRate: 2.01 }),
     ).toThrow()
   })
 
@@ -139,13 +139,13 @@ describe('AacPreferencesInputSchema', () => {
 
   it('rejects speechPitch below 0.5', () => {
     expect(() =>
-      AacPreferencesInputSchema.parse({ ...validInput, speechPitch: 0.49 })
+      AacPreferencesInputSchema.parse({ ...validInput, speechPitch: 0.49 }),
     ).toThrow()
   })
 
   it('rejects speechPitch above 2', () => {
     expect(() =>
-      AacPreferencesInputSchema.parse({ ...validInput, speechPitch: 2.01 })
+      AacPreferencesInputSchema.parse({ ...validInput, speechPitch: 2.01 }),
     ).toThrow()
   })
 
@@ -154,7 +154,7 @@ describe('AacPreferencesInputSchema', () => {
       AacPreferencesInputSchema.parse({
         ...validInput,
         phraseTapBehavior: 'invalid',
-      })
+      }),
     ).toThrow()
   })
 
@@ -163,7 +163,7 @@ describe('AacPreferencesInputSchema', () => {
       AacPreferencesInputSchema.parse({
         ...validInput,
         symbolSource: 'unknown',
-      })
+      }),
     ).toThrow()
   })
 
@@ -172,7 +172,7 @@ describe('AacPreferencesInputSchema', () => {
       AacPreferencesInputSchema.parse({
         ...validInput,
         symbolLabelPosition: 'center',
-      })
+      }),
     ).toThrow()
   })
 
@@ -181,7 +181,7 @@ describe('AacPreferencesInputSchema', () => {
       AacPreferencesInputSchema.parse({
         ...validInput,
         mobileGridColumns: '5',
-      })
+      }),
     ).toThrow()
   })
 

@@ -57,18 +57,12 @@ export async function aacMutationAuthCheck(
   })) as any as Speaker
 
   if (!speaker) {
-    return NextResponse.json(
-      { error: 'Speaker not found' },
-      { status: 404 },
-    )
+    return NextResponse.json({ error: 'Speaker not found' }, { status: 404 })
   }
 
   // Check user is parent (caregiver) of the speaker
   if (speaker.parentId !== session.user.id) {
-    return NextResponse.json(
-      { error: 'Not authorized' },
-      { status: 403 },
-    )
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403 })
   }
 
   return { userId: session.user.id }

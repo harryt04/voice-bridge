@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettify": "prettier --write .",
+    "ci": "prettier --write .; npm run build; npm run test",
     "test": "vitest run",
     "test:watch": "vitest"
   },

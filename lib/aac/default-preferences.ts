@@ -16,7 +16,9 @@ import type { AacUserPreferences } from '@/models'
  * @param speakerId - The speaker ID to bind preferences to
  * @returns Default preferences object
  */
-export function getDefaultPreferences(speakerId: string): Omit<AacUserPreferences, '_id' | 'updatedAt'> {
+export function getDefaultPreferences(
+  speakerId: string,
+): Omit<AacUserPreferences, '_id' | 'updatedAt'> {
   return {
     speakerId,
     voiceName: undefined,

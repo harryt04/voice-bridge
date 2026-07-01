@@ -3,10 +3,7 @@ import { auth } from '@/lib/auth'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
 import { AacUserPreferences } from '@/models'
 import { AacPreferencesInputSchema } from '@/lib/aac/aac-validators'
-import {
-  isValidObjectId,
-  aacMutationAuthCheck,
-} from '@/lib/aac/aac-auth'
+import { isValidObjectId, aacMutationAuthCheck } from '@/lib/aac/aac-auth'
 import { speakerAuthCheck } from '@/lib/mongo-utils'
 import { getDefaultPreferences } from '@/lib/aac/default-preferences'
 
@@ -54,10 +51,9 @@ export async function GET(req: NextRequest) {
 
     // Return default preferences if no custom prefs exist (not 404)
     if (!prefs) {
-      return NextResponse.json(
-        getDefaultPreferences(speakerId),
-        { status: 200 },
-      )
+      return NextResponse.json(getDefaultPreferences(speakerId), {
+        status: 200,
+      })
     }
 
     return NextResponse.json(prefs, { status: 200 })
@@ -119,10 +115,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(updates, { status: 200 })
     }
 
-    return NextResponse.json(
-      result.value || updates,
-      { status: 200 },
-    )
+    return NextResponse.json(result.value || updates, { status: 200 })
   } catch (error) {
     console.error('POST /api/aac/preferences error:', error)
     return NextResponse.json(
