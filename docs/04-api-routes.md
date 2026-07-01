@@ -521,3 +521,328 @@ DELETE responses consistently use `deletedCount`. POST update responses sometime
 3. **Auth logic error in GET /api/speaker:** Line 36 uses `||` instead of `&&`, allowing unauthorized access
 4. **Response field naming:** Inconsistent use of `updatedItem`, `updatedPlace`, `updatedSpeaker`, `updatedCount`, `modifiedCount`
 5. **Default speaker auto-create:** GET `/api/speakers` creates default speaker in DB even for simple list requests
+
+---
+
+## AAC (Augmentative and Alternative Communication) Routes
+
+These routes handle AAC phrase management and preference configuration. All AAC routes use better-auth authentication.
+
+### Authorization Model
+
+**Read operations** (GET phrases, GET preferences): Parent or Villager access
+- Use `speakerAuthCheck()` pattern for existing speaker validation
+
+**Write operations** (POST/PUT/DELETE phrases, POST preferences): **Caregiver-only** (parent only)
+- Use `aacMutationAuthCheck(req, speakerId)` utility
+- Helper verifies: session exists (401), speaker exists (404), `speaker.parentId === session.user.id` (403)
+
+### ObjectId Validation
+
+All AAC routes that accept `id` or `speakerId` query/body parameters must validate format before constructing `new ObjectId()`:
+
+```ts
+import { ObjectId } from 'mongodb'
+
+function isValidObjectId(id: string): boolean {
+  return ObjectId.isValid(id) && new ObjectId(id).toString() === id
+}
+
+if (!isValidObjectId(speakerId)) {
+  return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+}
+```
+
+Invalid ObjectIds return `400 Bad Request`.
+
+---
+
+### GET /api/aac/phrase?id=<id>
+
+**Fetch a single AAC phrase**
+
+**Auth:** Required (parent or villager)
+
+**Query Params:**
+- `id` (required): Phrase ObjectId
+
+**Response:** `AacPhrase`
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid ObjectId format
+- `401` — Unauthorized
+- `404` — Phrase not found
+- `500` — Internal server error
+
+**Example Response:**
+
+```json
+{
+  "_id": "507f191e810c19729de860ea",
+  "speakerId": "507f1f77bcf86cd799439011",
+  "text": "Hello",
+  "icon": "smile",
+  "backgroundColor": "#ffd700",
+  "category": "Social",
+  "sortOrder": 1,
+  "createdAt": "2026-06-29T10:30:00Z",
+  "updatedAt": "2026-06-29T10:30:00Z",
+  "lastUpdatedBy": "user_123abc"
+}
+```
+
+---
+
+### POST /api/aac/phrase
+
+**Create a new AAC phrase**
+
+**Auth:** Required (caregiver-only)
+
+**Request Body:** `AacPhraseInput`
+
+```json
+{
+  "speakerId": "507f1f77bcf86cd799439011",
+  "text": "Hello",
+  "icon": "smile",
+  "backgroundColor": "#ffd700",
+  "category": "Social",
+  "sortOrder": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "insertedId": "507f191e810c19729de860ea"
+}
+```
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid input (validation error via Zod schema)
+- `401` — Unauthorized (no session)
+- `403` — Forbidden (not the speaker's parent/caregiver)
+- `404` — Speaker not found
+- `500` — Internal server error
+
+**Validation Rules:**
+- `text`: 1-200 characters, required
+- `speakerId`: valid ObjectId, required, must match speaker in auth check
+- `sortOrder`: non-negative integer, optional
+- Other fields: optional strings
+
+**Server-side fields:**
+- `createdAt`, `updatedAt`, `lastUpdatedBy` set by server; client values ignored
+
+---
+
+### PUT /api/aac/phrase?id=<id>
+
+**Update an existing AAC phrase**
+
+**Auth:** Required (caregiver-only)
+
+**Query Params:**
+- `id` (required): Phrase ObjectId
+
+**Request Body:** `AacPhraseInput` (same as POST)
+
+**Response:**
+
+```json
+{
+  "updated": true
+}
+```
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid ObjectId format or invalid input
+- `401` — Unauthorized (no session)
+- `403` — Forbidden (not the speaker's parent, or phrase belongs to different speaker)
+- `404` — Phrase or speaker not found
+- `500` — Internal server error
+
+**Notes:**
+- Verifies phrase's `speakerId` belongs to user before updating (IDOR prevention)
+- `createdAt` is NOT modified; only `updatedAt` and `lastUpdatedBy` are updated
+
+---
+
+### DELETE /api/aac/phrase?id=<id>
+
+**Delete an AAC phrase**
+
+**Auth:** Required (caregiver-only)
+
+**Query Params:**
+- `id` (required): Phrase ObjectId
+
+**Response:**
+
+```json
+{
+  "deleted": true
+}
+```
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid ObjectId format
+- `401` — Unauthorized
+- `403` — Forbidden (not the speaker's parent)
+- `404` — Phrase or speaker not found
+- `500` — Internal server error
+
+---
+
+### GET /api/aac/phrases?speakerId=<id>
+
+**List all custom AAC phrases for a speaker**
+
+**Auth:** Required (parent or villager)
+
+**Query Params:**
+- `speakerId` (required): Speaker ObjectId
+
+**Response:** `AacPhrase[]`
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid ObjectId format
+- `401` — Unauthorized
+- `404` — Speaker not found
+- `500` — Internal server error
+
+**Sorting:** Results sorted by `sortOrder` ascending, then `createdAt` ascending
+
+**Example Response:**
+
+```json
+[
+  {
+    "_id": "507f191e810c19729de860ea",
+    "speakerId": "507f1f77bcf86cd799439011",
+    "text": "Hello",
+    "category": "Social",
+    "sortOrder": 1,
+    "createdAt": "2026-06-29T10:30:00Z",
+    "updatedAt": "2026-06-29T10:30:00Z",
+    "lastUpdatedBy": "user_123abc"
+  }
+]
+```
+
+---
+
+### GET /api/aac/preferences?speakerId=<id>
+
+**Fetch AAC user preferences for a speaker**
+
+**Auth:** Required (parent or villager)
+
+**Query Params:**
+- `speakerId` (required): Speaker ObjectId
+
+**Response:** `AacUserPreferences` or default object
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid ObjectId format
+- `401` — Unauthorized
+- `404` — Speaker not found
+- `500` — Internal server error
+
+**Behavior:**
+- If preferences exist in DB, returns them
+- If no preferences exist, returns **default object** (not 404):
+
+```json
+{
+  "speakerId": "507f1f77bcf86cd799439011",
+  "voiceName": null,
+  "speechRate": 1,
+  "speechPitch": 1,
+  "speakOnSymbolTap": true,
+  "phraseTapBehavior": "speak",
+  "symbolSource": "mulberry",
+  "symbolLabelPosition": "below",
+  "mobileGridColumns": 3
+}
+```
+
+**Example Response (from DB):**
+
+```json
+{
+  "_id": "507f191e810c19729de860ea",
+  "speakerId": "507f1f77bcf86cd799439011",
+  "voiceName": "Google US English Female",
+  "speechRate": 1.2,
+  "speechPitch": 0.9,
+  "speakOnSymbolTap": true,
+  "phraseTapBehavior": "append",
+  "symbolSource": "mulberry",
+  "symbolLabelPosition": "below",
+  "mobileGridColumns": 3,
+  "updatedAt": "2026-06-29T10:30:00Z"
+}
+```
+
+---
+
+### POST /api/aac/preferences
+
+**Upsert AAC user preferences for a speaker**
+
+**Auth:** Required (caregiver-only)
+
+**Request Body:** `AacUserPreferencesInput`
+
+```json
+{
+  "speakerId": "507f1f77bcf86cd799439011",
+  "voiceName": "Google US English Female",
+  "speechRate": 1.2,
+  "speechPitch": 0.9,
+  "speakOnSymbolTap": true,
+  "phraseTapBehavior": "append",
+  "symbolSource": "mulberry",
+  "symbolLabelPosition": "below",
+  "mobileGridColumns": 3
+}
+```
+
+**Response:**
+
+```json
+{
+  "upserted": true
+}
+```
+
+**Status Codes:**
+- `200` — Success
+- `400` — Invalid input (validation error)
+- `401` — Unauthorized (no session)
+- `403` — Forbidden (not the speaker's parent)
+- `404` — Speaker not found
+- `500` — Internal server error
+
+**Validation Rules (Zod schema):**
+- `speechRate`: 0.5–2.0, required
+- `speechPitch`: 0.5–2.0, required
+- `speakOnSymbolTap`: boolean, required
+- `phraseTapBehavior`: 'speak' | 'append', required
+- `symbolSource`: 'mulberry' | 'arasaac' | 'custom', required
+- `symbolLabelPosition`: 'below' | 'above' | 'hidden', required
+- `mobileGridColumns`: 2 | 3 | 4, required
+- `voiceName`: string, optional
+
+**Behavior:**
+- Uses MongoDB `findOneAndUpdate({ upsert: true })` on `speakerId`
+- Server sets `updatedAt` to current time; client value ignored

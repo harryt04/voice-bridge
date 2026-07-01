@@ -62,7 +62,7 @@ Mounts in root layout, initializes:
 
 ```
 ┌─────────────────┐
-│  User Login     │ (Clerk auth)
+│  User Login     │ (better-auth)
 └────────┬────────┘
          │
          ▼
@@ -119,9 +119,10 @@ GET  /api/foods?speakerId=456      → Fetch all foods for speaker 456
 
 ### Authorization Pattern
 
-Authorization uses Clerk `userId` for all checks:
-- Every request must include authenticated Clerk user (`getAuth(req)`)
-- `speakerAuthCheck(req, itemId)` verifies user is parent or villager of speaker owning the item
+Authorization uses better-auth `session.user.id` for all checks:
+- Every request must include authenticated session via `auth.api.getSession({ headers: req.headers })`
+- `speakerAuthCheck(req, speakerId)` verifies user is parent or villager of the speaker
+- **AAC mutations** use `aacMutationAuthCheck(req, speakerId)` — caregiver-only (parent only, not villager)
 - **Known gaps**: Authorization check incomplete in some routes (marked in code)
 
 ### Client-Side List Fetching
@@ -170,6 +171,8 @@ Examples:
 | places      | Locations (scoped)                          | `_id`, `speakerId`, `name`, ... |
 | villagers   | Read-only access grants (scoped)            | `_id`, `speakerId`, `userId`, ... |
 | vocabWords  | Vocabulary words (scoped)                   | `_id`, `speakerId`, `word`, ... |
+| aacPhrases  | Custom AAC phrases (scoped to speaker)      | `_id`, `speakerId`, `text`, `category`, ... |
+| aacUserPreferences | AAC user settings (one per speaker)  | `_id`, `speakerId`, `voiceName`, `speechRate`, ... |
 
 ### CRUD Utilities
 
@@ -251,3 +254,80 @@ Error handling is per-page/component with `catch(err)` and state-driven UI. No a
 - `speakerAuthCheck()` exists but not consistently applied across all endpoints
 - Some list endpoints may lack villager access verification
 - Audit: Review all `/api/{plural}` routes for authorization coverage
+
+---
+
+## 8. AAC (Augmentative and Alternative Communication) Architecture
+
+### Symbol Provider Pattern
+
+AAC uses a **Symbol Provider** abstraction to support multiple symbol sources at runtime:
+
+```
+SymbolProvider (interface)
+├── MulberrySymbolProvider (current: static JSON)
+├── ArasaacSymbolProvider (future: REST API)
+├── CustomSymbolProvider (future: cards integration)
+└── CompositeSymbolProvider (future: multi-source merging)
+```
+
+**Current Implementation (Mulberry):**
+- Symbol metadata: Static JSON file (`lib/aac/mulberry-symbols.json`)
+- ~500 core symbols bundled in `public/symbols/mulberry/`
+- Remaining ~3,000 symbols via GitHub CDN URLs
+- No API calls at runtime — all data loaded at module init
+
+**Structure:**
+```ts
+interface AacSymbol {
+  id: string
+  label: string
+  imageUrl: string    // /symbols/mulberry/{name}.svg or CDN URL
+  category: string    // 'core', 'feelings', 'people', etc.
+  source: 'mulberry'
+  tags?: string[]
+}
+```
+
+**12 Categories:** core, feelings, people, actions, food-drink, places, objects, describing, social, body, time, questions.
+
+### AAC State Management
+
+**Sentence Bar State** — Local component state, not persisted:
+- Managed in `app/aac/layout.tsx` via `AacSentenceContext`
+- Stores `SentenceWord[]` (id, label, imageUrl)
+- Cleared on navigation or user action
+- Context provides `addWord()`, `removeWord()`, `clearSentence()`
+
+**AAC Preferences** — React Query cached state:
+- Fetched once per page tree via `useAacPreferences(speakerId)` in layout
+- Stale time: 5 minutes
+- Mutations: `POST /api/aac/preferences` (caregiver-only)
+- Distributed to pages via `AacPreferencesContext`
+
+**Collections Involved:**
+- `aacPhrases`: Custom phrases created by caregiver
+- `aacUserPreferences`: Settings (voice, rate, pitch, etc.)
+
+### AAC Authorization Model
+
+**Read Operations** — Parent or Villager:
+- GET `/api/aac/phrases?speakerId=`
+- GET `/api/aac/preferences?speakerId=`
+
+**Write Operations** — Parent (caregiver) only:
+- POST `/api/aac/phrase` (create)
+- PUT `/api/aac/phrase?id=` (update)
+- DELETE `/api/aac/phrase?id=` (delete)
+- POST `/api/aac/preferences` (upsert settings)
+
+Uses `aacMutationAuthCheck(req, speakerId)` which verifies `speaker.parentId === session.user.id`.
+
+### TTS (Text-to-Speech) Utility
+
+Centralized speech output via `speak(text, preferences)` from `utils/aac-speech.ts`:
+- Wraps `window.speechSynthesis`
+- All symbol taps, phrase taps, and sentence speaks use this utility
+- Applies user preferences: `voiceName`, `speechRate`, `speechPitch`
+- Error handling: graceful degradation (no throw, just console.error)
+- **Client-side only** — never called on server

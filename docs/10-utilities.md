@@ -677,6 +677,373 @@ function SafeDirections({ place }) {
 
 ---
 
+# AAC Utilities
+
+AAC-specific utilities for text-to-speech, symbol handling, and data validation.
+
+## speak() — Text-to-Speech
+
+**File:** `utils/aac-speech.ts`
+
+**Availability:** Client-side only (`window.speechSynthesis`)
+
+### Purpose
+
+Centralized TTS utility for all AAC speech output (symbols, phrases, sentences). Applies user preferences and handles errors gracefully.
+
+### Signature
+
+```typescript
+export type SpeechPrefs = {
+  voiceName?: string
+  speechRate?: number
+  speechPitch?: number
+}
+
+export function speak(text: string, prefs: SpeechPrefs = {}): void
+```
+
+### Parameters
+
+- `text` — String to speak (empty/whitespace is ignored)
+- `prefs` — Optional preferences object:
+  - `voiceName` — Exact voice name from `window.speechSynthesis.getVoices()`
+  - `speechRate` — 0.5–2.0 (default 1.0)
+  - `speechPitch` — 0.5–2.0 (default 1.0)
+
+### Returns
+
+`void` — No return value. Sets up speech utterance and starts playback.
+
+### Behavior
+
+1. Validates text (returns silently if empty/whitespace)
+2. Cancels any currently-playing speech
+3. Creates `SpeechSynthesisUtterance` with provided text
+4. Sets rate and pitch from preferences
+5. Finds matching voice from `getVoices()` if `voiceName` provided
+6. Starts playback via `synth.speak(utterance)`
+
+### Error Handling
+
+Try-catch wraps all operations. On error: logs to console, **never throws**. Speech gracefully degrades if unavailable.
+
+```typescript
+try {
+  const synth = window.speechSynthesis
+  synth.cancel()
+  const utterance = new SpeechSynthesisUtterance(text)
+  // ... set voice, rate, pitch
+  synth.speak(utterance)
+} catch (error) {
+  console.error('Speech synthesis failed:', error)
+  // Silently degrade
+}
+```
+
+### Usage Examples
+
+```typescript
+// Simple speak
+speak('Hello world')
+
+// With preferences
+const prefs = {
+  voiceName: 'Google US English Female',
+  speechRate: 1.2,
+  speechPitch: 0.9,
+}
+speak('I am happy', prefs)
+
+// In symbol grid (tap handler)
+function handleSymbolTap(symbol, preferences) {
+  if (preferences.speakOnSymbolTap) {
+    speak(symbol.label, preferences)
+  }
+}
+
+// In sentence bar (speak full sentence)
+function handleSpeakSentence(words, preferences) {
+  const text = words.map(w => w.label).join(' ')
+  speak(text, preferences)
+}
+```
+
+### Use Cases
+
+- **Symbol tap:** Announce symbol label
+- **Phrase tap:** Speak quick phrase
+- **Sentence:** Speak full sentence from bar
+- **All sites:** Centralized voice settings application
+
+---
+
+## isValidObjectId() — ObjectId Validation
+
+**File:** `lib/aac/aac-auth.ts` (exported helper)
+
+**Availability:** Server-side (uses MongoDB ObjectId)
+
+### Purpose
+
+Validate ObjectId format before constructing `new ObjectId()` to avoid runtime errors.
+
+### Signature
+
+```typescript
+import { ObjectId } from 'mongodb'
+
+function isValidObjectId(id: string): boolean
+```
+
+### Parameters
+
+- `id` — String to validate
+
+### Returns
+
+`boolean` — `true` if valid ObjectId format, `false` otherwise
+
+### Implementation
+
+```typescript
+function isValidObjectId(id: string): boolean {
+  return ObjectId.isValid(id) && new ObjectId(id).toString() === id
+}
+```
+
+### Usage
+
+```typescript
+// In API route handler
+const { id } = req.query
+
+if (!isValidObjectId(id as string)) {
+  return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+}
+
+const objectId = new ObjectId(id as string)
+const result = await collection.findOne({ _id: objectId })
+```
+
+### Use Cases
+
+- **Query parameter validation:** Validate `?id=` before use
+- **Prevent errors:** Avoid `new ObjectId()` exceptions
+- **AAC routes:** All phrase/preference endpoints use this check
+
+---
+
+## aacMutationAuthCheck() — AAC Authorization
+
+**File:** `lib/aac/aac-auth.ts` (exported helper)
+
+**Availability:** Server-side (uses better-auth + MongoDB)
+
+### Purpose
+
+Check authorization for AAC phrase/preference mutations. Verifies session exists, speaker exists, and user is parent (caregiver).
+
+### Signature
+
+```typescript
+export async function aacMutationAuthCheck(
+  req: NextRequest,
+  speakerId: string,
+): Promise<{ userId: string } | NextResponse>
+```
+
+### Parameters
+
+- `req` — Next.js request object (for headers)
+- `speakerId` — Target speaker's ObjectId
+
+### Returns
+
+**Success:** `{ userId: string }` — User is authorized
+
+**Failure:** `NextResponse.json()` with error:
+- `401` — No session (unauthorized)
+- `404` — Speaker not found
+- `403` — User is not parent of speaker (forbidden)
+
+### Implementation Pattern
+
+```typescript
+const session = await auth.api.getSession({ headers: req.headers })
+if (!session) {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+}
+
+const db = await getDb()
+const speaker = await db.collection('speakers').findOne({
+  _id: new ObjectId(speakerId),
+})
+
+if (!speaker) {
+  return NextResponse.json({ error: 'Speaker not found' }, { status: 404 })
+}
+
+// Only parent (caregiver) can mutate
+if (speaker.parentId !== session.user.id) {
+  return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+}
+
+return { userId: session.user.id }
+```
+
+### Usage in Route Handlers
+
+```typescript
+// POST /api/aac/phrase
+export async function POST(req: NextRequest) {
+  const { speakerId, text, ...phraseData } = await req.json()
+
+  // Check authorization
+  const authResult = await aacMutationAuthCheck(req, speakerId)
+  if (authResult instanceof NextResponse) return authResult  // Early return on error
+
+  const { userId } = authResult  // Now safely destructure
+
+  // Proceed with mutation...
+  const db = await getDb()
+  const result = await db.collection('aacPhrases').insertOne({
+    speakerId: new ObjectId(speakerId),
+    text,
+    ...phraseData,
+    lastUpdatedBy: userId,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  })
+
+  return NextResponse.json({ insertedId: result.insertedId }, { status: 200 })
+}
+```
+
+### IDOR Prevention
+
+This check prevents **Insecure Direct Object Reference** attacks:
+- Ensures user is parent before allowing mutation on speaker
+- Cannot modify another speaker's phrases by guessing their ObjectId
+- Client-provided `speakerId` is validated against auth
+
+---
+
+## getPhraseFontSize() — Dynamic Font Sizing
+
+**File:** `utils/aac-phrase-text-size.ts` (export for components)
+
+**Availability:** Client-side (utility for rendering)
+
+### Purpose
+
+Return Tailwind font-size class based on phrase text length. Keeps readability on phrase tiles with limited space.
+
+### Signature
+
+```typescript
+export function getPhraseTailwindClass(text: string): string
+```
+
+### Parameters
+
+- `text` — Phrase text string
+
+### Returns
+
+`'text-base'` or `'text-sm'` Tailwind class string
+
+### Logic
+
+- **≤ 15 characters:** `'text-base'` (larger, for short phrases)
+- **> 15 characters:** `'text-sm'` (smaller, for longer phrases)
+
+### Usage
+
+```typescript
+import { getPhraseTailwindClass } from '@/utils/aac-phrase-text-size'
+
+function AacPhraseTile({ phrase }) {
+  const fontClass = getPhraseTailwindClass(phrase.text)
+
+  return (
+    <button className={cn('p-3 rounded-2xl', fontClass)}>
+      {phrase.text}
+    </button>
+  )
+}
+
+// Example outputs:
+// getPhraseTailwindClass('Yes')              → 'text-base'
+// getPhraseTailwindClass('I am happy')       → 'text-base'
+// getPhraseTailwindClass('I need a break')   → 'text-sm'
+// getPhraseTailwindClass('I am in pain')     → 'text-sm'
+```
+
+---
+
+## Symbol Provider Methods
+
+**File:** `lib/aac/mulberry-provider.ts`
+
+**Availability:** Server and client (static data)
+
+### Purpose
+
+Fetch symbols from static JSON by category or search query.
+
+### Signature
+
+```typescript
+class MulberrySymbolProvider implements SymbolProvider {
+  getCategories(): AacCategory[]
+  getSymbolsByCategory(categorySlug: string): AacSymbol[]
+  searchSymbols(query: string): AacSymbol[]
+}
+
+export const mulberryProvider = new MulberrySymbolProvider()
+```
+
+### Methods
+
+**getCategories():**
+- Returns all 12 AAC categories
+- No parameters
+- Returns `AacCategory[]` with slug, label, icon name
+
+**getSymbolsByCategory(categorySlug):**
+- Returns symbols for specific category
+- Parameter: `categorySlug` (e.g., 'core', 'feelings')
+- Returns `AacSymbol[]` filtered to category
+- Empty array if category not found
+
+**searchSymbols(query):**
+- Returns symbols matching query (case-insensitive)
+- Parameter: `query` (search term)
+- Searches label + tags fields
+- Returns `AacSymbol[]` matching results
+- Empty array if no matches
+
+### Usage
+
+```typescript
+import { mulberryProvider } from '@/lib/aac/mulberry-provider'
+
+// In symbol grid page
+const coreSymbols = mulberryProvider.getSymbolsByCategory('core')
+// → [{ id: 'mulberry-want', label: 'want', ... }, ...]
+
+// In search component
+const results = mulberryProvider.searchSymbols('happy')
+// → [{ id: 'mulberry-happy', label: 'happy', category: 'feelings', ... }]
+
+// In category selector
+const categories = mulberryProvider.getCategories()
+// → [{ slug: 'core', label: 'Core Words', icon: 'Star' }, ...]
+```
+
+---
+
 # Summary Table
 
 ## Server-Side Utilities (lib/)
@@ -690,11 +1057,23 @@ function SafeDirections({ place }) {
 
 ## Client-Side Utilities (utils/)
 
-| Function                       | File                      | Purpose                  | Returns          |
-| ------------------------------ | ------------------------- | ------------------------ | ---------------- |
-| `speakText()`                  | `utils/speech.ts`         | Text-to-speech           | `void`           |
-| `compressAndConvertToBase64()` | `utils/imageUtils.ts`     | Compress & encode image  | `Promise<string>` |
-| `openGoogleMapsDirections()`   | `utils/directions.ts`     | Open Google Maps         | `void`           |
+| Function                       | File                           | Purpose                  | Returns          |
+| ------------------------------ | ------------------------------ | ------------------------ | ---------------- |
+| `speakText()`                  | `utils/speech.ts`              | Text-to-speech           | `void`           |
+| `compressAndConvertToBase64()` | `utils/imageUtils.ts`          | Compress & encode image  | `Promise<string>` |
+| `openGoogleMapsDirections()`   | `utils/directions.ts`          | Open Google Maps         | `void`           |
+| `speak()`                      | `utils/aac-speech.ts`          | AAC text-to-speech (TTS) | `void`           |
+| `getPhraseTailwindClass()`     | `utils/aac-phrase-text-size.ts` | Dynamic font sizing      | `string`         |
+
+## Server-Side AAC Utilities (lib/aac/)
+
+| Function                   | File                      | Purpose                           | Returns                          |
+| -------------------------- | ------------------------- | --------------------------------- | -------------------------------- |
+| `isValidObjectId()`        | `lib/aac/aac-auth.ts`     | Validate ObjectId format          | `boolean`                        |
+| `aacMutationAuthCheck()`   | `lib/aac/aac-auth.ts`     | Check AAC mutation authorization  | `{ userId: string } \| NextResponse` |
+| `mulberryProvider.getCategories()` | `lib/aac/mulberry-provider.ts` | Get all symbol categories | `AacCategory[]`  |
+| `mulberryProvider.getSymbolsByCategory()` | `lib/aac/mulberry-provider.ts` | Get symbols by category | `AacSymbol[]` |
+| `mulberryProvider.searchSymbols()` | `lib/aac/mulberry-provider.ts` | Search symbols | `AacSymbol[]` |
 
 ---
 

@@ -880,6 +880,324 @@ type FoodInput = Omit<Food, '_id' | 'speakerId'>
 
 ---
 
+## AAC (Augmentative and Alternative Communication) Hooks
+
+### useAacPreferences
+
+**File:** `hooks/use-aac-preferences.tsx`  
+**Exported:** `useAacPreferences(speakerId: string)`
+
+React Query hook for fetching AAC user preferences.
+
+### Signature
+
+```typescript
+export function useAacPreferences(speakerId: string) {
+  return useQuery({
+    queryKey: ['aacPreferences', speakerId],
+    queryFn: async () => {
+      const res = await fetch(`/api/aac/preferences?speakerId=${speakerId}`)
+      if (!res.ok) throw new Error(`Preferences fetch failed: ${res.status}`)
+      return res.json()
+    },
+    staleTime: 5 * 60 * 1000,  // 5 minutes
+    enabled: !!speakerId,
+  })
+}
+```
+
+### Return Values
+
+Standard React Query `useQuery` return with:
+- `data: AacUserPreferences | undefined` — preferences object (includes defaults if no doc in DB)
+- `isLoading: boolean` — fetching in progress
+- `isError: boolean` — fetch failed
+- `error: Error | null` — error message if failed
+
+### Behavior
+
+- Caches for 5 minutes (`staleTime`)
+- Returns **default preferences** if no document exists (not 404)
+- Disabled when `speakerId` is null/empty
+- Called once per AAC page tree in `app/aac/layout.tsx`
+
+### Error Handling
+
+```typescript
+// In consuming component
+const { data: prefs, isError } = useAacPreferences(speakerId)
+
+if (isError) {
+  return <div>Failed to load preferences</div>
+}
+```
+
+---
+
+### useAacPhrases
+
+**File:** `hooks/use-aac-phrases.tsx`  
+**Exported:** `useAacPhrases(speakerId: string)`
+
+React Query hook for fetching custom AAC phrases for a speaker.
+
+### Signature
+
+```typescript
+export function useAacPhrases(speakerId: string) {
+  return useQuery({
+    queryKey: ['aacPhrases', speakerId],
+    queryFn: async () => {
+      const res = await fetch(`/api/aac/phrases?speakerId=${speakerId}`)
+      if (!res.ok) throw new Error(`Phrases fetch failed: ${res.status}`)
+      return res.json()
+    },
+    enabled: !!speakerId,
+  })
+}
+```
+
+### Return Values
+
+Standard React Query `useQuery` return with:
+- `data: AacPhrase[] | undefined` — array of custom phrases
+- `isLoading: boolean` — fetching in progress
+- `isError: boolean` — fetch failed
+- `error: Error | null` — error message if failed
+
+### Behavior
+
+- No stale time (fetches fresh on refocus)
+- Returns empty array if no custom phrases exist
+- Disabled when `speakerId` is null/empty
+- Used in `app/aac/phrases/page.tsx` for quick phrases grid
+
+### Error Handling
+
+```typescript
+// In consuming page
+const { data: phrases, isLoading, isError } = useAacPhrases(speakerId)
+
+if (isLoading) return <PhraseSkeleton count={6} />
+if (isError) return <div>Failed to load phrases. <RetryButton /></div>
+return <AacPhraseGrid phrases={phrases || []} />
+```
+
+---
+
+### useAvailableVoices
+
+**File:** `hooks/use-available-voices.tsx`  
+**Exported:** `useAvailableVoices()`
+
+Hook that loads available system voices from Web Speech API (`window.speechSynthesis`).
+
+### Signature
+
+```typescript
+export function useAvailableVoices() {
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const synth = window.speechSynthesis
+    const timeout = setTimeout(() => {
+      const voiceList = synth.getVoices()
+      setVoices(voiceList)
+      setLoading(false)
+    }, 3000)
+
+    synth.onvoiceschanged = () => {
+      const voiceList = synth.getVoices()
+      setVoices(voiceList)
+      setLoading(false)
+      clearTimeout(timeout)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [])
+
+  return { voices, loading }
+}
+```
+
+### Return Values
+
+```typescript
+{
+  voices: SpeechSynthesisVoice[],  // Array of available voices
+  loading: boolean                  // True while voices loading
+}
+```
+
+### Behavior
+
+- Calls `window.speechSynthesis.getVoices()` immediately
+- Listens for `voiceschanged` event (fires when voices load)
+- Falls back to 3-second timeout (voices may load before event fires)
+- Returns empty array while loading
+
+### Usage in AacSettingsForm
+
+```typescript
+const { voices, loading } = useAvailableVoices()
+
+return (
+  <Select disabled={loading} value={voiceName}>
+    <option>
+      {loading ? 'Loading voices...' : 'Select voice'}
+    </option>
+    {voices.map(v => (
+      <option key={v.name} value={v.name}>{v.name}</option>
+    ))}
+  </Select>
+)
+```
+
+---
+
+## AAC Contexts
+
+### AacSentenceContext
+
+**Location:** `app/aac/layout.tsx`  
+**Provider:** `app/aac/layout.tsx` (AAC layout component)
+
+Context for managing the sentence bar state (words being built).
+
+### Type
+
+```typescript
+type SentenceWord = {
+  id: string        // Unique crypto.randomUUID()
+  label: string     // Word text
+  imageUrl: string  // Thumbnail image path
+}
+
+type AacSentenceContextValue = {
+  sentence: SentenceWord[]
+  addWord: (word: Omit<SentenceWord, 'id'>) => void
+  removeWord: (id: string) => void  // By id, not index (safe for duplicates)
+  clearSentence: () => void
+}
+```
+
+### Usage
+
+```typescript
+'use client'
+
+import { createContext, useState, useCallback } from 'react'
+
+export const AacSentenceContext = createContext<AacSentenceContextValue | null>(null)
+
+export function useAacSentenceContext() {
+  const context = useContext(AacSentenceContext)
+  if (!context) {
+    throw new Error('useAacSentenceContext must be used within AAC layout')
+  }
+  return context
+}
+
+// In app/aac/layout.tsx:
+export default function AacLayout({ children }) {
+  const [sentence, setSentence] = useState<SentenceWord[]>([])
+
+  const addWord = useCallback((word) => {
+    setSentence(prev => [
+      ...prev,
+      { ...word, id: crypto.randomUUID() }
+    ])
+  }, [])
+
+  const removeWord = useCallback((id) => {
+    setSentence(prev => prev.filter(w => w.id !== id))
+  }, [])
+
+  const clearSentence = useCallback(() => {
+    setSentence([])
+  }, [])
+
+  return (
+    <AacSentenceContext.Provider value={{ sentence, addWord, removeWord, clearSentence }}>
+      <AacSentenceBar />
+      {children}
+    </AacSentenceContext.Provider>
+  )
+}
+```
+
+### Behavior
+
+- State is **local to AAC layout**, not persisted
+- Cleared when navigating away from AAC pages
+- All sub-pages share the same sentence state
+- Used by `AacSentenceBar` and `AacPhraseGrid` (append behavior)
+
+---
+
+### AacPreferencesContext
+
+**Location:** `app/aac/layout.tsx`  
+**Provider:** `app/aac/layout.tsx` (AAC layout component)
+
+Context for distributing loaded AAC preferences to all sub-pages (avoid repeated fetches).
+
+### Type
+
+```typescript
+type AacPreferencesContextValue = {
+  preferences: AacUserPreferences | null
+  preferencesLoading: boolean
+  preferencesError: Error | null
+}
+```
+
+### Usage
+
+```typescript
+// In app/aac/layout.tsx:
+const { data: prefs, isLoading, error } = useAacPreferences(speakerId)
+
+return (
+  <AacPreferencesContext.Provider 
+    value={{
+      preferences: prefs ?? null,
+      preferencesLoading: isLoading,
+      preferencesError: error,
+    }}
+  >
+    <AacSentenceBar />
+    {children}
+  </AacPreferencesContext.Provider>
+)
+
+// In consuming sub-pages:
+export function useAacPreferencesContext() {
+  const context = useContext(AacPreferencesContext)
+  if (!context) {
+    throw new Error('useAacPreferencesContext must be used within AAC layout')
+  }
+  return context
+}
+
+// Usage in AacSymbolGrid:
+const { preferences } = useAacPreferencesContext()
+const { mobileGridColumns, symbolLabelPosition } = preferences || {
+  mobileGridColumns: 3,
+  symbolLabelPosition: 'below'
+}
+```
+
+### Behavior
+
+- Preferences fetched once per AAC page tree (in layout)
+- Distributed to all sub-pages via context
+- Avoids calling `useAacPreferences` multiple times in child components
+- When preferences load, context updates automatically (triggers re-renders)
+
+---
+
 ## Best Practices
 
 ### 1. Use TanStack Query for All Server State

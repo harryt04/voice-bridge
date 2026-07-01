@@ -528,6 +528,146 @@ return NextResponse.json(
 )
 ```
 
+---
+
+## AAC (Augmentative and Alternative Communication) Collections
+
+Two new collections support AAC functionality:
+
+### aacPhrases Collection
+
+Stores custom quick phrases created by caregivers for a speaker.
+
+**Schema:**
+
+```ts
+{
+  _id: ObjectId,
+  speakerId: ObjectId (string in TypeScript),  // Foreign key to speakers._id
+  text: string,                                 // Phrase text (1-200 chars)
+  icon?: string,                                // Lucide icon name or emoji
+  backgroundColor?: string,                     // Hex color (#ffd700)
+  category?: string,                            // Display grouping (Social, Needs, etc.)
+  sortOrder?: number,                           // Sort priority
+  createdAt: Date,                              // Server-set on insert
+  updatedAt: Date,                              // Server-set on insert/update
+  lastUpdatedBy: string,                        // better-auth user.id
+}
+```
+
+**Index (Required):**
+
+```bash
+db.collection('aacPhrases').createIndex({ speakerId: 1 })
+```
+
+**Rationale:** Queries filter by `speakerId` to fetch phrases for a specific speaker. Index accelerates this lookup.
+
+**Authorization:**
+- GET (read): Parent or Villager of speaker
+- POST/PUT/DELETE (write): Parent (caregiver) only
+- Use `aacMutationAuthCheck()` for all writes
+
+**Example Query:**
+
+```ts
+const phrases = await collection
+  .find({ speakerId: new ObjectId(speakerId) })
+  .sort({ sortOrder: 1, createdAt: 1 })
+  .toArray()
+```
+
+---
+
+### aacUserPreferences Collection
+
+Stores per-speaker AAC settings (voice, speech rate, grid layout, etc.).
+
+**Schema:**
+
+```ts
+{
+  _id: ObjectId,
+  speakerId: ObjectId (string in TypeScript),  // Foreign key to speakers._id
+  voiceName?: string,                           // TTS voice name
+  speechRate: number,                           // 0.5-2.0 (default 1)
+  speechPitch: number,                          // 0.5-2.0 (default 1)
+  speakOnSymbolTap: boolean,                    // Auto-speak on symbol tap
+  phraseTapBehavior: 'speak' | 'append',       // How phrases are used
+  symbolSource: 'mulberry' | 'arasaac' | 'custom', // Symbol provider
+  symbolLabelPosition: 'below' | 'above' | 'hidden', // Label placement
+  mobileGridColumns: 2 | 3 | 4,                 // Grid column count
+  updatedAt: Date,                              // Server-set on upsert
+}
+```
+
+**Index (Required):**
+
+```bash
+db.collection('aacUserPreferences').createIndex(
+  { speakerId: 1 },
+  { unique: true }
+)
+```
+
+**Rationale:** 
+- Index on `speakerId` for fast lookups
+- `unique: true` enforces one preferences document per speaker
+- Upsert pattern: `findOneAndUpdate({ speakerId }, ..., { upsert: true })`
+
+**Authorization:**
+- GET (read): Parent or Villager of speaker
+- POST (write/upsert): Parent (caregiver) only
+- Use `aacMutationAuthCheck()` for all writes
+
+**Example Query (Upsert):**
+
+```ts
+const prefs = await collection.findOneAndUpdate(
+  { speakerId: new ObjectId(speakerId) },
+  { $set: { ...newPrefs, updatedAt: new Date() } },
+  { upsert: true, returnDocument: 'after' }
+)
+```
+
+**Default Fallback:**
+
+When GET finds no document, return this default (not 404):
+
+```ts
+const DEFAULT_PREFERENCES = {
+  speakerId,
+  voiceName: null,
+  speechRate: 1,
+  speechPitch: 1,
+  speakOnSymbolTap: true,
+  phraseTapBehavior: 'speak',
+  symbolSource: 'mulberry',
+  symbolLabelPosition: 'below',
+  mobileGridColumns: 3,
+}
+```
+
+---
+
+### Index Creation Task
+
+Use `gulpfile.ts` to create all indexes at setup:
+
+```bash
+npx gulp create-indexes
+```
+
+This task creates indexes for all collections, including:
+- `speakers`: (no primary index needed; _id is implicit)
+- `activities`, `foods`, `places`, `villagers`, `vocabWords`: `{ speakerId: 1 }`
+- `aacPhrases`: `{ speakerId: 1 }`
+- `aacUserPreferences`: `{ speakerId: 1, unique: true }`
+
+Run on first deployment to all environments.
+
+---
+
 ## No Transactions
 
 VoiceBridge does not use MongoDB transactions. All operations are single-document:

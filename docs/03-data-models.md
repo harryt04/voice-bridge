@@ -238,11 +238,160 @@ type VocabWord = {
 
 ---
 
+## AAC (Augmentative and Alternative Communication) Types
+
+### AacPhrase Type
+
+Represents a custom quick phrase created by a speaker's caregiver.
+
+**Location:** `models/aac-phrase.ts`
+
+#### AacPhraseInput
+
+```ts
+type AacPhraseInput = {
+  speakerId: string              // Required: speaker this phrase belongs to
+  text: string                   // Required: phrase text (1-200 chars)
+  icon?: string                  // Optional: lucide icon name or emoji
+  backgroundColor?: string       // Optional: hex color string (e.g., '#ffd700')
+  category?: string              // Optional: display grouping (e.g., 'Social')
+  sortOrder?: number             // Optional: sort priority (non-negative int)
+}
+```
+
+#### AacPhrase
+
+```ts
+type AacPhrase = AacPhraseInput & {
+  _id: string                    // MongoDB ObjectId as string
+  createdAt: Date                // Creation timestamp (server-set)
+  updatedAt: Date                // Last update timestamp (server-set)
+  lastUpdatedBy: string          // better-auth user ID of last updater (server-set)
+}
+```
+
+**Notes:**
+- `createdAt`, `updatedAt`, `lastUpdatedBy` are always set by the server; client values ignored
+- Scoped to a speaker via `speakerId` — every phrase must belong to exactly one speaker
+- Caregiver-only mutations: POST (create), PUT (update), DELETE (delete)
+- Parent or Villager can read via GET
+
+**Collection:** `aacPhrases`
+**Routes:** `/api/aac/phrase`, `/api/aac/phrases`
+
+---
+
+### AacUserPreferences Type
+
+Represents AAC settings for a speaker (voice, speech rate, grid layout, etc.).
+
+**Location:** `models/aac-preferences.ts`
+
+#### SymbolSource
+
+```ts
+type SymbolSource = 'mulberry' | 'arasaac' | 'custom'
+```
+
+Currently only `'mulberry'` is implemented. Future: ARASAAC REST API bridge and custom cards integration.
+
+#### AacUserPreferencesInput
+
+```ts
+type AacUserPreferencesInput = {
+  speakerId: string              // Required
+  voiceName?: string             // Optional: voice to use for TTS (e.g., "Google US English")
+  speechRate: number             // Required: 0.5–2.0 (default 1)
+  speechPitch: number            // Required: 0.5–2.0 (default 1)
+  speakOnSymbolTap: boolean      // Required: whether symbols auto-speak on tap (default true)
+  phraseTapBehavior: 'speak' | 'append'  // Required: 'speak' to speak phrase, 'append' to add to sentence bar
+  symbolSource: SymbolSource     // Required: 'mulberry', 'arasaac', or 'custom'
+  symbolLabelPosition: 'below' | 'above' | 'hidden'  // Required: where to show symbol text
+  mobileGridColumns: 2 | 3 | 4   // Required: grid columns on mobile (2, 3, or 4)
+}
+```
+
+#### AacUserPreferences
+
+```ts
+type AacUserPreferences = AacUserPreferencesInput & {
+  _id: string                    // MongoDB ObjectId as string
+  updatedAt: Date                // Last update timestamp (server-set)
+}
+```
+
+**Notes:**
+- One preferences doc per speaker (unique index on `speakerId`)
+- Caregiver-only mutations: POST (upsert)
+- Parent or Villager can read via GET
+- GET returns default object if no doc exists (not 404)
+- `updatedAt` is server-set; client value ignored
+
+**Collection:** `aacUserPreferences`
+**Routes:** `/api/aac/preferences`
+
+---
+
+### AacSymbol Type
+
+Represents a symbol from the symbol provider (metadata only, no database).
+
+**Location:** `lib/aac/symbol-provider.ts`
+
+```ts
+type AacSymbol = {
+  id: string                     // Unique symbol ID
+  label: string                  // Display text (e.g., 'want', 'happy')
+  imageUrl: string               // Absolute URL or /public path to SVG
+  category: string               // Category slug (e.g., 'core', 'feelings')
+  source: SymbolSource           // 'mulberry', 'arasaac', 'custom'
+  tags?: string[]                // Optional: search tags
+}
+```
+
+**Notes:**
+- Not stored in MongoDB; loaded from static JSON (`lib/aac/mulberry-symbols.json`)
+- Used by symbol grids and search utilities
+- 12 categories defined in `AAC_CATEGORIES` constant
+
+---
+
+### AacCategory Type
+
+Represents an AAC symbol category.
+
+**Location:** `lib/aac/symbol-provider.ts`
+
+```ts
+type AacCategory = {
+  slug: string                   // URL-friendly ID (e.g., 'core')
+  label: string                  // Display name (e.g., 'Core Words')
+  icon: string                   // lucide icon name (e.g., 'Star')
+}
+```
+
+**12 Categories:**
+1. `core` — Core Words (icon: Star)
+2. `feelings` — Feelings (icon: Heart)
+3. `people` — People (icon: User)
+4. `actions` — Actions (icon: Zap)
+5. `food-drink` — Food & Drink (icon: UtensilsCrossed)
+6. `places` — Places (icon: MapPin)
+7. `objects` — Objects (icon: Box)
+8. `describing` — Describing (icon: Palette)
+9. `social` — Social (icon: MessageCircle)
+10. `body` — Body (icon: PersonStanding)
+11. `time` — Time (icon: Clock)
+12. `questions` — Questions (icon: HelpCircle)
+
+---
+
 ## Type System Notes
 
 - All types use `type` keyword (not `interface`)
-- Input types receive `*Input` suffix: `SpeakerInput`, `FoodInput`, `PlaceInput`
-- Main types extend `*Input` with `_id` and `userId` fields
+- Input types receive `*Input` suffix: `SpeakerInput`, `AacPhraseInput`, `AacUserPreferencesInput`
+- Main types extend `*Input` with `_id` and runtime fields
 - MongoDB `_id` is stored as string in TypeScript; converted to `ObjectId` by API layer
-- Runtime fields (`lastUpdatedBy`, `updatedAt`, `isArchived`) are optional at type level but consistently added by API handlers
-- Optional fields use `?:` syntax (e.g., `imageBase64?: string`)
+- Runtime fields (`lastUpdatedBy`, `updatedAt`, `createdAt`) are optional at type level but consistently added by API handlers
+- AAC types are validated at runtime using Zod schemas in `lib/aac/aac-validators.ts`
+- Optional fields use `?:` syntax (e.g., `voiceName?: string`)

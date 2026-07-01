@@ -1,20 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter as FontSans, Outfit as FontDisplay } from 'next/font/google'
+import Script from 'next/script'
 
 import './globals.css'
 
 import { cn } from '@/lib/utils'
-import { SessionProvider } from '@/lib/auth-client'
-import { PostHogProvider } from '@/providers/posthogProvider'
-import { ThemeProvider } from '@/providers/themeProvider'
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  useSidebar,
-} from '@/components/ui/sidebar'
-import { AuthGatedSidebar } from '@/components/custom/auth-gated-sidebar'
-import { VBQueryClient } from '@/hooks/use-query-client'
-import { Toaster } from 'sonner'
+import { RootLayoutClient } from './layout-client'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -39,34 +30,37 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <SessionProvider>
-        <PostHogProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <SidebarProvider>
-              <body
-                suppressHydrationWarning={true}
-                className={cn(
-                  'min-h-screen bg-background font-sans antialiased',
-                  fontSans.variable,
-                  fontDisplay.variable,
-                )}
-              >
-                <VBQueryClient>
-                  <AuthGatedSidebar />
-                  {children}
-                  <Toaster />
-                </VBQueryClient>
-              </body>
-            </SidebarProvider>
-          </ThemeProvider>
-        </PostHogProvider>
-      </SessionProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function() {
+  try {
+    const theme = localStorage.getItem('theme') || 'system';
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  } catch (e) {}
+})()`,
+          }}
+        />
+      </head>
+      <body
+        suppressHydrationWarning={true}
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+          fontDisplay.variable,
+        )}
+      >
+        <RootLayoutClient>{children}</RootLayoutClient>
+      </body>
     </html>
   )
 }

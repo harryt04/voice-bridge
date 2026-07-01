@@ -875,6 +875,168 @@ No props.
 
 ---
 
+---
+
+## AAC (Augmentative and Alternative Communication) Components
+
+All AAC components are client components (`'use client'`) and work within the AAC layout context.
+
+### AacSentenceBar
+
+**File:** `components/custom/aac-sentence-bar.tsx`  
+**Status:** `'use client'` (Client Component)
+
+Sticky bar at the top of AAC pages that displays the current sentence being built.
+
+**Features:**
+- Persistent above content, below sidebar trigger on mobile
+- Displays word chips with auto-scrolling
+- Invisible tap-to-speak button behind chip strip (prevents nested-interactive violation)
+- Speak and Clear buttons
+- Responsive sizing with `sticky` positioning
+- `aria-live="polite"` for screen reader updates
+- Dark mode via Tailwind filter
+
+**Key Props:**
+- Consumes `AacSentenceContext` and `AacPreferencesContext` from layout
+- No props; purely context-driven
+
+### AacCategoryGrid
+
+**File:** `components/custom/aac-category-grid.tsx`  
+**Status:** `'use client'` (Client Component)
+
+Grid of 12 category tiles for navigating symbol libraries.
+
+**Features:**
+- 2-column mobile, 3-column tablet, 4-column desktop
+- Per-category colors from `CATEGORY_COLORS` map
+- Dark mode brightness/saturation filter: `dark:[filter:brightness(0.72)_saturate(1.1)]`
+- Lucide icons (32px) + `font-display` labels
+- Tap navigates to `/aac/[categorySlug]`
+- Touch targets: `min-h-[80px] aspect-square`
+- `aria-label` with category name
+
+**Returns:** Grid of `AacCategoryTile` sub-components
+
+### AacSymbolGrid
+
+**File:** `components/custom/aac-symbol-grid.tsx`  
+**Status:** `'use client'` (Client Component)
+
+Responsive grid of symbol cells with optional load-more pagination.
+
+**Features:**
+- Column count driven by `mobileGridColumns` preference (2/3/4)
+- Grid gap and padding per design spec
+- Lazy image loading (`loading="lazy"`)
+- Dark mode: `dark:invert` on symbol SVGs
+- **Pagination:** Shows 200 symbols initially, "Load more" button to fetch next batch
+- Renders via `AacSymbolCell` sub-components
+
+**Props:**
+- `symbols: AacSymbol[]` — filtered to category
+- `mobileGridColumns: 2 | 3 | 4` — from preferences
+- `onSymbolTap: (symbol: AacSymbol) => void` — tap handler
+
+**Behavior:**
+- Click symbol: calls `speak(symbol.label, preferences)` if `speakOnSymbolTap` is true
+- Long-press (500ms) shows tooltip with 96×96 image
+
+### AacSymbolCell
+
+Sub-component of `AacSymbolGrid`. Represents a single symbol.
+
+**Features:**
+- Touch target: `min-h-[72px] min-w-[72px]`
+- Label below/above/hidden per preference
+- Hover/active states with color transitions
+- `aria-label` on button
+- `alt` on image
+- Long-press tooltip on mobile (via `onTouchStart`/`onTouchEnd`)
+
+### AacPhraseGrid
+
+**File:** `components/custom/aac-phrase-grid.tsx`  
+**Status:** `'use client'` (Client Component)
+
+Grid of quick phrases, grouped by category.
+
+**Features:**
+- 2-column mobile, 3-column tablet responsive
+- Group headers (`col-span-full`)
+- Default phrases always shown (non-editable)
+- Custom phrase tiles with edit/delete overlays (caregiver-only)
+- Inline `AacPhraseTile` sub-components
+
+**Props:**
+- `phrases: AacPhrase[]` — custom phrases for current speaker
+- `editMode: boolean` — enables edit/delete overlays
+- `isCaregiver: boolean` — controls overlay visibility
+
+### AacPhraseTile
+
+Sub-component of `AacPhraseGrid`. Represents a single phrase.
+
+**Features:**
+- Touch target: `min-h-[80px]`
+- Background from phrase or secondary color default
+- Optional icon (emoji or lucide, 24px)
+- Dynamic font sizing: `text-base` (≤15 chars) or `text-sm` (>15 chars)
+- Click: `speak()` or `append` per `phraseTapBehavior`
+- Edit/delete overlay: semi-transparent scrim with pencil/trash icons
+- `aria-label` on button
+
+### AacSettingsForm
+
+**File:** `components/custom/aac-settings-form.tsx`  
+**Status:** `'use client'` (Client Component)
+
+Form with 8 settings controls for AAC customization.
+
+**Features:**
+- Caregiver-only (disabled if user is not speaker's parent)
+- Auto-save on change with 300ms debounce
+- Optimistic updates (no rollback on error, toast notification)
+- All controls at standard `h-11` (44px) touch target height
+
+**Controls:**
+1. **Voice** — Select from `useAvailableVoices()` hook (disabled while loading)
+2. **Speech Rate** — Slider 0.5–2.0 (step 0.1) with `min-h-[44px]`
+3. **Speech Pitch** — Slider 0.5–2.0 (step 0.1)
+4. **Speak on Tap** — Switch (justify-between layout)
+5. **Phrase Tap Behavior** — RadioGroup (speak / append)
+6. **Symbol Source** — Select (mulberry, arasaac, custom — only mulberry available currently)
+7. **Label Position** — RadioGroup (below, above, hidden)
+8. **Grid Columns** — Select (2, 3, or 4)
+
+**State:**
+- Consumes `AacPreferencesContext` from layout
+- Uses `useMutation` for auto-save
+- Shows caregiver notice if not authorized: "Only the caregiver can change these settings."
+
+**Fonts:**
+- `font-display` on section headings (h2, h3)
+- `font-sans` on labels and form controls
+
+---
+
+## Font-Display Usage
+
+Applied to these components for visual hierarchy:
+
+- `AacSentenceBar` — sentence text (large, bold)
+- `AacCategoryGrid` — category labels (h2 in tiles)
+- `AacSymbolGrid` — long-press tooltip labels (display font in 96×96 preview)
+- `AacPhraseTile` — phrase text (dynamic size)
+- `AppSidebar` — app name "VoiceBridge" in brand header
+- All page `<h1>` titles across app
+- Login/Register page headings and submit buttons
+
+Use `.font-display` Tailwind class.
+
+---
+
 ## Summary Table
 
 | Component | File | Status | Key Responsibility |
@@ -891,8 +1053,17 @@ No props.
 | VBSidebarTrigger | `sidebar-trigger.tsx` | Client | Mobile/collapsed sidebar trigger bar |
 | NoResultsComponent | `no-results-component.tsx` | Server | Empty state template |
 | LandingPage | `landing-page.tsx` | Server | Marketing homepage |
-| LoginCard | `login-card.tsx` | Client | Login redirect wrapper |
+| LoginForm | `login-form.tsx` | Client | Email/password + Google OAuth sign-in |
+| RegisterForm | `register-form.tsx` | Client | Email/password registration |
+| UserMenu | `user-menu.tsx` | Client | Account menu with sign-out |
 | ThemeSwitcher | `themeSwitcher.tsx` | Client | Light/dark/auto theme toggle |
+| AacSentenceBar | `aac-sentence-bar.tsx` | Client | Sticky word chip display + speak/clear |
+| AacCategoryGrid | `aac-category-grid.tsx` | Client | 12-tile symbol category grid |
+| AacSymbolGrid | `aac-symbol-grid.tsx` | Client | Filtered symbols with load-more pagination |
+| AacSymbolCell | (sub-component) | Client | Single symbol button + tooltip |
+| AacPhraseGrid | `aac-phrase-grid.tsx` | Client | Custom + default phrases grouped by category |
+| AacPhraseTile | (sub-component) | Client | Single phrase with edit/delete overlay |
+| AacSettingsForm | `aac-settings-form.tsx` | Client | 8 settings controls (voice, rate, pitch, etc.) |
 
 ---
 

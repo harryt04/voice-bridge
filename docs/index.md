@@ -10,17 +10,17 @@ Navigate to each section using the links below:
 
 | # | Document | Purpose |
 |---|----------|---------|
-| 01 | [Architecture](01-architecture.md) | System design, domain model, provider hierarchy, data flow |
+| 01 | [Architecture](01-architecture.md) | System design, domain model, provider hierarchy, AAC architecture, data flow |
 | 02 | [Directory Structure](02-directory-structure.md) | Project layout, file organization, folder purposes |
-| 03 | [Data Models](03-data-models.md) | Type definitions, database schemas, model patterns |
-| 04 | [API Routes](04-api-routes.md) | REST endpoints, request/response patterns, error handling |
-| 05 | [Components](05-components.md) | React components, UI library, component composition |
-| 06 | [Hooks and State](06-hooks-and-state.md) | React hooks, state management, context patterns |
-| 07 | [Database](07-database.md) | MongoDB patterns, collections, queries, indexes |
-| 08 | [Authentication](08-authentication.md) | Clerk auth, authorization, user roles, security |
-| 09 | [Styling](09-styling.md) | Tailwind CSS, theme system, design tokens |
-| 10 | [Utilities](10-utilities.md) | Helper functions, client utils, server utils |
-| 11 | [Conventions and Patterns](11-conventions-and-patterns.md) | Naming conventions, import ordering, common recipes |
+| 03 | [Data Models](03-data-models.md) | Type definitions, database schemas, model patterns, AAC types |
+| 04 | [API Routes](04-api-routes.md) | REST endpoints, request/response patterns, error handling, AAC routes |
+| 05 | [Components](05-components.md) | React components, UI library, component composition, AAC components |
+| 06 | [Hooks and State](06-hooks-and-state.md) | React hooks, state management, context patterns, AAC contexts |
+| 07 | [Database](07-database.md) | MongoDB patterns, collections, queries, indexes, AAC collections |
+| 08 | [Authentication](08-authentication.md) | better-auth, authorization, user roles, AAC authorization, security |
+| 09 | [Styling](09-styling.md) | Tailwind CSS, theme system, design tokens, dark mode |
+| 10 | [Utilities](10-utilities.md) | Helper functions, client utils, server utils, AAC utilities |
+| 11 | [Conventions and Patterns](11-conventions-and-patterns.md) | Naming conventions, import ordering, common recipes, AAC patterns |
 
 ---
 
@@ -29,17 +29,19 @@ Navigate to each section using the links below:
 ### Technology Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 18
+- **UI Library**: React 18 (with shadcn/ui components)
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
-- **Authentication**: better-auth
-- **Styling**: Tailwind CSS 3.4
+- **Authentication**: better-auth (session-based, Google OAuth)
+- **Styling**: Tailwind CSS 3.4 + CSS variables
 - **State Management**: TanStack React Query + React Context
-- **Forms**: react-hook-form + zod
+- **Forms**: react-hook-form + zod validation
 - **Analytics**: PostHog
 - **Icons**: lucide-react
-- **Notifications**: sonner
-- **Theme**: next-themes
+- **Notifications**: sonner (toast)
+- **Theme**: next-themes (dark/light mode)
+- **AAC**: Custom Symbol Provider abstraction (Mulberry, extensible)
+- **Speech**: Web Speech API (TTS utility)
 - **Package Manager**: npm
 
 ### Key File Locations
@@ -63,11 +65,12 @@ Navigate to each section using the links below:
 |------|---------|
 | `next.config.ts` | Next.js configuration (image patterns, redirects) |
 | `tsconfig.json` | TypeScript configuration (strict mode, path aliases) |
-| `tailwind.config.ts` | Tailwind CSS configuration (colors, spacing, fonts) |
+| `tailwind.config.ts` | Tailwind CSS config (colors, spacing, fonts, font-display) |
 | `.eslintrc.json` | ESLint rules and exceptions |
 | `.prettierrc` | Prettier formatting rules (no semicolons, trailing commas) |
 | `package.json` | Dependencies and scripts |
-| `.env.sample` | Environment variables template |
+| `.env.sample` | Environment variables template (better-auth, Google OAuth, MongoDB) |
+| `gulpfile.ts` | MongoDB index creation and utility tasks |
 
 ---
 
@@ -412,10 +415,11 @@ Should output a valid MongoDB URI. Check `.env.local` file.
 
 ### API Returns 401 Unauthorized
 
-User not authenticated. Verify:
-1. User is logged in (check Clerk dashboard)
-2. Request includes auth headers (automatic with Clerk middleware)
-3. API route calls `currentUser()`
+User not authenticated or session expired. Verify:
+1. User is logged in (check browser network tab for session cookie)
+2. Request includes auth headers (automatic via better-auth middleware)
+3. API route calls `auth.api.getSession({ headers: req.headers })`
+4. For AAC routes, verify user has required permission level (caregiver for mutations, any for reads)
 
 **See:** [08: Authentication](08-authentication.md)
 

@@ -448,6 +448,100 @@ This is automatically handled; no changes required for typical development.
 
 ---
 
+## Font Configuration
+
+### Font Stack
+
+VoiceBridge uses two font families:
+
+**Body Text (Default):** Inter (sans-serif)
+- Used for: Input labels, button text, form controls, navigation items, symbol cell labels
+- Imported in `app/layout.tsx` as `FontSans`
+- Applied to body via `${fontSans.variable}`
+
+**Display/Headings:** Outfit (sans-serif)
+- Used for: Page titles, sidebar brand, section headings, AAC category labels, phrase tiles
+- Imported in `app/layout.tsx` as `FontDisplay`
+- Applied to body via `${fontDisplay.variable}`
+- Activated via Tailwind class `font-display`
+
+### Outfit Font Configuration
+
+**File:** `app/layout.tsx`
+
+```typescript
+import { Outfit as FontDisplay } from 'next/font/google'
+
+const fontDisplay = FontDisplay({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['400', '600', '700'],
+})
+```
+
+**Tailwind config integration:**
+
+```typescript
+// tailwind.config.ts
+theme: {
+  extend: {
+    fontFamily: {
+      display: ['var(--font-display)', ...fontFamily.sans],
+    },
+  },
+}
+```
+
+### Using font-display Class
+
+Apply `font-display` Tailwind class to any element that should use Outfit:
+
+```jsx
+// Page titles
+<h1 className="font-display text-2xl font-semibold">AAC Board</h1>
+
+// Sidebar brand
+<div className="font-display font-bold text-xl text-sidebar-primary">VoiceBridge</div>
+
+// Section headings
+<h2 className="font-display text-lg font-semibold">Quick Phrases</h2>
+
+// AAC category tiles
+<div className="font-display text-base font-semibold">{category.label}</div>
+
+// Phrase tiles
+<button className={cn('font-display font-semibold', fontSizeClass)}>
+  {phrase.text}
+</button>
+
+// Login/register page headings
+<h1 className="font-display text-3xl font-bold">Sign In</h1>
+```
+
+### Where to Apply font-display
+
+**Always use `font-display` for:**
+- All page `<h1>` titles
+- Section `<h2>` headings
+- Sidebar brand/logo text
+- AAC category labels (grid tiles)
+- AAC phrase text (quick phrases)
+- Login/register page titles
+- Important action button text (if high-prominence)
+
+**Never use `font-display` for:**
+- Form input labels (use default Inter)
+- Button text in standard buttons (use default Inter)
+- Navigation menu items (use default Inter)
+- Help text or smaller labels (use default Inter)
+- Symbol cell labels (use default Inter)
+
+### Dark Mode
+
+Both Inter and Outfit fonts render correctly in dark mode with no additional configuration. The fonts adapt to system/user preference automatically via `next-themes`.
+
+---
+
 ## Summary for Agents
 
 When working with VoiceBridge styling:
