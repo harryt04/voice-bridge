@@ -188,10 +188,6 @@ Before submitting your PR, ensure:
    npx gulp create-indexes
    ```
 
-## Migration Note: Upgrading from Clerk
-
-**Existing self-hosted instances using Clerk will need to re-create speaker profiles after upgrading.** User IDs change from Clerk to better-auth. No automatic migration is performed. Fresh installations start with a clean database. For details, see [Authentication](docs/08-authentication.md) in the documentation.
-
 ## Code Style
 
 - **No semicolons**, single quotes, trailing commas enforced via Prettier
