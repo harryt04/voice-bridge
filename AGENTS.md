@@ -33,18 +33,19 @@ npm run build        # Production build (next build) — also serves as the type
 npm run start        # Start production server
 npm run lint         # ESLint via next lint
 npm run prettify     # Format all files with Prettier (prettier --write .)
+npm run prep         # Alias for prettify — run before opening a PR
+npm run ci           # PR merge gate: format check + lint + build + test (non-mutating)
 npx gulp create-indexes  # Create MongoDB indexes (requires DB connection)
 ```
 
-There is **no test framework** configured. No jest, vitest, or any test runner exists.
-No `*.test.*` or `*.spec.*` files are present. `/coverage` is gitignored for future use.
-
-To verify changes, run:
+To verify changes before opening a PR, run:
 
 ```bash
-npm run build        # Catches TypeScript errors and build issues
-npm run lint         # Catches ESLint violations
+npm run ci           # Runs everything CI runs: format check, lint, build, test
 ```
+
+`npm run ci` is also run automatically on every pull request into `master` via
+[.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ## Project Structure
 

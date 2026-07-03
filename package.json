@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "prettify": "prettier --write .",
-    "ci": "prettier --write .; npm run build; npm run test",
+    "prep": "prettier --write .",
+    "ci": "prettier --check . && npm run lint && npm run build && npm run test",
     "test": "vitest run",
     "test:watch": "vitest"
   },

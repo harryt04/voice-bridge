@@ -120,13 +120,15 @@ npm run lint         # Checks for ESLint violations
 npm run dev          # Test locally in browser
 ```
 
-**Before opening a PR**, run the complete validation suite to ensure your branch is ready to merge:
+**Before opening a PR**, format your changes and run the complete validation suite:
 
 ```bash
-npm run ci           # Runs all checks: format, lint, and build
+npm run prep          # Formats your changes with Prettier (prettier --write .)
+npm run ci             # Runs all checks: format check, lint, build, and test
 ```
 
-This command prepares and validates your changes comprehensively, catching any formatting, linting, or TypeScript issues before you push.
+`npm run ci` is non-mutating and is the same command GitHub Actions runs on every
+pull request into `master`, so a clean local run means the PR check will pass too.
 
 ### 4. Commit Your Work
 
