@@ -146,7 +146,7 @@ function AacSymbolCell({
 
             {imgError ? (
               <ImageOff
-                className="aspect-square w-full text-muted-foreground/50"
+                className="aspect-square w-full text-muted-foreground/70"
                 strokeWidth={1.5}
               />
             ) : (
@@ -179,7 +179,7 @@ function AacSymbolCell({
             <div className="flex flex-col items-center gap-2">
               {imgError ? (
                 <ImageOff
-                  className="h-24 w-24 text-muted-foreground/50"
+                  className="h-24 w-24 text-muted-foreground/70"
                   strokeWidth={1.5}
                 />
               ) : (

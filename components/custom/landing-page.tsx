@@ -73,10 +73,7 @@ function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section
-          id="features"
-          className="w-full bg-slate-50/50 py-12 dark:bg-transparent lg:py-24"
-        >
+        <section id="features" className="w-full bg-muted/50 py-12 lg:py-24">
           <div className="container space-y-6">
             <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
               <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">

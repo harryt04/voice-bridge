@@ -11,8 +11,6 @@ import { useSession } from '@/lib/auth-client'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { NoResultsComponent } from '@/components/custom/no-results-component'
 import { Input } from '@/components/ui/input'
-import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
-import { useSidebar } from '@/components/ui/sidebar'
 import { useRouter } from 'next/navigation'
 
 export default function Places() {
@@ -22,7 +20,6 @@ export default function Places() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const { open, isMobile } = useSidebar()
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -105,7 +102,7 @@ export default function Places() {
     }
 
     if (error) {
-      return <p className="text-red-500">{error}</p>
+      return <p className="text-destructive">{error}</p>
     }
 
     if (places.length === 0) {
@@ -152,10 +149,7 @@ export default function Places() {
 
   return (
     <>
-      <VBSidebarTrigger title={'Places'} />
-      <div
-        className={`flex w-full flex-col ${!open || isMobile ? 'mt-20' : ''}`}
-      >
+      <div className="flex w-full flex-col">
         <div className="flex w-full flex-col items-center justify-center gap-4 px-4 pt-8 md:flex-row md:gap-6">
           {places.length > 0 && (
             <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">

@@ -5,6 +5,7 @@ import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AuthGatedSidebar } from '@/components/custom/auth-gated-sidebar'
+import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 import { VBQueryClient } from '@/hooks/use-query-client'
 import { Toaster } from 'sonner'
 
@@ -22,7 +23,10 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
           <SidebarProvider>
             <VBQueryClient>
               <AuthGatedSidebar />
-              <SidebarInset>{children}</SidebarInset>
+              <SidebarInset>
+                <VBSidebarTrigger />
+                {children}
+              </SidebarInset>
               <Toaster />
             </VBQueryClient>
           </SidebarProvider>
