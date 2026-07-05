@@ -60,7 +60,7 @@ lib/                    # Core utilities: mongo-client, mongo-utils, posthog-ser
 models/                 # TypeScript type definitions with barrel export (models/index.ts)
 providers/              # React context providers (PostHog, theme)
 utils/                  # Client-side utilities (directions, imageUtils, speech)
-public/                 # Static assets
+public/                 # Static assets (favicon/PWA icons + site.webmanifest live at the root)
 ```
 
 ## Code Style
