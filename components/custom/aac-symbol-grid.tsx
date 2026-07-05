@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useContext, useCallback, useRef } from 'react'
+import Image from 'next/image'
 import { AacPreferencesContext } from '@/app/aac/layout'
 import { speak } from '@/utils/aac-speech'
 import type { AacSymbol } from '@/lib/aac/symbol-provider'
@@ -149,13 +150,17 @@ function AacSymbolCell({
                 strokeWidth={1.5}
               />
             ) : (
-              <img
-                src={symbol.imageUrl}
-                alt={symbol.label}
-                loading="lazy"
-                onError={() => setImgError(true)}
-                className="aspect-square w-full object-contain dark:invert"
-              />
+              <div className="relative aspect-square w-full">
+                <Image
+                  src={symbol.imageUrl}
+                  alt={symbol.label}
+                  fill
+                  loading="lazy"
+                  onError={() => setImgError(true)}
+                  className="object-contain dark:invert"
+                  sizes="(max-width: 768px) 15vw, 80px"
+                />
+              </div>
             )}
 
             {labelPosition === 'below' && showLabel && (
@@ -178,9 +183,11 @@ function AacSymbolCell({
                   strokeWidth={1.5}
                 />
               ) : (
-                <img
+                <Image
                   src={symbol.imageUrl}
                   alt={symbol.label}
+                  width={96}
+                  height={96}
                   className="h-24 w-24 object-contain dark:invert"
                 />
               )}

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useContext, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import { AacSentenceContext, AacPreferencesContext } from '@/app/aac/layout'
 import { speak } from '@/utils/aac-speech'
 import { Button } from '@/components/ui/button'
@@ -78,9 +79,11 @@ export function AacSentenceBar() {
                 key={word.id}
                 className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-2 py-1 text-primary-foreground duration-150 animate-in fade-in slide-in-from-right-2"
               >
-                <img
+                <Image
                   src={word.imageUrl}
                   alt={word.label}
+                  width={24}
+                  height={24}
                   className="h-6 w-6 rounded-sm object-contain"
                 />
                 <span className="font-sans text-base font-medium">
