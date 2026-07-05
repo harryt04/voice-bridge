@@ -6,6 +6,7 @@ import { speak } from '@/utils/aac-speech'
 import { getPhraseTailwindClass } from '@/utils/aac-phrase-text-size'
 import { DEFAULT_PHRASES } from '@/lib/aac/default-phrases'
 import { AAC_CATEGORIES } from '@/lib/aac/symbol-provider'
+import { getReadableTextColor } from '@/lib/aac/color-utils'
 import type { AacPhrase } from '@/models'
 import { Button } from '@/components/ui/button'
 import {
@@ -178,6 +179,9 @@ function AacPhraseTile({
 
   const fontSizeClass = getPhraseTailwindClass(phrase.text)
   const bgColor = phrase.backgroundColor || 'hsl(var(--secondary))'
+  const customTextColor = phrase.backgroundColor
+    ? getReadableTextColor(phrase.backgroundColor)
+    : undefined
 
   return (
     <>
@@ -200,6 +204,7 @@ function AacPhraseTile({
             'text-center font-display font-semibold leading-snug',
             fontSizeClass,
           )}
+          style={customTextColor ? { color: customTextColor } : undefined}
         >
           {phrase.text}
         </span>

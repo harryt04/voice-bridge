@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from '@/lib/auth-client'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { useAacPreferences } from '@/hooks/use-aac-preferences'
+import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 import type { AacUserPreferences } from '@/models'
 
 /**
@@ -118,6 +119,7 @@ export default function AacLayout({ children }: { children: React.ReactNode }) {
   return (
     <AacSentenceContext.Provider value={sentenceContextValue}>
       <AacPreferencesContext.Provider value={preferencesContextValue}>
+        <VBSidebarTrigger />
         {/* AacSentenceBar intentionally not rendered: symbol taps don't call addWord yet,
             so the bar is permanently empty. Wire it up (see aac-phrase-grid.tsx for the
             pattern) before re-enabling. */}

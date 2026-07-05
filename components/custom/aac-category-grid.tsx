@@ -15,8 +15,8 @@ import * as LucideIcons from 'lucide-react'
  * Dark mode: brightness filter via Tailwind dark: variant
  */
 export function AacCategoryGrid() {
-  const { theme } = useTheme()
-  const isDark = theme === 'dark'
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
 
   return (
     <div className="flex flex-wrap justify-center gap-4 p-4">
@@ -45,12 +45,10 @@ function AacCategoryTile({ category, isDark = false }: AacCategoryTileProps) {
   return (
     <Link href={`/aac/${category.slug}`} className="shrink-0">
       <button
-        className={`flex h-32 w-32 shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all duration-150 hover:shadow-md active:scale-[0.97] sm:h-36 sm:w-36 lg:h-40 lg:w-40 ${
-          isDark ? 'dark:[filter:brightness(0.72)_saturate(1.1)]' : ''
-        }`}
+        className="flex h-32 w-32 shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all duration-150 hover:shadow-md active:scale-[0.97] sm:h-36 sm:w-36 lg:h-40 lg:w-40"
         style={{
-          backgroundColor: colors.bg,
-          color: colors.fg,
+          backgroundColor: isDark ? colors.darkBg : colors.bg,
+          color: isDark ? colors.darkFg : colors.fg,
         }}
         aria-label={`${category.label} category`}
       >

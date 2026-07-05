@@ -93,7 +93,7 @@ export const ItemComponent = ({
       </CardHeader>
       <CardContent>
         {imageError && (
-          <div className="flex h-[300px] w-[300px] items-center justify-center bg-gray-200 text-gray-500">
+          <div className="flex h-[300px] w-[300px] items-center justify-center bg-muted text-muted-foreground">
             Image not available
           </div>
         )}
