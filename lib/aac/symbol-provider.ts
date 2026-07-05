@@ -6,7 +6,7 @@
  * composable at runtime via the SymbolProvider interface.
  */
 
-export type SymbolSource = 'mulberry' | 'arasaac' | 'custom'
+export type SymbolSource = 'mulberry' | 'arasaac' | 'custom' | 'opensymbols'
 
 export type AacSymbol = {
   id: string
@@ -26,12 +26,16 @@ export type AacCategory = {
 export interface SymbolProvider {
   getCategories(): AacCategory[]
   getSymbolsByCategory(categorySlug: string): AacSymbol[]
-  searchSymbols(query: string): AacSymbol[] // Implemented for interface contract; no UI consumer in this epic
+  // Network-backed providers (e.g. OpenSymbols) resolve this asynchronously;
+  // callers should always `await` the result.
+  searchSymbols(query: string): AacSymbol[] | Promise<AacSymbol[]>
 }
 
 /**
- * 12 AAC categories with display labels and lucide icon names.
- * Used by all symbol providers and the category grid component.
+ * 23 AAC categories with display labels and lucide icon names.
+ * Used by all symbol providers, the category grid component, and phrase
+ * category grouping (phrase categories and symbol categories share this
+ * one taxonomy).
  */
 export const AAC_CATEGORIES: AacCategory[] = [
   { slug: 'core', label: 'Core Words', icon: 'Star' },
@@ -46,4 +50,15 @@ export const AAC_CATEGORIES: AacCategory[] = [
   { slug: 'body', label: 'Body', icon: 'PersonStanding' },
   { slug: 'time', label: 'Time', icon: 'Clock' },
   { slug: 'questions', label: 'Questions', icon: 'HelpCircle' },
+  { slug: 'needs', label: 'Needs', icon: 'HandHelping' },
+  { slug: 'emergency', label: 'Emergency', icon: 'AlertTriangle' },
+  { slug: 'rejecting', label: 'Rejecting', icon: 'XCircle' },
+  { slug: 'directing', label: 'Directing', icon: 'ArrowRight' },
+  { slug: 'mealtime', label: 'Mealtime', icon: 'Utensils' },
+  { slug: 'school', label: 'School', icon: 'GraduationCap' },
+  { slug: 'community', label: 'Community', icon: 'Building2' },
+  { slug: 'play', label: 'Play', icon: 'Gamepad2' },
+  { slug: 'home', label: 'Home', icon: 'Home' },
+  { slug: 'choices', label: 'Choices', icon: 'ListChecks' },
+  { slug: 'conversation', label: 'Conversation', icon: 'MessagesSquare' },
 ]

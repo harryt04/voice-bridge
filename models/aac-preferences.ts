@@ -1,4 +1,4 @@
-export type SymbolSource = 'mulberry' | 'arasaac' | 'custom'
+export type SymbolSource = 'mulberry' | 'arasaac' | 'custom' | 'opensymbols'
 
 export type AacUserPreferences = {
   _id: string

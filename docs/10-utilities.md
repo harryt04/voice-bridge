@@ -1007,7 +1007,7 @@ export const mulberryProvider = new MulberrySymbolProvider()
 ### Methods
 
 **getCategories():**
-- Returns all 12 AAC categories
+- Returns all AAC categories (23, defined in `AAC_CATEGORIES`)
 - No parameters
 - Returns `AacCategory[]` with slug, label, icon name
 
@@ -1044,6 +1044,66 @@ const categories = mulberryProvider.getCategories()
 
 ---
 
+## OpenSymbols Provider & Provider Factory
+
+**Files:** `lib/aac/opensymbols-provider.ts`, `lib/aac/symbol-provider-factory.ts`
+
+**Availability:** `OpenSymbolsProvider.searchSymbols()` is client-side but
+calls a server-side proxy route (`/api/aac/symbols/search`) — it never talks
+to the OpenSymbols API directly, since that requires a shared secret. See
+[12: OpenSymbols API Integration](12-opensymbols-api.md) for the full
+contract.
+
+### Signature
+
+```typescript
+class OpenSymbolsProvider implements SymbolProvider {
+  getCategories(): AacCategory[] // reuses AAC_CATEGORIES
+  getSymbolsByCategory(categorySlug: string): AacSymbol[] // always []
+  searchSymbols(query: string): Promise<AacSymbol[]>
+}
+
+export const openSymbolsProvider = new OpenSymbolsProvider()
+
+function getSymbolProvider(source: SymbolSource): SymbolProvider
+```
+
+### Methods
+
+**getSymbolsByCategory(categorySlug):**
+- Always returns `[]` — OpenSymbols has no slug-based category filter
+  equivalent to `AAC_CATEGORIES`, and this method must stay synchronous per
+  the shared `SymbolProvider` interface. Use `searchSymbols()` for real
+  results.
+
+**searchSymbols(query):**
+- Fetches `/api/aac/symbols/search?q=<query>` (same-origin, no secret
+  exposed to the client)
+- Returns `Promise<AacSymbol[]>` — note `SymbolProvider.searchSymbols()`'s
+  return type is `AacSymbol[] | Promise<AacSymbol[]>` precisely to
+  accommodate this; callers should always `await` it
+- Returns `[]` if the proxy route errors
+
+**getSymbolProvider(source):**
+- Resolves the right `SymbolProvider` for an `AacUserPreferences.symbolSource`
+  value: `'opensymbols'` → `openSymbolsProvider`, everything else
+  (`'mulberry'`, `'arasaac'`, `'custom'`) → `mulberryProvider` (`'arasaac'`
+  and `'custom'` have no dedicated implementation yet)
+- Used by `app/aac/[categorySlug]/page.tsx` to make the Settings page's
+  "Symbol Set" selector actually take effect
+
+### Usage
+
+```typescript
+import { getSymbolProvider } from '@/lib/aac/symbol-provider-factory'
+
+const provider = getSymbolProvider(preferences.symbolSource)
+const categorySymbols = provider.getSymbolsByCategory('core')
+const searchResults = await provider.searchSymbols('happy')
+```
+
+---
+
 # Summary Table
 
 ## Server-Side Utilities (lib/)
@@ -1074,6 +1134,8 @@ const categories = mulberryProvider.getCategories()
 | `mulberryProvider.getCategories()` | `lib/aac/mulberry-provider.ts` | Get all symbol categories | `AacCategory[]`  |
 | `mulberryProvider.getSymbolsByCategory()` | `lib/aac/mulberry-provider.ts` | Get symbols by category | `AacSymbol[]` |
 | `mulberryProvider.searchSymbols()` | `lib/aac/mulberry-provider.ts` | Search symbols | `AacSymbol[]` |
+| `openSymbolsProvider.searchSymbols()` | `lib/aac/opensymbols-provider.ts` | Search OpenSymbols via server proxy | `Promise<AacSymbol[]>` |
+| `getSymbolProvider()` | `lib/aac/symbol-provider-factory.ts` | Resolve provider for a `symbolSource` | `SymbolProvider` |
 
 ---
 

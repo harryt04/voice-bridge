@@ -25,7 +25,7 @@ export const AacPreferencesInputSchema = z.object({
     .max(2, 'Speech pitch must be at most 2'),
   speakOnSymbolTap: z.boolean(),
   phraseTapBehavior: z.enum(['speak', 'append']),
-  symbolSource: z.enum(['mulberry', 'arasaac', 'custom']),
+  symbolSource: z.enum(['mulberry', 'arasaac', 'custom', 'opensymbols']),
   symbolLabelPosition: z.enum(['below', 'above', 'hidden']),
   mobileGridColumns: z
     .enum(['2', '3', '4'])

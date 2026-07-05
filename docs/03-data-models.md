@@ -290,10 +290,13 @@ Represents AAC settings for a speaker (voice, speech rate, grid layout, etc.).
 #### SymbolSource
 
 ```ts
-type SymbolSource = 'mulberry' | 'arasaac' | 'custom'
+type SymbolSource = 'mulberry' | 'arasaac' | 'custom' | 'opensymbols'
 ```
 
-Currently only `'mulberry'` is implemented. Future: ARASAAC REST API bridge and custom cards integration.
+`'mulberry'` and `'opensymbols'` are implemented (see
+[OpenSymbols API Integration](12-opensymbols-api.md)). `'arasaac'` and
+`'custom'` are not yet implemented and currently fall back to Mulberry via
+`getSymbolProvider()` in `lib/aac/symbol-provider-factory.ts`.
 
 #### AacUserPreferencesInput
 
@@ -305,7 +308,7 @@ type AacUserPreferencesInput = {
   speechPitch: number            // Required: 0.5–2.0 (default 1)
   speakOnSymbolTap: boolean      // Required: whether symbols auto-speak on tap (default true)
   phraseTapBehavior: 'speak' | 'append'  // Required: 'speak' to speak phrase, 'append' to add to sentence bar
-  symbolSource: SymbolSource     // Required: 'mulberry', 'arasaac', or 'custom'
+  symbolSource: SymbolSource     // Required: 'mulberry', 'arasaac', 'custom', or 'opensymbols'
   symbolLabelPosition: 'below' | 'above' | 'hidden'  // Required: where to show symbol text
   mobileGridColumns: 2 | 3 | 4   // Required: grid columns on mobile (2, 3, or 4)
 }
@@ -344,15 +347,18 @@ type AacSymbol = {
   label: string                  // Display text (e.g., 'want', 'happy')
   imageUrl: string               // Absolute URL or /public path to SVG
   category: string               // Category slug (e.g., 'core', 'feelings')
-  source: SymbolSource           // 'mulberry', 'arasaac', 'custom'
+  source: SymbolSource           // 'mulberry', 'arasaac', 'custom', 'opensymbols'
   tags?: string[]                // Optional: search tags
 }
 ```
 
 **Notes:**
-- Not stored in MongoDB; loaded from static JSON (`lib/aac/mulberry-symbols.json`)
+- Not stored in MongoDB; Mulberry symbols are loaded from static JSON
+  (`lib/aac/mulberry-symbols.json`), OpenSymbols results come from a live
+  API call (see [12: OpenSymbols API Integration](12-opensymbols-api.md))
 - Used by symbol grids and search utilities
-- 12 categories defined in `AAC_CATEGORIES` constant
+- 23 categories defined in `AAC_CATEGORIES` constant (12 original symbol
+  categories + 11 scenario categories shared with phrase categories)
 
 ---
 

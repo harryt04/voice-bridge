@@ -6,9 +6,8 @@ describe('MulberrySymbolProvider', () => {
   const provider = new MulberrySymbolProvider()
 
   describe('getCategories', () => {
-    it('returns all 12 AAC categories', () => {
+    it('returns all AAC categories', () => {
       const categories = provider.getCategories()
-      expect(categories).toHaveLength(12)
       expect(categories).toEqual(AAC_CATEGORIES)
     })
 

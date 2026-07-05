@@ -5,6 +5,7 @@ import { AacPreferencesContext, AacSentenceContext } from '@/app/aac/layout'
 import { speak } from '@/utils/aac-speech'
 import { getPhraseTailwindClass } from '@/utils/aac-phrase-text-size'
 import { DEFAULT_PHRASES } from '@/lib/aac/default-phrases'
+import { AAC_CATEGORIES } from '@/lib/aac/symbol-provider'
 import type { AacPhrase } from '@/models'
 import { Button } from '@/components/ui/button'
 import {
@@ -85,7 +86,8 @@ export function AacPhraseGrid({
           {/* Category header */}
           <div className="col-span-full pt-2">
             <p className="font-sans text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              {category}
+              {AAC_CATEGORIES.find((c) => c.slug === category)?.label ??
+                category}
             </p>
           </div>
 

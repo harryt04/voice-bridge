@@ -838,7 +838,7 @@ Invalid ObjectIds return `400 Bad Request`.
 - `speechPitch`: 0.5–2.0, required
 - `speakOnSymbolTap`: boolean, required
 - `phraseTapBehavior`: 'speak' | 'append', required
-- `symbolSource`: 'mulberry' | 'arasaac' | 'custom', required
+- `symbolSource`: 'mulberry' | 'arasaac' | 'custom' | 'opensymbols', required
 - `symbolLabelPosition`: 'below' | 'above' | 'hidden', required
 - `mobileGridColumns`: 2 | 3 | 4, required
 - `voiceName`: string, optional
@@ -846,3 +846,24 @@ Invalid ObjectIds return `400 Bad Request`.
 **Behavior:**
 - Uses MongoDB `findOneAndUpdate({ upsert: true })` on `speakerId`
 - Server sets `updatedAt` to current time; client value ignored
+
+### GET /api/aac/symbols/search?q=<term>
+
+Server-side proxy for the third-party OpenSymbols API — never calls it from
+the client, since it requires a shared secret (`OPENSYMBOLS_API_SECRET`).
+See [12: OpenSymbols API Integration](12-opensymbols-api.md) for the full
+contract and caching design.
+
+**Auth:** Requires a session (`auth.api.getSession`); no speaker scoping —
+this is symbol search, not per-speaker data.
+
+**Query params:**
+- `q` — required, search term
+
+**Response:** `AacSymbol[]` (same shape used by every `SymbolProvider`)
+
+**Status Codes:**
+- `200` — Success (may be an empty array)
+- `400` — Missing `q` parameter
+- `401` — Unauthorized (no session)
+- `500` — OpenSymbols API error or misconfigured `OPENSYMBOLS_API_SECRET`

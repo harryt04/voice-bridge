@@ -594,7 +594,7 @@ Stores per-speaker AAC settings (voice, speech rate, grid layout, etc.).
   speechPitch: number,                          // 0.5-2.0 (default 1)
   speakOnSymbolTap: boolean,                    // Auto-speak on symbol tap
   phraseTapBehavior: 'speak' | 'append',       // How phrases are used
-  symbolSource: 'mulberry' | 'arasaac' | 'custom', // Symbol provider
+  symbolSource: 'mulberry' | 'arasaac' | 'custom' | 'opensymbols', // Symbol provider
   symbolLabelPosition: 'below' | 'above' | 'hidden', // Label placement
   mobileGridColumns: 2 | 3 | 4,                 // Grid column count
   updatedAt: Date,                              // Server-set on upsert

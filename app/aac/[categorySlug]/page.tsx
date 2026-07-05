@@ -4,10 +4,10 @@ import { use, useContext, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { AacSymbolGrid } from '@/components/custom/aac-symbol-grid'
+import { AacSymbolSearch } from '@/components/custom/aac-symbol-search'
 import { useSpeakerContext } from '@/hooks/use-speakers'
 import { AAC_CATEGORIES } from '@/lib/aac/symbol-provider'
-import { mulberryProvider } from '@/lib/aac/mulberry-provider'
+import { getSymbolProvider } from '@/lib/aac/symbol-provider-factory'
 import {
   AacPreferencesContext,
   type AacPreferencesContextValue,
@@ -44,10 +44,15 @@ export default function AacCategoryPage({
   // Safely extract preferences from context
   const preferences = preferencesContextValue?.preferences
 
+  const provider = useMemo(
+    () => getSymbolProvider(preferences?.symbolSource ?? 'mulberry'),
+    [preferences?.symbolSource],
+  )
+
   // Fetch symbols for this category (useMemo to avoid re-fetching)
   const symbols = useMemo(() => {
-    return mulberryProvider.getSymbolsByCategory(categorySlug)
-  }, [categorySlug])
+    return provider.getSymbolsByCategory(categorySlug)
+  }, [provider, categorySlug])
 
   if (!category) {
     return (
@@ -77,9 +82,9 @@ export default function AacCategoryPage({
         </h1>
       </div>
 
-      {/* Symbol grid - component from WU-3-F */}
+      {/* Symbol search + grid - component from WU-3-F */}
       <div className="flex-1 overflow-y-auto">
-        <AacSymbolGrid symbols={symbols} />
+        <AacSymbolSearch provider={provider} categorySymbols={symbols} />
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { DEFAULT_PHRASES } from './default-phrases'
+import { AAC_CATEGORIES } from './symbol-provider'
 
 describe('DEFAULT_PHRASES', () => {
-  it('contains exactly 18 phrases', () => {
-    expect(DEFAULT_PHRASES).toHaveLength(18)
+  it('contains exactly 152 phrases', () => {
+    expect(DEFAULT_PHRASES).toHaveLength(152)
   })
 
   it('all phrases have non-empty text', () => {
@@ -28,32 +29,38 @@ describe('DEFAULT_PHRASES', () => {
     expect(uniqueTexts.size).toBe(texts.length)
   })
 
-  it('contains phrases from multiple categories', () => {
+  it('contains phrases from 15 categories', () => {
     const categories = new Set(DEFAULT_PHRASES.map((p) => p.category))
-    expect(categories.size).toBeGreaterThan(1)
+    expect(categories.size).toBe(15)
   })
 
-  it('includes social phrases', () => {
-    const socialPhrases = DEFAULT_PHRASES.filter((p) => p.category === 'Social')
-    expect(socialPhrases.length).toBeGreaterThan(0)
+  it('every phrase category is a valid AAC_CATEGORIES slug', () => {
+    const validSlugs = new Set(AAC_CATEGORIES.map((c) => c.slug))
+    DEFAULT_PHRASES.forEach((phrase) => {
+      expect(validSlugs.has(phrase.category)).toBe(true)
+    })
   })
 
-  it('includes needs phrases', () => {
-    const needsPhrases = DEFAULT_PHRASES.filter((p) => p.category === 'Needs')
-    expect(needsPhrases.length).toBeGreaterThan(0)
-  })
+  const expectedCategories = [
+    'social',
+    'needs',
+    'rejecting',
+    'feelings',
+    'questions',
+    'describing',
+    'directing',
+    'mealtime',
+    'school',
+    'community',
+    'emergency',
+    'play',
+    'home',
+    'choices',
+    'conversation',
+  ]
 
-  it('includes feelings phrases', () => {
-    const feelingsPhrases = DEFAULT_PHRASES.filter(
-      (p) => p.category === 'Feelings',
-    )
-    expect(feelingsPhrases.length).toBeGreaterThan(0)
-  })
-
-  it('includes emergency phrases', () => {
-    const emergencyPhrases = DEFAULT_PHRASES.filter(
-      (p) => p.category === 'Emergency',
-    )
-    expect(emergencyPhrases.length).toBeGreaterThan(0)
+  it.each(expectedCategories)('includes %s phrases', (category) => {
+    const phrases = DEFAULT_PHRASES.filter((p) => p.category === category)
+    expect(phrases.length).toBeGreaterThan(0)
   })
 })

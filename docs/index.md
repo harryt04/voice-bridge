@@ -21,6 +21,7 @@ Navigate to each section using the links below:
 | 09 | [Styling](09-styling.md) | Tailwind CSS, theme system, design tokens, dark mode |
 | 10 | [Utilities](10-utilities.md) | Helper functions, client utils, server utils, AAC utilities |
 | 11 | [Conventions and Patterns](11-conventions-and-patterns.md) | Naming conventions, import ordering, common recipes, AAC patterns |
+| 12 | [OpenSymbols API Integration](12-opensymbols-api.md) | Third-party OpenSymbols API contract, auth flow, caching strategy |
 
 ---
 
@@ -69,7 +70,7 @@ Navigate to each section using the links below:
 | `.eslintrc.json` | ESLint rules and exceptions |
 | `.prettierrc` | Prettier formatting rules (no semicolons, trailing commas) |
 | `package.json` | Dependencies and scripts |
-| `.env.sample` | Environment variables template (better-auth, Google OAuth, MongoDB) |
+| `.env.sample` | Environment variables template (better-auth, Google OAuth, MongoDB, OpenSymbols) |
 | `gulpfile.ts` | MongoDB index creation and utility tasks |
 
 ---

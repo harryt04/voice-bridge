@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { CATEGORY_COLORS } from './category-colors'
 
 describe('CATEGORY_COLORS', () => {
-  it('includes all 12 AAC category slugs', () => {
+  it('includes all 23 AAC category slugs', () => {
     const expectedSlugs = [
       'core',
       'feelings',
@@ -16,6 +16,17 @@ describe('CATEGORY_COLORS', () => {
       'body',
       'time',
       'questions',
+      'needs',
+      'emergency',
+      'rejecting',
+      'directing',
+      'mealtime',
+      'school',
+      'community',
+      'play',
+      'home',
+      'choices',
+      'conversation',
     ]
 
     expectedSlugs.forEach((slug) => {
@@ -43,8 +54,8 @@ describe('CATEGORY_COLORS', () => {
     expect(CATEGORY_COLORS['unmapped-slug']).toBeUndefined()
   })
 
-  it('contains exactly 12 categories', () => {
+  it('contains exactly 23 categories', () => {
     const keys = Object.keys(CATEGORY_COLORS)
-    expect(keys).toHaveLength(12)
+    expect(keys).toHaveLength(23)
   })
 })

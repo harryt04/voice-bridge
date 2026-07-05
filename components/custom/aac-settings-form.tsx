@@ -272,6 +272,7 @@ export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
               <SelectItem value="mulberry">Mulberry Symbols</SelectItem>
               <SelectItem value="arasaac">ARASAAC Symbols</SelectItem>
               <SelectItem value="custom">Custom Symbols</SelectItem>
+              <SelectItem value="opensymbols">OpenSymbols (Search)</SelectItem>
             </SelectContent>
           </Select>
         </div>
