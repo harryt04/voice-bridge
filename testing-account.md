@@ -1,2 +1,2 @@
-email: tester@example.com
-password: C%pJm3^%Je0#ues*
+email: debug-tester@example.com
+password: DebugPass123!

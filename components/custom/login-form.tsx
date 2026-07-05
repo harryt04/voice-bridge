@@ -58,10 +58,16 @@ export function LoginForm() {
       }
 
       try {
-        await signIn.email({
+        const { error: signInError } = await signIn.email({
           email,
           password,
         })
+
+        if (signInError) {
+          setError(signInError.message ?? 'Sign in failed. Please try again.')
+          setLoading(false)
+          return
+        }
 
         router.push(getRedirectPath())
       } catch (err) {

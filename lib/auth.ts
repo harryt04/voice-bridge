@@ -21,8 +21,11 @@ const db = mongoClient.db(`voicebridge-${process.env.NODE_ENV}`)
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, {
-    // Enable transactions when client is available for better consistency
+    // This MongoDB instance is a standalone server, not a replica set/mongos,
+    // so transactions (which the adapter would otherwise enable by default
+    // when a client is provided) are not supported and must be disabled.
     client: mongoClient,
+    transaction: false,
   }),
   socialProviders: {
     google: {
