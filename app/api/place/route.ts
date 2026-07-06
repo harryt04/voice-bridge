@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { getMongoClient, mongoDBConfig } from '@/lib/mongo-client'
+import { speakerAuthCheck } from '@/lib/mongo-utils'
 import { ObjectId } from 'mongodb'
 
 // Helper to extract `id` from the query
@@ -38,6 +39,11 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const authCheckResult = await speakerAuthCheck(req, place.speakerId)
+    if (authCheckResult) {
+      return authCheckResult
+    }
+
     return NextResponse.json(place, { status: 200 })
   } catch (error) {
     console.error('Error:', error)
@@ -67,6 +73,14 @@ export async function POST(req: NextRequest) {
           _id: new ObjectId(id),
         })
       : false
+
+    const authCheckResult = await speakerAuthCheck(
+      req,
+      existingPlace ? existingPlace.speakerId : body.speakerId,
+    )
+    if (authCheckResult) {
+      return authCheckResult
+    }
 
     const updatedPlace = {
       ...body,
@@ -127,6 +141,11 @@ export async function DELETE(req: NextRequest) {
         { error: 'Place not found or unauthorized' },
         { status: 404 },
       )
+    }
+
+    const authCheckResult = await speakerAuthCheck(req, existingPlace.speakerId)
+    if (authCheckResult) {
+      return authCheckResult
     }
 
     const result = await placesCollection.deleteOne({ _id: new ObjectId(id) })

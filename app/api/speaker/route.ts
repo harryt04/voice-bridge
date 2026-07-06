@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
 
     if (
       !speaker ||
-      !speaker.villagerIds.includes(session.user.id) ||
-      speaker.parentId !== session.user.id
+      (speaker.parentId !== session.user.id &&
+        !speaker.villagerIds?.includes(session.user.id))
     ) {
       return NextResponse.json(
         { error: 'Speaker not found or unauthorized' },
@@ -71,6 +71,17 @@ export async function POST(req: NextRequest) {
           _id: new ObjectId(id),
         })
       : undefined
+
+    if (
+      existingSpeaker &&
+      existingSpeaker.parentId !== session.user.id &&
+      !existingSpeaker.villagerIds?.includes(session.user.id)
+    ) {
+      return NextResponse.json(
+        { error: 'Speaker not found or unauthorized' },
+        { status: 404 },
+      )
+    }
 
     const updatedSpeaker = {
       parentId: existingSpeaker?.parentId ?? session.user.id,
@@ -131,7 +142,11 @@ export async function DELETE(req: NextRequest) {
       _id: new ObjectId(id),
     })
 
-    if (!existingSpeaker) {
+    if (
+      !existingSpeaker ||
+      (existingSpeaker.parentId !== session.user.id &&
+        !existingSpeaker.villagerIds?.includes(session.user.id))
+    ) {
       return NextResponse.json(
         { error: 'Speaker not found or unauthorized' },
         { status: 404 },

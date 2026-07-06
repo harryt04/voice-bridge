@@ -34,8 +34,6 @@ export async function handleDatabaseOperation(
     return NextResponse.json({ error: 'Missing ID' }, { status: 400 })
   }
 
-  speakerAuthCheck(req, id as string)
-
   try {
     const client = await getMongoClient()
     const db = client.db(mongoDBConfig.dbName)
@@ -47,6 +45,10 @@ export async function handleDatabaseOperation(
         if (!item) {
           return NextResponse.json({ error: 'Item not found' }, { status: 404 })
         }
+        const authCheckResult = await speakerAuthCheck(req, item.speakerId)
+        if (authCheckResult) {
+          return authCheckResult
+        }
         return NextResponse.json(item, { status: 200 })
       }
       case 'POST': {
@@ -54,6 +56,15 @@ export async function handleDatabaseOperation(
         const existingItem = id
           ? await collection.findOne({ _id: new ObjectId(id) })
           : null
+
+        const authCheckResult = await speakerAuthCheck(
+          req,
+          existingItem ? existingItem.speakerId : body.speakerId,
+        )
+        if (authCheckResult) {
+          return authCheckResult
+        }
+
         const updatedItem = {
           ...body,
           lastUpdatedBy: session.user.id,
@@ -77,6 +88,14 @@ export async function handleDatabaseOperation(
         }
       }
       case 'DELETE': {
+        const item = await collection.findOne({ _id: new ObjectId(id!) })
+        if (!item) {
+          return NextResponse.json({ error: 'Item not found' }, { status: 404 })
+        }
+        const authCheckResult = await speakerAuthCheck(req, item.speakerId)
+        if (authCheckResult) {
+          return authCheckResult
+        }
         const result = await collection.deleteOne({ _id: new ObjectId(id!) })
         return NextResponse.json({
           success: true,
@@ -120,12 +139,15 @@ export async function fetchDataFromCollection(
   }
 
   try {
+    const authCheckResult = await speakerAuthCheck(req, speakerId as string)
+    if (authCheckResult) {
+      return authCheckResult
+    }
+
     // Connect to MongoDB
     const client = await getMongoClient()
     const db = client.db(mongoDBConfig.dbName)
     const collection = db.collection(collectionName)
-
-    speakerAuthCheck(req, speakerId as string)
 
     // Fetch data from the specified collection
     const data = await collection.find({ speakerId: speakerId }).toArray()

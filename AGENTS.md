@@ -63,6 +63,42 @@ utils/                  # Client-side utilities (directions, imageUtils, speech)
 public/                 # Static assets (favicon/PWA icons + site.webmanifest live at the root)
 ```
 
+## Testing
+
+- **Framework**: Vitest, with two projects defined in `vitest.config.ts`:
+  - `node` — `app/api/**/*.test.ts`, `lib/**/*.test.ts`, `utils/**/*.test.ts`
+  - `jsdom` — `components/**/*.test.tsx`, `hooks/**/*.test.tsx`
+  - A file can override its project's default environment with a
+    `// @vitest-environment jsdom` comment at the top (used for `utils/`
+    files that touch browser APIs like `window`/`Image`/canvas).
+- **Database tests**: `mongodb-memory-server` provides a real in-memory
+  MongoDB, started once in `vitest.global-setup.ts` (sets
+  `MONGO_CONNECTION_STRING` before any module loads). Tests talk to real
+  collections via `getMongoClient()` — do not mock the MongoDB driver.
+  `fileParallelism` is disabled repo-wide so test files sharing the DB don't
+  race each other's `deleteMany()` calls.
+- **Auth**: `@/lib/auth` (better-auth) is mocked per-test-file with
+  `vi.mock('@/lib/auth', () => ({ auth: { api: { getSession: vi.fn() } } }))`,
+  then `vi.mocked(auth.api.getSession).mockResolvedValue(...)` controls the
+  session per test.
+- **Env var boilerplate**: node-project test files set
+  `MONGO_CONNECTION_STRING` / `BETTER_AUTH_SECRET` / `BETTER_AUTH_URL`
+  fallbacks at the top of the file (before other imports) — copy this from
+  an existing file like `lib/mongo-utils.test.ts` rather than reinventing it.
+- **API route tests**: import the route's `GET`/`POST`/`DELETE` handlers
+  directly and call them with a constructed `NextRequest`; assert on
+  `res.status` and `await res.json()`. Route handlers that are thin wrappers
+  around `handleDatabaseOperation`/`fetchDataFromCollection`
+  (`lib/mongo-utils.ts`) only need a small wiring test, since the shared
+  logic itself is covered by `lib/mongo-utils.test.ts`.
+- **Component tests**: `@testing-library/react` + `@testing-library/user-event`.
+  Mock `next/navigation` (`useRouter`, `useSearchParams`) and `@/lib/auth-client`
+  per test file. Use `fireEvent.submit(form)` (not a button click) to test
+  validation branches that run before a native `required` field would block
+  submission in jsdom.
+- Run `npm run test` (or `npm run test:watch`); `npm run ci` runs the suite
+  as part of the PR gate.
+
 ## Code Style
 
 ### Formatting (Prettier — enforced)
