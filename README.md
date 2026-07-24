@@ -84,7 +84,7 @@ npx gulp create-indexes  # Create MongoDB indexes
 
 ## Contributing
 
-We welcome contributions! Whether you're fixing bugs, adding features, or improving documentation, please follow these steps:
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) and follow the guidelines in [AGENTS.md](AGENTS.md) and [docs/index.md](docs/index.md).
 
 ### 1. Create a Feature Branch
 
