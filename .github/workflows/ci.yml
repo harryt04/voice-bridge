@@ -7,6 +7,17 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      MONGO_CONNECTION_STRING: dummy
+      BETTER_AUTH_SECRET: dummy
+      BETTER_AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_BETTER_AUTH_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: dummy
+      GOOGLE_CLIENT_SECRET: dummy
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      OPENSYMBOLS_API_SECRET: dummy
+      NEXT_PUBLIC_POSTHOG_KEY: dummy
+      NEXT_PUBLIC_POSTHOG_HOST: dummy
     steps:
       - uses: actions/checkout@v4
 
