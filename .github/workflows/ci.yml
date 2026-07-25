@@ -7,6 +7,19 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      # Must be a syntactically valid Mongo URI — better-auth parses it at
+      # module load during `next build` page-data collection.
+      MONGO_CONNECTION_STRING: mongodb://127.0.0.1:27017/voicebridge_ci
+      BETTER_AUTH_SECRET: ci-secret-for-testing-only-32-chars-xx
+      BETTER_AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_BETTER_AUTH_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: dummy
+      GOOGLE_CLIENT_SECRET: dummy
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      OPENSYMBOLS_API_SECRET: dummy
+      NEXT_PUBLIC_POSTHOG_KEY: dummy
+      NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
     steps:
       - uses: actions/checkout@v4
 
