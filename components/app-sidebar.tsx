@@ -68,10 +68,6 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="bg-sidebar text-sidebar-foreground">
-      {/* Light sidebar background was too similar to light content, requiring glassmorphism (.translucent-bg)
-          to be readable. Dark sidebar (hsl(230 20% 16%)) creates a persistent, high-contrast visual frame
-          that helps users with cognitive differences locate navigation reliably without competing with content.
-          It also eliminates the need for .translucent-bg, improving maintainability. */}
       <SidebarHeader className="gap-3 p-4">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="h-10 w-10 shrink-0" />

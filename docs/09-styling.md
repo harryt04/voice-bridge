@@ -127,7 +127,11 @@ Activated when `.dark` class is present on document root:
 
 ### Sidebar-Specific Color System
 
-The sidebar has its own color system for independent theming:
+The sidebar uses theme-specific colors: a warm light surface with dark text in
+light mode and a dark surface with light text in dark mode. It follows the
+Light, Dark, or Automatic preference from `ThemeSwitcher` through `next-themes`;
+Automatic tracks the system color scheme. Accent, border, and focus-ring colors
+also adapt to the selected theme.
 
 ```
 --sidebar-background
@@ -140,7 +144,7 @@ The sidebar has its own color system for independent theming:
 --sidebar-ring
 ```
 
-**File:** `app/globals.css` (lines 32-39, and dark variants 68-75)
+**File:** `app/globals.css` (`:root` for light mode, `.dark` for dark mode)
 
 ---
 
