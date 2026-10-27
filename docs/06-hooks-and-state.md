@@ -1072,6 +1072,7 @@ type SentenceWord = {
   id: string        // Unique crypto.randomUUID()
   label: string     // Word text
   imageUrl: string  // Thumbnail image path
+  icon?: string  // Emoji or Lucide icon for phrase chips
 }
 
 type AacSentenceContextValue = {

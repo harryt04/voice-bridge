@@ -948,7 +948,7 @@ Responsive grid of symbol cells with optional load-more pagination.
 
 ### AacSymbolCell
 
-Sub-component of `AacSymbolGrid`. Represents a single symbol.
+Sub-component of `AacSymbolGrid`. Represents a single symbol. Failed symbol images display the category icon as a fallback.
 
 **Features:**
 - Touch target: `min-h-[72px] min-w-[72px]`
@@ -984,7 +984,9 @@ Sub-component of `AacPhraseGrid`. Represents a single phrase.
 **Features:**
 - Touch target: `min-h-[80px]`
 - Background from phrase or secondary color default
-- Optional icon (emoji or lucide, 24px)
+- All 152 default phrases include a phrase-specific emoji
+- Emoji and Lucide icons render at 32px; custom phrases without an icon use their category icon or a speech bubble
+- Appending a phrase preserves its icon for sentence chips
 - Dynamic font sizing: `text-base` (≤15 chars) or `text-sm` (>15 chars)
 - Click: `speak()` or `append` per `phraseTapBehavior`
 - Edit/delete overlay: semi-transparent scrim with pencil/trash icons
