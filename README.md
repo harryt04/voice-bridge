@@ -27,7 +27,7 @@ The `/docs/` directory contains 11 comprehensive markdown files covering archite
 ### Prerequisites
 
 - Node.js 18+ 
-- npm or yarn
+- pnpm 11.24.0 (pinned in `package.json`)
 - MongoDB instance (local or cloud)
 - Google OAuth credentials (for authentication)
 
@@ -41,7 +41,7 @@ The `/docs/` directory contains 11 comprehensive markdown files covering archite
 
 2. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Set up environment variables**:
@@ -61,25 +61,25 @@ The `/docs/` directory contains 11 comprehensive markdown files covering archite
 
 4. **Create MongoDB indexes** (optional but recommended):
    ```bash
-   npx gulp create-indexes
+   pnpm exec gulp create-indexes
    ```
-   Note: If gulp is not found, install it globally first: `npm install -g gulp`
+   Note: Gulp is a local development dependency; run `pnpm install --frozen-lockfile` if it is missing.
 
 5. **Start the development server**:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Development Commands
 
 ```bash
-npm run dev          # Start development server (next dev)
-npm run build        # Production build (also serves as type checker)
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run prettify     # Format all files with Prettier
-npx gulp create-indexes  # Create MongoDB indexes
+pnpm run dev          # Start development server (next dev)
+pnpm run build        # Production build (also serves as type checker)
+pnpm run start        # Start production server
+pnpm run lint         # Run ESLint
+pnpm run prettify     # Format all files with Prettier
+pnpm exec gulp create-indexes  # Create MongoDB indexes
 ```
 
 ## Contributing
@@ -108,26 +108,26 @@ Use descriptive branch names (e.g., `feature/add-dark-mode`, `fix/speaker-deleti
   - Use `PascalCase` for React components
   - Use `use-` prefix for custom hooks
   - Follow the naming conventions table in [AGENTS.md](AGENTS.md#naming-conventions)
-- Ensure code is properly formatted with `npm run prettify`
-- Check for linting errors with `npm run lint`
+- Ensure code is properly formatted with `pnpm run prettify`
+- Check for linting errors with `pnpm run lint`
 - Update documentation in `/docs/` if your changes affect existing functionality
 
 ### 3. Test Your Changes
 
 ```bash
-npm run build        # Catches TypeScript errors
-npm run lint         # Checks for ESLint violations
-npm run dev          # Test locally in browser
+pnpm run build        # Catches TypeScript errors
+pnpm run lint         # Checks for ESLint violations
+pnpm run dev          # Test locally in browser
 ```
 
 **Before opening a PR**, format your changes and run the complete validation suite:
 
 ```bash
-npm run prep          # Formats your changes with Prettier (prettier --write .)
-npm run ci             # Runs all checks: format check, lint, build, and test
+pnpm run prep          # Formats your changes with Prettier (prettier --write .)
+pnpm run ci             # Runs all checks: format check, lint, build, and test
 ```
 
-`npm run ci` is non-mutating and is the same command GitHub Actions runs on every
+`pnpm run ci` is non-mutating and is the same command GitHub Actions runs on every
 pull request into `master`, so a clean local run means the PR check will pass too.
 
 ### 4. Commit Your Work
@@ -166,9 +166,9 @@ Then:
 ### PR Checklist
 
 Before submitting your PR, ensure:
-- [ ] Code is formatted (`npm run prettify`)
-- [ ] No linting errors (`npm run lint`)
-- [ ] TypeScript compiles (`npm run build`)
+- [ ] Code is formatted (`pnpm run prettify`)
+- [ ] No linting errors (`pnpm run lint`)
+- [ ] TypeScript compiles (`pnpm run build`)
 - [ ] Changes follow coding conventions in [AGENTS.md](AGENTS.md)
 - [ ] Documentation is updated if needed
 - [ ] Related issues are referenced in the PR description
@@ -187,7 +187,7 @@ Before submitting your PR, ensure:
 1. Set your `MONGO_CONNECTION_STRING` in `.env.local`
 2. Create indexes in your MongoDB instance:
    ```bash
-   npx gulp create-indexes
+   pnpm exec gulp create-indexes
    ```
 
 ## Code Style
@@ -203,3 +203,10 @@ See [AGENTS.md](AGENTS.md) for comprehensive style and naming guidelines.
 ## License
 
 VoiceBridge is free and open source. Check the LICENSE file for details.
+
+## Package manager
+
+Use pnpm 11.24.0, pinned in `package.json`. Install it with
+`npm install --global pnpm@11.24.0` if pnpm is not available.
+Run `pnpm install --frozen-lockfile` after cloning. Commit `pnpm-lock.yaml`
+when dependencies change; do not generate npm or Yarn lockfiles.

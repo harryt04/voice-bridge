@@ -210,12 +210,12 @@ Consider removing these if not needed.
 ### Local Development
 
 ```bash
-npm run dev          # Start dev server (http://localhost:3000)
-npm run build        # Production build + type check
-npm run start        # Start production server
-npm run lint         # Check for ESLint violations
-npm run prettify     # Format all files with Prettier
-npx gulp create-indexes  # Create MongoDB indexes
+pnpm run dev          # Start dev server (http://localhost:3000)
+pnpm run build        # Production build + type check
+pnpm run start        # Start production server
+pnpm run lint         # Check for ESLint violations
+pnpm run prettify     # Format all files with Prettier
+pnpm exec gulp create-indexes  # Create MongoDB indexes
 ```
 
 ### Build Verification
@@ -223,9 +223,9 @@ npx gulp create-indexes  # Create MongoDB indexes
 Always run before committing:
 
 ```bash
-npm run build        # Catches TypeScript errors and build issues
-npm run lint         # Catches ESLint violations
-npm run prettify     # Format to project standards
+pnpm run build        # Catches TypeScript errors and build issues
+pnpm run lint         # Catches ESLint violations
+pnpm run prettify     # Format to project standards
 ```
 
 ### Database Initialization
@@ -233,7 +233,7 @@ npm run prettify     # Format to project standards
 First time setup:
 
 ```bash
-npx gulp create-indexes  # Creates MongoDB indexes for all collections
+pnpm exec gulp create-indexes  # Creates MongoDB indexes for all collections
 ```
 
 This requires `MONGO_CONNECTION_STRING` environment variable set.
@@ -272,7 +272,7 @@ Blank lines between groups.
 - Trailing commas
 - Tailwind class sorting
 
-Run `npm run prettify` before committing.
+Run `pnpm run prettify` before committing.
 
 **See:** [AGENTS.md](../AGENTS.md)
 
@@ -376,10 +376,10 @@ Follow the complete 8-step guide to add foods, places, activities, etc.
 
 ### Build Fails with TypeScript Errors
 
-Run `npm run build` to see all errors:
+Run `pnpm run build` to see all errors:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Fix reported type errors. See [TypeScript docs](https://www.typescriptlang.org/docs/) for help.
@@ -389,7 +389,7 @@ Fix reported type errors. See [TypeScript docs](https://www.typescriptlang.org/d
 Fix with:
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 Some errors auto-fixable. See `.eslintrc.json` for rules.
@@ -399,7 +399,7 @@ Some errors auto-fixable. See `.eslintrc.json` for rules.
 Auto-format with:
 
 ```bash
-npm run prettify
+pnpm run prettify
 ```
 
 This applies Prettier to all files.

@@ -598,9 +598,9 @@ export async function createMongoDbIndexes() {
 ### Step 8: Deploy & Initialize
 
 ```bash
-npm run build           # Verify build succeeds
-npm run start          # Start production server
-npx gulp create-indexes # Create MongoDB indexes
+pnpm run build           # Verify build succeeds
+pnpm run start          # Start production server
+pnpm exec gulp create-indexes # Create MongoDB indexes
 ```
 
 ---

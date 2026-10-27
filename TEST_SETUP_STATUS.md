@@ -34,10 +34,10 @@ All test files described in the coverage plan (Tiers 1–3) are implemented and 
 ## Running Tests
 
 ```bash
-npm install
-npm run test          # 159/159 passing
-npm run test:watch    # watch mode
-npx vitest run lib/aac/aac-validators.test.ts   # single file
+pnpm install
+pnpm run test          # 159/159 passing
+pnpm run test:watch    # watch mode
+pnpm exec vitest run lib/aac/aac-validators.test.ts   # single file
 ```
 
 ## Explicitly out of scope

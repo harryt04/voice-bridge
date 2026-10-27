@@ -28,23 +28,23 @@ Refer to the docs when building or modifying any feature. If you have made chang
 ## Build / Lint / Format Commands
 
 ```bash
-npm run dev          # Start dev server (next dev)
-npm run build        # Production build (next build) — also serves as the type checker
-npm run start        # Start production server
-npm run lint         # ESLint via next lint
-npm run prettify     # Format all files with Prettier (prettier --write .)
-npm run prep         # Alias for prettify — run before opening a PR
-npm run ci           # PR merge gate: format check + lint + build + test (non-mutating)
-npx gulp create-indexes  # Create MongoDB indexes (requires DB connection)
+pnpm run dev          # Start dev server (next dev)
+pnpm run build        # Production build (next build) — also serves as the type checker
+pnpm run start        # Start production server
+pnpm run lint         # ESLint via next lint
+pnpm run prettify     # Format all files with Prettier (prettier --write .)
+pnpm run prep         # Alias for prettify — run before opening a PR
+pnpm run ci           # PR merge gate: format check + lint + build + test (non-mutating)
+pnpm exec gulp create-indexes  # Create MongoDB indexes (requires DB connection)
 ```
 
 To verify changes before opening a PR, run:
 
 ```bash
-npm run ci           # Runs everything CI runs: format check, lint, build, test
+pnpm run ci           # Runs everything CI runs: format check, lint, build, test
 ```
 
-`npm run ci` is also run automatically on every pull request into `master` via
+`pnpm run ci` is also run automatically on every pull request into `master` via
 [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ## Project Structure
@@ -96,7 +96,7 @@ public/                 # Static assets (favicon/PWA icons + site.webmanifest li
   per test file. Use `fireEvent.submit(form)` (not a button click) to test
   validation branches that run before a native `required` field would block
   submission in jsdom.
-- Run `npm run test` (or `npm run test:watch`); `npm run ci` runs the suite
+- Run `pnpm run test` (or `pnpm run test:watch`); `pnpm run ci` runs the suite
   as part of the PR gate.
 
 ## Code Style
@@ -109,7 +109,7 @@ public/                 # Static assets (favicon/PWA icons + site.webmanifest li
 - **Print width**: 80 characters
 - **Tailwind class sorting** via `prettier-plugin-tailwindcss`
 
-Always run `npm run prettify` or let Prettier handle formatting. Do not manually
+Always run `pnpm run prettify` or let Prettier handle formatting. Do not manually
 adjust Tailwind class order — the plugin handles it.
 
 ### Imports
@@ -250,4 +250,4 @@ MONGO_CONNECTION_STRING       # MongoDB connection URI
 - `lucide-react` — icons
 - `next-themes` — dark/light mode
 - `browser-image-compression` — client-side image compression
-- npm is the package manager; `.npmrc` sets `legacy-peer-deps=true`
+- pnpm is the package manager; use the version pinned in `package.json`
