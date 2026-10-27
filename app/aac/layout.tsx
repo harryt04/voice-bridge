@@ -14,6 +14,7 @@ export type SentenceWord = {
   id: string
   label: string
   imageUrl: string
+  icon?: string
 }
 
 /**

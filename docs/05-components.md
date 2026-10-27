@@ -593,8 +593,9 @@ Rendered in alphabetical order (sorted by title):
 3. **Header:**
    - `SidebarTrigger` (hamburger button)
    - Title: "VoiceBridge"
-   - `UserButton` (Clerk auth dropdown)
    - `ThemeSwitcher` (light/dark/auto)
+   - `UserMenu` (better-auth account dropdown) on its own full-width row;
+     long names or email addresses truncate while the avatar and chevron stay visible
 
 4. **Footer:**
    - "Report a bug" link → GitHub issues
@@ -602,8 +603,10 @@ Rendered in alphabetical order (sorted by title):
 
 ### Rendering
 
-- **Header:** Flex row with trigger, title, user/theme buttons
-- **Body:** Speaker selector + navigation menu (sorted alphabetically)
+- **Header:** Fixed above the scrollable navigation, with trigger/title/theme in
+  the first row and the account menu in the second row
+- **Body:** Speaker selector + navigation menu (sorted alphabetically); scrolls
+  vertically as needed, with horizontal scrolling disabled
 - **Footer:** Two external links
 - **Responsive:** Mobile-aware via `setOpenMobile`
 
@@ -945,7 +948,7 @@ Responsive grid of symbol cells with optional load-more pagination.
 
 ### AacSymbolCell
 
-Sub-component of `AacSymbolGrid`. Represents a single symbol.
+Sub-component of `AacSymbolGrid`. Represents a single symbol. Failed symbol images display the category icon as a fallback.
 
 **Features:**
 - Touch target: `min-h-[72px] min-w-[72px]`
@@ -981,7 +984,9 @@ Sub-component of `AacPhraseGrid`. Represents a single phrase.
 **Features:**
 - Touch target: `min-h-[80px]`
 - Background from phrase or secondary color default
-- Optional icon (emoji or lucide, 24px)
+- All 152 default phrases include a phrase-specific emoji
+- Emoji and Lucide icons render at 32px; custom phrases without an icon use their category icon or a speech bubble
+- Appending a phrase preserves its icon for sentence chips
 - Dynamic font sizing: `text-base` (≤15 chars) or `text-sm` (>15 chars)
 - Click: `speak()` or `append` per `phraseTapBehavior`
 - Edit/delete overlay: semi-transparent scrim with pencil/trash icons

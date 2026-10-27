@@ -237,9 +237,26 @@ These are called from component click handlers, not during SSR.
 
 Static assets served directly by Next.js.
 
+`public/icon.svg` is the editable source for the megaphone app icon. Its opaque
+purple background and centered artwork fit Android's maskable safe zone (a circle
+with radius 40% of the icon width). The manifest uses only 192px and 512px app
+icons with `any maskable` purpose; tiny browser favicons are declared separately
+in `app/layout.tsx`.
+
+After editing the SVG, run `node scripts/generate-icons.mjs` to rasterize each PNG
+and the multi-resolution ICO directly from the vector using Sharp (installed by
+Next.js). Update the `?v=2` asset version in the manifest and layout when replacing
+icons to change their cache URLs. An already installed PWA may need to be removed
+and installed again to see the new launcher icon immediately.
+
 ```
 public/
-├── favicon.ico                   # Site favicon
+├── icon.svg                      # Vector megaphone source / scalable favicon
+├── favicon.ico                   # Generated 16/32/48px browser fallback
+├── favicon-{16,32}x{16,32}.png     # Generated browser PNG icons
+├── android-chrome-{192,512}x{192,512}.png # PWA icons (any + maskable)
+├── apple-touch-icon.png          # Generated 180px Apple icon
+├── site.webmanifest              # PWA installation metadata
 ├── images/                       # Image assets
 └── [other static files...]
 ```

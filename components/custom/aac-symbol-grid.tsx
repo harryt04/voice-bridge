@@ -12,7 +12,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { ChevronDown, ImageOff } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+import { AacIcon } from '@/components/custom/aac-icon'
+import { AAC_CATEGORIES } from '@/lib/aac/symbol-provider'
 import { cn } from '@/lib/utils'
 
 type AacSymbolGridProps = {
@@ -145,10 +147,13 @@ function AacSymbolCell({
             )}
 
             {imgError ? (
-              <ImageOff
-                className="aspect-square w-full text-muted-foreground/70"
-                strokeWidth={1.5}
-              />
+              <div className="flex aspect-square w-full items-center justify-center text-muted-foreground">
+                <AacIcon
+                  icon={
+                    AAC_CATEGORIES.find((c) => c.slug === symbol.category)?.icon
+                  }
+                />
+              </div>
             ) : (
               <div className="relative aspect-square w-full">
                 <Image
@@ -178,10 +183,15 @@ function AacSymbolCell({
           <TooltipContent side="top" className="gap-2">
             <div className="flex flex-col items-center gap-2">
               {imgError ? (
-                <ImageOff
-                  className="h-24 w-24 text-muted-foreground/70"
-                  strokeWidth={1.5}
-                />
+                <div className="flex h-24 w-24 items-center justify-center text-muted-foreground">
+                  <AacIcon
+                    icon={
+                      AAC_CATEGORIES.find((c) => c.slug === symbol.category)
+                        ?.icon
+                    }
+                    size={48}
+                  />
+                </div>
               ) : (
                 <Image
                   src={symbol.imageUrl}

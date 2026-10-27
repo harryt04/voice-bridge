@@ -2,6 +2,7 @@
 
 import React, { useContext, useCallback, useState } from 'react'
 import { AacPreferencesContext, AacSentenceContext } from '@/app/aac/layout'
+import { AacIcon } from '@/components/custom/aac-icon'
 import { speak } from '@/utils/aac-speech'
 import { getPhraseTailwindClass } from '@/utils/aac-phrase-text-size'
 import { DEFAULT_PHRASES } from '@/lib/aac/default-phrases'
@@ -141,9 +142,11 @@ function AacPhraseTile({
       // Append to sentence
       addWord({
         label: phrase.text,
-        imageUrl: phrase.icon
-          ? `data:image/svg+xml,${phrase.icon}`
-          : '/placeholder.svg',
+        imageUrl: '/placeholder.svg',
+        icon:
+          phrase.icon ||
+          AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon ||
+          'MessageCircle',
       })
     } else {
       // Speak immediately
@@ -191,12 +194,14 @@ function AacPhraseTile({
         style={{ backgroundColor: bgColor }}
         aria-label={phrase.text}
       >
-        {/* Icon if present */}
-        {phrase.icon && (
-          <span className="text-2xl" aria-hidden="true">
-            {phrase.icon}
-          </span>
-        )}
+        <span style={customTextColor ? { color: customTextColor } : undefined}>
+          <AacIcon
+            icon={phrase.icon}
+            fallback={
+              AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon
+            }
+          />
+        </span>
 
         {/* Text with dynamic font size */}
         <span
