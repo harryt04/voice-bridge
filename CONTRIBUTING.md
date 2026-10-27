@@ -7,4 +7,4 @@ Thank you for your interest in contributing! Please follow the guidelines in:
 
 See README.md for setup and development commands.
 
-All contributions must pass `npm run ci` before PR.
+All contributions must pass `pnpm run ci` before PR.

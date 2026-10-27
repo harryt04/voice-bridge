@@ -309,7 +309,7 @@ Indexes are created to optimize query performance. They are defined and applied 
 Indexes are applied automatically when collections are created. To manually run index creation:
 
 ```bash
-npx gulp create-indexes
+pnpm exec gulp create-indexes
 ```
 
 This executes the `create-indexes` task defined in `gulpfile.ts`, which:
@@ -655,7 +655,7 @@ const DEFAULT_PREFERENCES = {
 Use `gulpfile.ts` to create all indexes at setup:
 
 ```bash
-npx gulp create-indexes
+pnpm exec gulp create-indexes
 ```
 
 This task creates indexes for all collections, including:

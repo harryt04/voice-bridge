@@ -88,16 +88,16 @@ Configuration:        tsconfig.json, next.config.js, tailwind.config.ts, middlew
 ## Build & Deployment
 
 ```bash
-npm run dev       # Start dev server
-npm run build     # Production build + TS check
-npm run lint      # ESLint check
-npm run prettify  # Format all files
-npm run start     # Start production server
+pnpm run dev       # Start dev server
+pnpm run build     # Production build + TS check
+pnpm run lint      # ESLint check
+pnpm run prettify  # Format all files
+pnpm run start     # Start production server
 ```
 
 Run MongoDB index creation (after deploying new resources):
 ```bash
-npx gulp create-indexes
+pnpm exec gulp create-indexes
 ```
 
 ---
@@ -154,7 +154,7 @@ Full details: [docs/01-architecture.md](docs/01-architecture.md).
 2. **Understand the system**: Read [docs/01-architecture.md](docs/01-architecture.md)
 3. **Find what you need**: Use the Quick Navigation table above
 4. **Make changes**: Follow conventions in [docs/11-conventions-and-patterns.md](docs/11-conventions-and-patterns.md)
-5. **Build & test**: `npm run build && npm run lint`
+5. **Build & test**: `pnpm run build && pnpm run lint`
 
 ---
 

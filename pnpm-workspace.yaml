@@ -1,0 +1,6 @@
+allowBuilds:
+  'core-js': false
+  'esbuild': true
+  'mongodb-memory-server': true
+  'protobufjs': true
+  'sharp': true

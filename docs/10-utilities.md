@@ -1168,5 +1168,5 @@ import { openGoogleMapsDirections } from '@/utils/directions'
 2. **Validate parameters** — Check `null` returns from `extractParamFromUrl()`
 3. **Handle promises** — `compressAndConvertToBase64()` is async; use `await` or `.then()`
 4. **Check for empty strings** — `openGoogleMapsDirections()` requires non-empty address
-5. **Run `npm run lint`** — Ensure proper usage and no ESLint violations
+5. **Run `pnpm run lint`** — Ensure proper usage and no ESLint violations
 6. **Test accessibility** — `speakText()` should work across devices and browsers
