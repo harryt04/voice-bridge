@@ -26,7 +26,7 @@ The `/docs/` directory contains 11 comprehensive markdown files covering archite
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 24
 - pnpm 11.24.0 (pinned in `package.json`)
 - MongoDB instance (local or cloud)
 - Google OAuth credentials (for authentication)
