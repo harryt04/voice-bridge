@@ -18,6 +18,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -71,18 +72,18 @@ export function AppSidebar() {
           to be readable. Dark sidebar (hsl(230 20% 16%)) creates a persistent, high-contrast visual frame
           that helps users with cognitive differences locate navigation reliably without competing with content.
           It also eliminates the need for .translucent-bg, improving maintainability. */}
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="my-4 font-display">
-            <SidebarTrigger className="-ml-2 mr-4 p-5" />
+      <SidebarHeader className="gap-3 p-4">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger className="h-10 w-10 shrink-0" />
+          <span className="min-w-0 flex-1 font-display text-sm font-semibold">
             VoiceBridge
-            <div className={cn('flex w-full flex-row justify-end gap-4')}>
-              <div className="h-full w-fit pt-1.5">
-                <UserMenu />
-              </div>
-              <ThemeSwitcher />
-            </div>
-          </SidebarGroupLabel>
+          </span>
+          <ThemeSwitcher />
+        </div>
+        <UserMenu />
+      </SidebarHeader>
+      <SidebarContent className="overflow-x-hidden">
+        <SidebarGroup>
           <SpeakerSelector />
         </SidebarGroup>
         <SidebarGroup>

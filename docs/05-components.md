@@ -593,8 +593,9 @@ Rendered in alphabetical order (sorted by title):
 3. **Header:**
    - `SidebarTrigger` (hamburger button)
    - Title: "VoiceBridge"
-   - `UserButton` (Clerk auth dropdown)
    - `ThemeSwitcher` (light/dark/auto)
+   - `UserMenu` (better-auth account dropdown) on its own full-width row;
+     long names or email addresses truncate while the avatar and chevron stay visible
 
 4. **Footer:**
    - "Report a bug" link → GitHub issues
@@ -602,8 +603,10 @@ Rendered in alphabetical order (sorted by title):
 
 ### Rendering
 
-- **Header:** Flex row with trigger, title, user/theme buttons
-- **Body:** Speaker selector + navigation menu (sorted alphabetically)
+- **Header:** Fixed above the scrollable navigation, with trigger/title/theme in
+  the first row and the account menu in the second row
+- **Body:** Speaker selector + navigation menu (sorted alphabetically); scrolls
+  vertically as needed, with horizontal scrolling disabled
 - **Footer:** Two external links
 - **Responsive:** Mobile-aware via `setOpenMobile`
 
