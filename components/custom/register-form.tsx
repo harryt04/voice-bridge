@@ -110,7 +110,10 @@ export function RegisterForm() {
       {/* Footer link */}
       <p className="text-center font-sans text-sm text-muted-foreground">
         Already have an account?{' '}
-        <Link href="/login" className="text-primary hover:underline">
+        <Link
+          href="/login"
+          className="text-primary underline underline-offset-4 hover:no-underline"
+        >
           Sign in
         </Link>
       </p>

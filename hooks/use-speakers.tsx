@@ -8,6 +8,7 @@ import React, {
   useEffect,
 } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from '@/lib/auth-client'
 import { Speaker } from '@/models/speaker'
 
 // Define the context type
@@ -33,11 +34,19 @@ const fetchSpeakers = async (): Promise<Speaker[]> => {
 export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  // Only request speakers for signed-in users; anonymous visitors (landing,
+  // login, register) would otherwise trigger a 401 on every page load.
+  const { data: session, isPending: isSessionPending } = useSession()
   const {
     data: speakers = [] as Speaker[],
-    isLoading,
+    isLoading: isSpeakersLoading,
     isError,
-  } = useQuery({ queryKey: ['speakers'], queryFn: fetchSpeakers })
+  } = useQuery({
+    queryKey: ['speakers'],
+    queryFn: fetchSpeakers,
+    enabled: !!session?.user,
+  })
+  const isLoading = isSessionPending || isSpeakersLoading
 
   const [selectedSpeaker, setSelectedSpeakerState] = useState<Speaker | null>(
     null,
