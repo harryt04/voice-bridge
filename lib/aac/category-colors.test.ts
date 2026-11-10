@@ -136,14 +136,14 @@ describe('CATEGORY_COLORS', () => {
       const lightContrast = getContrastRatio(colors.bg, colors.fg)
       const darkContrast = getContrastRatio(colors.darkBg, colors.darkFg)
 
-      expect(lightContrast).toBeGreaterThanOrEqual(
-        4.5,
+      expect(
+        lightContrast,
         `${slug} light mode contrast (${lightContrast.toFixed(2)}:1) below 4.5:1`,
-      )
-      expect(darkContrast).toBeGreaterThanOrEqual(
-        4.5,
+      ).toBeGreaterThanOrEqual(4.5)
+      expect(
+        darkContrast,
         `${slug} dark mode contrast (${darkContrast.toFixed(2)}:1) below 4.5:1`,
-      )
+      ).toBeGreaterThanOrEqual(4.5)
     })
   })
 })
