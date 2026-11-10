@@ -122,7 +122,7 @@ export const useSpeakerContext = (): SpeakerContextType
 
 1. **Fetch on Mount:**
    - Uses `useQuery(['speakers'], fetchSpeakers)` from TanStack React Query
-   - Calls `GET /api/speakers` on component mount
+   - Calls `GET /api/speakers` only once a user session exists (`enabled: !!session?.user`), so signed-out visitors never trigger a 401
    - Caches result with key `['speakers']`
 
 2. **Auto-Select First Speaker:**
@@ -226,7 +226,7 @@ export const SpeakerProvider: React.FC<{ children: ReactNode }> = ({
 ### Behavior
 
 1. **Data Fetching:**
-   - Calls `useQuery(['speakers'], fetchSpeakers)` on mount
+   - Calls `useQuery(['speakers'], fetchSpeakers)`, enabled only when `useSession()` reports a signed-in user
    - Fetches from `GET /api/speakers`
    - Provides cached result via `data` property
 

@@ -176,7 +176,10 @@ export function LoginForm() {
       {/* Footer link */}
       <p className="text-center font-sans text-sm text-muted-foreground">
         Don&apos;t have an account?{' '}
-        <Link href="/register" className="text-primary hover:underline">
+        <Link
+          href="/register"
+          className="text-primary underline underline-offset-4 hover:no-underline"
+        >
           Sign up
         </Link>
       </p>
