@@ -43,17 +43,11 @@ export function SpeakerForm({
     }
   }, [speaker])
 
-  const handleChange =
-    (field: keyof typeof formState) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormState({
-        ...formState,
-        [field]: e.target.value,
-      })
-    }
-
-  const handleVillagerIdsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVillagerIds(e.target.value)
+  const handleChange = (field: keyof typeof formState) => (value: string) => {
+    setFormState({
+      ...formState,
+      [field]: value,
+    })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -95,7 +89,7 @@ export function SpeakerForm({
               <Input
                 id="name"
                 value={formState.name}
-                onChange={handleChange('name')}
+                onValueChange={handleChange('name')}
                 placeholder="Enter speaker name"
                 className="w-full"
               />
@@ -107,7 +101,7 @@ export function SpeakerForm({
               <Input
                 id="villagerIds"
                 value={villagerIds}
-                onChange={handleVillagerIdsChange}
+                onValueChange={setVillagerIds}
                 placeholder="Enter comma-separated User IDs"
                 className="w-full"
               />

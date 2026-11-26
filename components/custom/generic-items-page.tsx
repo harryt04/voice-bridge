@@ -173,7 +173,7 @@ export default function GenericItemsPage({
               <Input
                 placeholder={`Search ${pageInfo.pluralLabel}...`}
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onValueChange={setSearchQuery}
                 className="h-9"
               />
               {searchQuery && (

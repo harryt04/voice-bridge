@@ -12,10 +12,9 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/use-toast'
 import { Speaker } from '@/models'
 import { Skeleton } from '../ui/skeleton'
-import { Progress } from '@radix-ui/react-progress'
 
 export const SpeakerSelector = () => {
   const {

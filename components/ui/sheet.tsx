@@ -1,46 +1,56 @@
 'use client'
 
 import * as React from 'react'
-import * as SheetPrimitive from '@radix-ui/react-dialog'
+import {
+  Dialog as SdkDialog,
+  DialogBackdrop as SdkDialogBackdrop,
+  DialogClose as SdkDialogClose,
+  DialogContent as SdkDialogContent,
+  DialogDescription as SdkDialogDescription,
+  DialogTitle as SdkDialogTitle,
+  DialogTrigger as SdkDialogTrigger,
+} from '@ui-sdk/react/dialog'
+import { BodyPortal } from './body-portal'
+import { withChild } from './with-child'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-const Sheet = SheetPrimitive.Root
+const Sheet = SdkDialog
 
-const SheetTrigger = SheetPrimitive.Trigger
+const SheetTrigger = withChild(SdkDialogTrigger)
 
-const SheetClose = SheetPrimitive.Close
+const SheetClose = withChild(SdkDialogClose)
 
-const SheetPortal = SheetPrimitive.Portal
+const SheetPortal = BodyPortal
 
 const SheetOverlay = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
+  React.ElementRef<typeof SdkDialogBackdrop>,
+  React.ComponentPropsWithoutRef<typeof SdkDialogBackdrop>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Overlay
+  <SdkDialogBackdrop
     className={cn(
-      'fixed inset-0 z-50 bg-black/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+      'fixed inset-0 z-50 bg-black/80 data-ending-style:animate-out data-ending-style:fade-out-0 data-open:animate-in data-open:fade-in-0',
       className,
     )}
     {...props}
     ref={ref}
   />
 ))
-SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
+SheetOverlay.displayName = 'SheetOverlay'
 
 const sheetVariants = cva(
-  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-open:animate-in data-ending-style:animate-out data-ending-style:duration-300 data-open:duration-500',
   {
     variants: {
       side: {
-        top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+        top: 'inset-x-0 top-0 border-b data-ending-style:slide-out-to-top data-open:slide-in-from-top',
         bottom:
-          'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
-        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+          'inset-x-0 bottom-0 border-t data-ending-style:slide-out-to-bottom data-open:slide-in-from-bottom',
+        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-ending-style:slide-out-to-left data-open:slide-in-from-left sm:max-w-sm',
         right:
-          'inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+          'inset-y-0 right-0 h-full w-3/4  border-l data-ending-style:slide-out-to-right data-open:slide-in-from-right sm:max-w-sm',
       },
     },
     defaultVariants: {
@@ -51,29 +61,31 @@ const sheetVariants = cva(
 
 interface SheetContentProps
   extends
-    React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+    React.ComponentPropsWithoutRef<typeof SdkDialogContent>,
+    VariantProps<typeof sheetVariants> {
+  children?: React.ReactNode
+}
 
 const SheetContent = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Content>,
+  React.ElementRef<typeof SdkDialogContent>,
   SheetContentProps
 >(({ side = 'right', className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
-    <SheetPrimitive.Content
+    <SdkDialogContent
       ref={ref}
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary">
+      <SdkDialogClose className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-open:bg-secondary">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
-      </SheetPrimitive.Close>
-    </SheetPrimitive.Content>
+      </SdkDialogClose>
+    </SdkDialogContent>
   </SheetPortal>
 ))
-SheetContent.displayName = SheetPrimitive.Content.displayName
+SheetContent.displayName = 'SheetContent'
 
 const SheetHeader = ({
   className,
@@ -104,28 +116,28 @@ const SheetFooter = ({
 SheetFooter.displayName = 'SheetFooter'
 
 const SheetTitle = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Title>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
+  React.ElementRef<typeof SdkDialogTitle>,
+  React.ComponentPropsWithoutRef<typeof SdkDialogTitle>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title
+  <SdkDialogTitle
     ref={ref}
     className={cn('text-lg font-semibold text-foreground', className)}
     {...props}
   />
 ))
-SheetTitle.displayName = SheetPrimitive.Title.displayName
+SheetTitle.displayName = 'SheetTitle'
 
 const SheetDescription = React.forwardRef<
-  React.ElementRef<typeof SheetPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description>
+  React.ElementRef<typeof SdkDialogDescription>,
+  React.ComponentPropsWithoutRef<typeof SdkDialogDescription>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Description
+  <SdkDialogDescription
     ref={ref}
     className={cn('text-sm text-muted-foreground', className)}
     {...props}
   />
 ))
-SheetDescription.displayName = SheetPrimitive.Description.displayName
+SheetDescription.displayName = 'SheetDescription'
 
 export {
   Sheet,

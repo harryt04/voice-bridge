@@ -69,7 +69,7 @@ export function AacSymbolSearch({
           type="search"
           placeholder="Search symbols..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onValueChange={setQuery}
           className="pl-9"
           aria-label="Search symbols"
         />

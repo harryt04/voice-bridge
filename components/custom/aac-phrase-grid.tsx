@@ -188,35 +188,38 @@ function AacPhraseTile({
 
   return (
     <>
-      <button
-        onClick={handleTap}
-        className="group relative flex min-h-20 flex-col items-center justify-center gap-1 rounded-2xl p-3 transition-all duration-100 active:scale-[0.97] active:brightness-95"
-        style={{ backgroundColor: bgColor }}
-        aria-label={phrase.text}
-      >
-        <span style={customTextColor ? { color: customTextColor } : undefined}>
-          <AacIcon
-            icon={phrase.icon}
-            fallback={
-              AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon
-            }
-          />
-        </span>
-
-        {/* Text with dynamic font size */}
-        <span
-          className={cn(
-            'text-center font-display leading-snug font-semibold',
-            fontSizeClass,
-          )}
-          style={customTextColor ? { color: customTextColor } : undefined}
+      <div className="group relative">
+        <button
+          onClick={handleTap}
+          className="flex h-full min-h-20 w-full flex-col items-center justify-center gap-1 rounded-2xl p-3 transition-all duration-100 active:scale-[0.97] active:brightness-95"
+          style={{ backgroundColor: bgColor }}
+          aria-label={phrase.text}
         >
-          {phrase.text}
-        </span>
+          <span
+            style={customTextColor ? { color: customTextColor } : undefined}
+          >
+            <AacIcon
+              icon={phrase.icon}
+              fallback={
+                AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon
+              }
+            />
+          </span>
 
+          {/* Text with dynamic font size */}
+          <span
+            className={cn(
+              'text-center font-display leading-snug font-semibold',
+              fontSizeClass,
+            )}
+            style={customTextColor ? { color: customTextColor } : undefined}
+          >
+            {phrase.text}
+          </span>
+        </button>
         {/* Edit/Delete overlay - only for custom phrases and owner */}
         {isCustom && isOwner && (
-          <div className="absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 [&>button]:pointer-events-auto">
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -240,7 +243,7 @@ function AacPhraseTile({
             </button>
           </div>
         )}
-      </button>
+      </div>
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
@@ -254,7 +257,7 @@ function AacPhraseTile({
               <Input
                 id="edit-text"
                 value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                onValueChange={setEditText}
                 placeholder="Enter phrase text"
               />
             </div>

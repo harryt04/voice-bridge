@@ -1,35 +1,32 @@
 'use client'
-
+import { isValidElement } from 'react'
 import {
   Toast,
   ToastClose,
   ToastDescription,
-  ToastProvider,
   ToastTitle,
   ToastViewport,
-} from '@/components/ui/toast'
-import { useToast } from '@/components/ui/use-toast'
+} from './toast'
+import { toastQueue } from './use-toast'
 
 export function Toaster() {
-  const { toasts } = useToast()
-
   return (
-    <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        )
-      })}
-      <ToastViewport />
-    </ToastProvider>
+    <ToastViewport
+      toaster={toastQueue}
+      aria-label="Notifications"
+      align="end"
+      side="bottom"
+    >
+      {(message) => (
+        <Toast variant={message.type === 'error' ? 'destructive' : 'default'}>
+          <div className="grid gap-1">
+            <ToastTitle />
+            <ToastDescription />
+          </div>
+          {isValidElement(message.data) && message.data}
+          <ToastClose aria-label="Close notification" />
+        </Toast>
+      )}
+    </ToastViewport>
   )
 }

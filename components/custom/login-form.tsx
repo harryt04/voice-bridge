@@ -151,7 +151,7 @@ export function LoginForm() {
           placeholder="Email"
           className="h-11"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onValueChange={setEmail}
           disabled={loading}
           required
         />
@@ -160,7 +160,7 @@ export function LoginForm() {
           placeholder="Password"
           className="h-11"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onValueChange={setPassword}
           disabled={loading}
           required
         />
