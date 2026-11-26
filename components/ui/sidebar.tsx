@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Button as SdkButton } from '@ui-sdk/react/button'
 import { withChild } from './with-child'
-import { Slot } from '@radix-ui/react-slot'
+import { Slot } from '@/components/ui/slot'
 import { VariantProps, cva } from 'class-variance-authority'
 import { PanelLeft } from 'lucide-react'
 

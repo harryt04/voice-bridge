@@ -96,7 +96,7 @@ export const SpeakerSelector = () => {
         onValueChange={handleChildSwitch}
         value={selectedSpeaker?._id || ''}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" aria-label="Speaker">
           {selectedSpeaker?.name || 'Select a Speaker'}
         </SelectTrigger>
         <SelectContent data-agent-hidden data-agent-secret>

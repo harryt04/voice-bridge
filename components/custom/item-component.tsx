@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 import { speakText } from '@/utils/speech'
 import { AudioLines, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
-import { Pencil1Icon } from '@radix-ui/react-icons'
+import { Pencil } from 'lucide-react'
 import { ItemForm } from './item-form'
 import { Muted } from '../ui/typography'
 
@@ -116,7 +116,7 @@ export const ItemComponent = ({
         {editMode && !isEditing && (
           <div className="flex flex-row gap-4 p-4">
             <Button variant="outline" onClick={handleEditClick}>
-              <Pencil1Icon /> Edit
+              <Pencil /> Edit
             </Button>
             <Button variant="destructive" onClick={handleDeleteClick}>
               <TrashIcon /> Delete

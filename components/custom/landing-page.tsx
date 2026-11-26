@@ -2,8 +2,7 @@ import Link from 'next/link'
 import { ThemeSwitcher } from './themeSwitcher'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CirclePlayIcon, Github } from 'lucide-react' // Use CirclePlayIcon
-import { GitHubLogoIcon } from '@radix-ui/react-icons' // Keep for source code button if preferred
+import { CirclePlayIcon, Github } from 'lucide-react'
 
 function LandingPage() {
   return (
@@ -64,7 +63,7 @@ function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <GitHubLogoIcon className="mr-2 h-5 w-5" />
+                  <Github className="mr-2 h-5 w-5" />
                   View source code
                 </a>
               </Button>
