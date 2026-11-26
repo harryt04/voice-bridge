@@ -54,7 +54,11 @@ export function AacSentenceBar() {
   const { preferences } = preferencesContext
 
   return (
-    <div className="sticky top-0 z-50 flex min-h-16 items-center gap-2 bg-primary px-3 py-2 shadow-md">
+    <div
+      data-agent-secret
+      data-agent-hidden
+      className="sticky top-0 z-50 flex min-h-16 items-center gap-2 bg-primary px-3 py-2 shadow-md"
+    >
       {/* Hidden button behind chip strip for tap-to-speak (G15 pattern) */}
       <div className="relative flex-1">
         <button

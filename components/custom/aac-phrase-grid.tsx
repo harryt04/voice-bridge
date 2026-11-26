@@ -188,7 +188,11 @@ function AacPhraseTile({
 
   return (
     <>
-      <div className="group relative">
+      <div
+        data-agent-hidden={isCustom || undefined}
+        data-agent-secret={isCustom || undefined}
+        className="group relative"
+      >
         <button
           onClick={handleTap}
           className="flex h-full min-h-20 w-full flex-col items-center justify-center gap-1 rounded-2xl p-3 transition-all duration-100 active:scale-[0.97] active:brightness-95"
@@ -247,7 +251,7 @@ function AacPhraseTile({
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
+        <DialogContent data-agent-secret data-agent-hidden>
           <DialogHeader>
             <DialogTitle>Edit Phrase</DialogTitle>
           </DialogHeader>

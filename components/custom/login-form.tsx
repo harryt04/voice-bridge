@@ -83,7 +83,11 @@ export function LoginForm() {
   )
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md">
+    <div
+      data-agent-secret
+      data-agent-confirm="Manage authentication"
+      className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md"
+    >
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="font-display text-2xl font-bold text-primary">

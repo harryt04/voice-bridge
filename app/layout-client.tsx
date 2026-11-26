@@ -1,5 +1,6 @@
 'use client'
 
+import { AgentBridge } from '@/components/agent-bridge'
 import { SessionProvider } from '@/lib/auth-client'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
@@ -12,6 +13,7 @@ import { Toaster } from '@/components/ui/toaster'
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
+      <AgentBridge />
       <PostHogProvider>
         <ThemeProvider
           attribute="class"

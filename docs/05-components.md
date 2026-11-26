@@ -1,6 +1,6 @@
 # Components Documentation
 
-This document provides comprehensive details on all custom components in the VoiceBridge application. These components are built with React 18, TypeScript, and shadcn/ui, following the App Router pattern.
+This document provides comprehensive details on all custom components in the VoiceBridge application. These components are built with React 19, TypeScript, and UI SDK, following the App Router pattern.
 
 ---
 

@@ -88,7 +88,7 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === '/aac'}>
-                  <Link href="/aac">
+                  <Link href="/aac" aria-label="Go to Symbol Board">
                     <Grid2x2 size={16} />
                     Symbol Board
                   </Link>
@@ -99,7 +99,7 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === '/aac/phrases'}
                 >
-                  <Link href="/aac/phrases">
+                  <Link href="/aac/phrases" aria-label="Go to Quick Phrases">
                     <MessageSquare size={16} />
                     Quick Phrases
                   </Link>
@@ -124,6 +124,7 @@ export function AppSidebar() {
                         className="p-6"
                       >
                         <Link
+                          aria-label={`Go to ${item.title}`}
                           href={item.url}
                           onClick={() => {
                             setOpenMobile(false)

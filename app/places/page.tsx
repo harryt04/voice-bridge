@@ -155,9 +155,11 @@ export default function Places() {
             <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
               <SearchIcon className="h-5 w-5 text-muted-foreground" />
               <Input
+                aria-label="Search places"
+                data-agent-secret
                 placeholder="Search places..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onValueChange={setSearchQuery}
                 className="h-9"
               />
               {searchQuery && (

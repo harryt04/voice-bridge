@@ -30,7 +30,7 @@ Navigate to each section using the links below:
 ### Technology Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 19 (with shadcn/ui components)
+- **UI Library**: React 19 (with UI SDK wrappers)
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
 - **Authentication**: better-auth (session-based, Google OAuth)
@@ -39,7 +39,7 @@ Navigate to each section using the links below:
 - **Forms**: react-hook-form + zod validation
 - **Analytics**: PostHog
 - **Icons**: lucide-react
-- **Notifications**: sonner (toast)
+- **Notifications**: UI SDK toast
 - **Theme**: next-themes (dark/light mode)
 - **AAC**: Custom Symbol Provider abstraction (Mulberry, extensible)
 - **Speech**: Web Speech API (TTS utility)
@@ -51,7 +51,7 @@ Navigate to each section using the links below:
 |----------|---------|
 | `app/layout.tsx` | Root layout, provider hierarchy |
 | `app/api/` | REST API endpoints |
-| `components/ui/` | shadcn/ui components (auto-generated) |
+| `components/ui/` | styled UI SDK wrappers |
 | `components/custom/` | Application-specific components |
 | `models/` | TypeScript type definitions |
 | `hooks/` | React hooks |
@@ -164,7 +164,7 @@ const { mutate: deleteFood } = useMutation({
 // ✅ Do this
 const { mutate: deleteFood } = useMutation({
   mutationFn: deleteFoodFn,
-  onError: (error) => toast.error('Delete failed'),
+  onError: (error) => toast({ title: 'Delete failed', variant: 'destructive' }),
 })
 ```
 
@@ -350,14 +350,14 @@ export function CreateForm() {
 ### Show Toast Notification
 
 ```typescript
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/use-toast'
 
 function handleDelete() {
   try {
     // Delete logic
-    toast.success('Deleted successfully')
+    toast('Deleted successfully')
   } catch (error) {
-    toast.error('Failed to delete')
+    toast({ title: 'Failed to delete', variant: 'destructive' })
   }
 }
 ```

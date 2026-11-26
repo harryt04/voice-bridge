@@ -72,6 +72,7 @@ export function AacSymbolSearch({
           onValueChange={setQuery}
           className="pl-9"
           aria-label="Search symbols"
+          data-agent-secret
         />
       </div>
 

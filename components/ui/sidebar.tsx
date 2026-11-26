@@ -1,6 +1,8 @@
 'use client'
 
 import * as React from 'react'
+import { Button as SdkButton } from '@ui-sdk/react/button'
+import { withChild } from './with-child'
 import { Slot } from '@radix-ui/react-slot'
 import { VariantProps, cva } from 'class-variance-authority'
 import { PanelLeft } from 'lucide-react'
@@ -553,9 +555,12 @@ const sidebarMenuButtonVariants = cva(
   },
 )
 
+const MenuButtonPart = withChild(SdkButton)
+
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<'button'> & {
+  Omit<React.ComponentProps<'button'>, 'onClick'> & {
+    onClick?: React.MouseEventHandler<HTMLElement>
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
@@ -573,11 +578,11 @@ const SidebarMenuButton = React.forwardRef<
     },
     ref,
   ) => {
-    const Comp = asChild ? Slot : 'button'
     const { isMobile, state } = useSidebar()
 
     const button = (
-      <Comp
+      <MenuButtonPart
+        asChild={asChild}
         ref={ref}
         data-sidebar="menu-button"
         data-size={size}

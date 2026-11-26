@@ -28,7 +28,7 @@
 **VoiceBridge** is a Next.js 16 web application helping individuals with autism communicate using visual tools.
 
 ### Tech Stack
-- **Frontend**: React 18, TypeScript, Tailwind CSS 3.4, shadcn/ui
+- **Frontend**: React 19, TypeScript, Tailwind CSS 4, UI SDK
 - **Backend**: Next.js 16 App Router, Clerk (auth)
 - **Database**: MongoDB (direct driver, no ORM)
 - **State**: TanStack React Query, React Context
@@ -50,12 +50,12 @@ Root entry:           app/layout.tsx          (provider hierarchy)
 Root page:            app/page.tsx            (redirects to /places)
 API base:             app/api/                (13 REST endpoints)
 Components (custom):  components/custom/      (GenericItemsPage, ItemComponent, etc.)
-Components (UI):      components/ui/          (shadcn/ui — auto-generated)
+Components (UI):      components/ui/          (UI SDK wrappers)
 React Hooks:          hooks/                  (useSpeakerContext, useIsMobile, VBQueryClient)
 Type Definitions:     models/                 (Speaker, Food, Place, etc. — import from @/models)
 Server Utilities:     lib/                    (mongo-client, mongo-utils, utils, posthog)
 Client Utilities:     utils/                  (speech.ts, imageUtils.ts, directions.ts)
-Configuration:        tsconfig.json, next.config.js, tailwind.config.ts, middleware.ts
+Configuration:        tsconfig.json, next.config.js, app/globals.css, middleware.ts
 ```
 
 ---

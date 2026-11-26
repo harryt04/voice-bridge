@@ -50,6 +50,8 @@ export function UserMenu() {
           variant="ghost"
           className="h-10 w-full min-w-0 justify-between gap-2 px-2"
           aria-label="Account menu"
+          data-agent-secret
+          data-agent-confirm="Manage account"
         >
           <div className="flex min-w-0 items-center gap-2">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
@@ -62,7 +64,12 @@ export function UserMenu() {
           <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent
+        data-agent-secret
+        data-agent-hidden
+        align="end"
+        className="w-56"
+      >
         <DropdownMenuLabel className="flex flex-col space-y-1">
           <span className="text-sm font-medium">
             {session.user.name || 'User'}

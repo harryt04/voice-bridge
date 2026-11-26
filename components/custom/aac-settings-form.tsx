@@ -90,7 +90,10 @@ export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
   }
 
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4">
+    <div
+      data-agent-confirm="Change AAC settings"
+      className="mx-auto flex max-w-2xl flex-col gap-6 p-4"
+    >
       <h1 className="font-display text-2xl font-semibold">AAC Settings</h1>
 
       {/* Read-only notice */}
@@ -129,7 +132,7 @@ export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
                 }
               />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent data-agent-confirm="Change AAC settings">
               {voices.map((voice) => (
                 <SelectItem key={voice.name} value={voice.name}>
                   {voice.name} {voice.lang && `(${voice.lang})`}
@@ -268,7 +271,7 @@ export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
             <SelectTrigger className="h-11">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent data-agent-confirm="Change AAC settings">
               <SelectItem value="mulberry">Mulberry Symbols</SelectItem>
               <SelectItem value="arasaac">ARASAAC Symbols</SelectItem>
               <SelectItem value="custom">Custom Symbols</SelectItem>
@@ -342,7 +345,7 @@ export function AacSettingsForm({ speakerId, isOwner }: AacSettingsFormProps) {
             <SelectTrigger className="h-11">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent data-agent-confirm="Change AAC settings">
               <SelectItem value="2">2 columns</SelectItem>
               <SelectItem value="3">3 columns</SelectItem>
               <SelectItem value="4">4 columns</SelectItem>

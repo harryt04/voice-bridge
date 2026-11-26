@@ -75,6 +75,8 @@ export const PlaceComponent = ({
 
   return (
     <Card
+      data-agent-hidden
+      data-agent-secret
       className={cn('min-h-full cursor-pointer')}
       onClick={() => {
         if (!editMode) {

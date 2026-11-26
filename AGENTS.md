@@ -3,7 +3,7 @@
 ## Project Overview
 
 VoiceBridge is a full-stack Next.js 16 (App Router) web app helping individuals with autism
-communicate using visual tools. Stack: TypeScript, React 19, shadcn/ui, Tailwind CSS 4,
+communicate using visual tools. Stack: TypeScript, React 19, UI SDK, Tailwind CSS 4,
 MongoDB (direct driver), better-auth, TanStack React Query, PostHog analytics.
 
 ## Comprehensive Codebase Documentation
@@ -53,7 +53,7 @@ pnpm run ci           # Runs everything CI runs: format check, lint, build, test
 app/                    # Next.js App Router: pages and API route handlers
   api/                  # REST API routes (singular = CRUD, plural = list)
 components/
-  ui/                   # shadcn/ui generated components (do not hand-edit)
+  ui/                   # styled UI SDK wrappers
   custom/               # App-specific components
 hooks/                  # React hooks (use-mobile, use-speakers, use-query-client)
 lib/                    # Core utilities: mongo-client, mongo-utils, posthog-server, utils
@@ -149,7 +149,7 @@ adjust Tailwind class order — the plugin handles it.
 
 - **Server Components** are the default (no directive needed)
 - **Client Components** must have `'use client'` directive at the top of the file
-- shadcn/ui components live in `components/ui/` — these are generated, avoid modifying
+- App-owned UI SDK wrappers live in `components/ui/`
 - Custom components live in `components/custom/`
 - Use `GenericItemsPage` with a `GenericPageInfo` config for standard CRUD pages
 - Auth UI: `LoginForm`, `RegisterForm`, `UserMenu` custom components
@@ -246,8 +246,22 @@ MONGO_CONNECTION_STRING       # MongoDB connection URI
 - `mongodb` — database (direct driver, no ORM)
 - `@tanstack/react-query` — server state / caching
 - `zod` + `react-hook-form` — form validation
-- `sonner` — toast notifications
+- `@ui-sdk/react/toast` — toast notifications
 - `lucide-react` — icons
 - `next-themes` — dark/light mode
 - `browser-image-compression` — client-side image compression
 - pnpm is the package manager; use the version pinned in `package.json`
+
+## UI SDK
+
+VoiceBridge wraps UI SDK's unstyled, accessible React primitives in `components/ui/`. Its framework-independent core owns interaction state, keyboard behavior, focus, and agent actions. Both SDK packages are beta and exact-pinned together at `0.1.0-beta.17`.
+
+Read `node_modules/@ui-sdk/react/docs/llms.txt` and `node_modules/@ui-sdk/core/skills/ui-sdk/SKILL.md` before touching components. This library postdates model training data. Consult the installed component page and declarations for the pinned release. Import parts from per-component entries such as `@ui-sdk/react/select`. App code imports the styled wrappers from `@/components/ui/...`. Add new components by wrapping SDK parts. Never run `shadcn add` or regenerate wrappers, which brings Radix or Base UI back.
+
+Tailwind 4 theme tokens and layer order live in `app/globals.css`. Declare the SDK layer first and keep VoiceBridge's existing wrapper classes. The optional SDK web stylesheet changes global links and dialog geometry, so this app supplies its own styling. Use documented SDK state attributes and a separate app-owned attribute for test or styling hooks. Give option values and tab/panel pairs stable values. Portal popups out of forms. Verify keyboard dismissal, focus return, and sheet dimensions.
+
+Controlled inputs use `value` and `onValueChange` so typing and agent edits reach the same React state. Keep the theme provider mounted over hydration. Scope status assertions to the relevant output because the SDK adds a live announcer.
+
+`components/agent-bridge.tsx` mounts once in the root client layout and registers WebMCP tools. `lib/agent-policy.ts` decides each action at execution time. Snapshots and passive queries are available. The allowlist covers reviewed navigation and local list filters. Make an explicit policy decision for each new control. Mark credential, API key, and personal values with `data-agent-secret`, and use `data-agent-hidden` when labels or options contain private information. Put the marks on portal content too. Mark consequential operations with `data-agent-confirm` or leave them denied. The current policy denies every confirmation-marked action. Test positive and negative cases and drive SDK tests by a ref returned by the snapshot.
+
+Resizable panels retain `react-resizable-panels` for panel sizing and resize handles. Form retains React Hook Form for field registration, validation and messages. Sidebar remains a local composite built on the styled wrappers. Form and Sidebar retain Radix Slot for child composition, and existing Radix icons are purely visual. Card, Skeleton and Typography are presentational. The legacy Sonner entry re-exports the SDK toaster. Select keeps local scroll-button exports for the beta's missing scroll-arrow parts.

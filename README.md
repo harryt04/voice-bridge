@@ -4,13 +4,13 @@ VoiceBridge is a free and open source web app that helps children or adults with
 
 ## Tech Stack
 
-- **Frontend**: [React 19](https://react.dev), TypeScript, [Tailwind CSS 4](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com)
+- **Frontend**: [React 19](https://react.dev), TypeScript, [Tailwind CSS 4](https://tailwindcss.com), [UI SDK](https://ui-sdk.dev)
 - **Backend**: [Next.js 16](https://nextjs.org) (App Router), [better-auth](https://www.better-auth.com)
 - **Database**: [MongoDB](https://www.mongodb.com) (direct driver, no ORM)
 - **State Management**: [TanStack React Query](https://tanstack.com/query), React Context
 - **Forms**: [react-hook-form](https://react-hook-form.com), [Zod](https://zod.dev)
 - **Analytics**: [PostHog](https://posthog.com)
-- **UI Kit**: [shadcn/ui](https://ui.shadcn.com), [Lucide Icons](https://lucide.dev)
+- **UI Kit**: [UI SDK](https://ui-sdk.dev), [Lucide Icons](https://lucide.dev)
 - **Hosting**: [Coolify](https://coolify.io/docs) (self-hosted)
 
 ## Documentation
