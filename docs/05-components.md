@@ -196,7 +196,6 @@ export function ItemForm({
   - `formState: { name, imageUrl, description, imageBase64 }` — Form field values
   - `isUploading: boolean` — File processing state
   - `previewImage: string | null` — Base64 or URL for image preview
-  - `fileInputRef` — Hidden file input ref
 
 - **Hooks:** None
 
@@ -211,8 +210,8 @@ export function ItemForm({
 
 ### Image Upload Logic
 
-1. User clicks "Upload Image" button → triggers hidden file input
-2. `handleImageUpload()` receives file
+1. User presses "Upload Image", a `FileInputTrigger` from `components/ui/file-input.tsx` → the UI SDK `FileInput` opens the system picker and accepts only `image/*`
+2. `handleImageUpload(files)` receives the chosen files from `onValueChange` and takes the first
 3. `compressAndConvertToBase64()` processes:
    - Resizes to 800×800px
    - Compresses to 0.7 quality

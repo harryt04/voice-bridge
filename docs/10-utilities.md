@@ -437,7 +437,7 @@ compressAndConvertToBase64(
 
 ### Parameters
 
-- `file: File` — The image file to process (from `<input type="file">`)
+- `file: File` — The image file to process (from the UI SDK `FileInput`)
 - `maxWidth: number` — Maximum width (default: 800px)
 - `maxHeight: number` — Maximum height (default: 800px)
 - `quality: number` — JPEG compression quality 0–1 (default: 0.7 = 70%)
@@ -480,8 +480,8 @@ async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
 function ItemForm() {
   const [image, setImage] = useState<string | null>(null)
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+  const handleImageChange = async (files: File[]) => {
+    const file = files[0]
     if (file) {
       const compressed = await compressAndConvertToBase64(file, 600, 600, 0.8)
       setImage(compressed)
@@ -490,7 +490,10 @@ function ItemForm() {
 
   return (
     <form>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      {/* FileInput and FileInputTrigger from '@/components/ui/file-input' */}
+      <FileInput accept="image/*" onValueChange={handleImageChange}>
+        <FileInputTrigger>Upload Image</FileInputTrigger>
+      </FileInput>
       {image && <img src={image} alt="preview" style={{ maxWidth: '200px' }} />}
     </form>
   )
