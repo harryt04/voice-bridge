@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, type JSX } from 'react'
 import { cn } from '@/lib/utils'
 
 const createComponent = <T extends HTMLElement>(

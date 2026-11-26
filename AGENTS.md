@@ -3,7 +3,7 @@
 ## Project Overview
 
 VoiceBridge is a full-stack Next.js 16 (App Router) web app helping individuals with autism
-communicate using visual tools. Stack: TypeScript, React 18, shadcn/ui, Tailwind CSS 3.4,
+communicate using visual tools. Stack: TypeScript, React 19, shadcn/ui, Tailwind CSS 3.4,
 MongoDB (direct driver), better-auth, TanStack React Query, PostHog analytics.
 
 ## Comprehensive Codebase Documentation

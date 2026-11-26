@@ -30,7 +30,7 @@ Navigate to each section using the links below:
 ### Technology Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 18 (with shadcn/ui components)
+- **UI Library**: React 19 (with shadcn/ui components)
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
 - **Authentication**: better-auth (session-based, Google OAuth)
@@ -431,7 +431,7 @@ User not authenticated or session expired. Verify:
 ### External Documentation
 
 - **Next.js 16**: https://nextjs.org/docs
-- **React 18**: https://react.dev
+- **React 19**: https://react.dev
 - **TypeScript**: https://www.typescriptlang.org/docs
 - **Tailwind CSS**: https://tailwindcss.com/docs
 - **MongoDB**: https://docs.mongodb.com/
