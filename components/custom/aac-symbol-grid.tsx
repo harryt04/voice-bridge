@@ -137,11 +137,11 @@ function AacSymbolCell({
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onMouseLeave={handleTouchEnd}
-            className="min-h-18 flex flex-col items-center gap-1 rounded-xl border border-border/50 bg-card p-1.5 transition-colors duration-100 hover:border-primary hover:bg-primary/5 active:scale-[0.96] active:bg-primary/10"
+            className="flex min-h-18 flex-col items-center gap-1 rounded-xl border border-border/50 bg-card p-1.5 transition-colors duration-100 hover:border-primary hover:bg-primary/5 active:scale-[0.96] active:bg-primary/10"
             aria-label={symbol.label}
           >
             {labelPosition === 'above' && showLabel && (
-              <span className="w-full truncate text-center font-sans text-sm font-semibold leading-tight text-foreground">
+              <span className="w-full truncate text-center font-sans text-sm leading-tight font-semibold text-foreground">
                 {symbol.label}
               </span>
             )}
@@ -169,7 +169,7 @@ function AacSymbolCell({
             )}
 
             {labelPosition === 'below' && showLabel && (
-              <span className="w-full truncate text-center font-sans text-sm font-semibold leading-tight text-foreground">
+              <span className="w-full truncate text-center font-sans text-sm leading-tight font-semibold text-foreground">
                 {symbol.label}
               </span>
             )}

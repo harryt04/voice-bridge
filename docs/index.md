@@ -34,7 +34,7 @@ Navigate to each section using the links below:
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
 - **Authentication**: better-auth (session-based, Google OAuth)
-- **Styling**: Tailwind CSS 3.4 + CSS variables
+- **Styling**: Tailwind CSS 4 + CSS variables
 - **State Management**: TanStack React Query + React Context
 - **Forms**: react-hook-form + zod validation
 - **Analytics**: PostHog
@@ -66,7 +66,7 @@ Navigate to each section using the links below:
 |------|---------|
 | `next.config.ts` | Next.js configuration (image patterns, redirects) |
 | `tsconfig.json` | TypeScript configuration (strict mode, path aliases) |
-| `tailwind.config.ts` | Tailwind CSS config (colors, spacing, fonts, font-display) |
+| `app/globals.css` | Tailwind CSS config (colors, spacing, fonts, font-display) |
 | `.eslintrc.json` | ESLint rules and exceptions |
 | `.prettierrc` | Prettier formatting rules (no semicolons, trailing commas) |
 | `package.json` | Dependencies and scripts |
@@ -90,7 +90,7 @@ Quick navigation to find the right place for common development tasks:
 | **New hook** | [06: Hooks and State](06-hooks-and-state.md) | Create `hooks/use-{name}.tsx`, export `use{Name}()` function |
 | **New type/model** | [03: Data Models](03-data-models.md) | Create `models/{name}.ts`, add to `models/index.ts` barrel export |
 | **New utility function** | [10: Utilities](10-utilities.md) | Create in `lib/` (server) or `utils/` (client) |
-| **Styling/colors** | [09: Styling](09-styling.md) | Update `tailwind.config.ts` or add utility classes |
+| **Styling/colors** | [09: Styling](09-styling.md) | Update `app/globals.css` or add utility classes |
 
 ---
 

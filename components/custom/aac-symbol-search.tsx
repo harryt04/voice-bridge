@@ -63,7 +63,7 @@ export function AacSymbolSearch({
       <div className="relative px-3 pt-2">
         <Search
           size={16}
-          className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="pointer-events-none absolute top-1/2 left-6 -translate-y-1/2 text-muted-foreground"
         />
         <Input
           type="search"

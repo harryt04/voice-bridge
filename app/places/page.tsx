@@ -132,7 +132,7 @@ export default function Places() {
     return filteredPlaces.map((place) => (
       <div
         key={place._id}
-        className={`flex-grow basis-full sm:basis-1/2 lg:basis-1/3`}
+        className={`grow basis-full sm:basis-1/2 lg:basis-1/3`}
       >
         <PlaceComponent
           place={place}

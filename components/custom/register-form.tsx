@@ -64,7 +64,7 @@ export function RegisterForm() {
       {/* Error display */}
       {error && (
         <div className="flex gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3">
-          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-destructive" />
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
           <p className="font-sans text-sm text-destructive">{error}</p>
         </div>
       )}

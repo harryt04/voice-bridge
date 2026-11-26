@@ -71,14 +71,14 @@ export function AacSentenceBar() {
           aria-atomic="false"
         >
           {sentence.length === 0 ? (
-            <p className="flex items-center font-sans text-sm italic text-primary-foreground/50">
+            <p className="flex items-center font-sans text-sm text-primary-foreground/50 italic">
               Tap symbols to build a sentence
             </p>
           ) : (
             sentence.map((word) => (
               <button
                 key={word.id}
-                className="flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-2 py-1 text-primary-foreground duration-150 animate-in fade-in slide-in-from-right-2"
+                className="flex min-h-11 shrink-0 animate-in items-center gap-1 rounded-full border border-primary-foreground/30 bg-primary-foreground/20 px-2 py-1 text-primary-foreground duration-150 fade-in slide-in-from-right-2"
               >
                 {word.icon ? (
                   <AacIcon icon={word.icon} size={24} />

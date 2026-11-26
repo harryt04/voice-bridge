@@ -147,7 +147,7 @@ export default function GenericItemsPage({
     return filteredItems.map((item) => (
       <div
         key={item._id}
-        className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
+        className={`grow basis-full sm:basis-1/4 lg:basis-1/5`}
       >
         <ItemComponent
           item={item}

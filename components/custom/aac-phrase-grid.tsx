@@ -87,7 +87,7 @@ export function AacPhraseGrid({
         <div key={category} className="flex flex-col gap-3">
           {/* Category header */}
           <div className="col-span-full pt-2">
-            <p className="font-sans text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="font-sans text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               {AAC_CATEGORIES.find((c) => c.slug === category)?.label ??
                 category}
             </p>
@@ -206,7 +206,7 @@ function AacPhraseTile({
         {/* Text with dynamic font size */}
         <span
           className={cn(
-            'text-center font-display font-semibold leading-snug',
+            'text-center font-display leading-snug font-semibold',
             fontSizeClass,
           )}
           style={customTextColor ? { color: customTextColor } : undefined}
@@ -222,7 +222,7 @@ function AacPhraseTile({
                 e.stopPropagation()
                 setShowEditDialog(true)
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-sm hover:bg-background"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-xs hover:bg-background"
               aria-label="Edit phrase"
             >
               <Pencil size={16} />
@@ -233,7 +233,7 @@ function AacPhraseTile({
                 handleDelete()
               }}
               disabled={isDeleting}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-sm hover:bg-background disabled:opacity-50"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-xs hover:bg-background disabled:opacity-50"
               aria-label="Delete phrase"
             >
               <Trash2 size={16} />

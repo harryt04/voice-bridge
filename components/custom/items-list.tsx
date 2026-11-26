@@ -82,10 +82,7 @@ export default function ItemsList({
     }
 
     return items.map((item) => (
-      <div
-        key={item._id}
-        className="flex-grow basis-full sm:basis-1/4 lg:basis-1/5"
-      >
+      <div key={item._id} className="grow basis-full sm:basis-1/4 lg:basis-1/5">
         <ItemComponent
           item={item}
           editMode={editMode}
@@ -99,7 +96,7 @@ export default function ItemsList({
   return (
     <>
       <div className="flex w-full flex-col">
-        <div className="ml-0 mt-8 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
+        <div className="mt-8 ml-0 flex w-10/12 flex-col items-center gap-4 md:ml-8 md:flex-row">
           <Button variant="default" onClick={() => setIsFormOpen(true)}>
             <PlusIcon /> Add {pageInfo.singularLabel}
           </Button>

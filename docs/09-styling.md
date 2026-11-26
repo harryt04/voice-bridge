@@ -4,26 +4,17 @@ This document covers all styling configuration and conventions for VoiceBridge, 
 
 ## Tailwind CSS Configuration
 
-**File:** `tailwind.config.ts`
+**File:** `app/globals.css`
 
 ### Dark Mode Setup
 
-- **Mode:** Class-based dark mode (`darkMode: ['class']`)
+- **Mode:** Class-based dark mode via the CSS `dark` custom variant
 - **Trigger:** Add `.dark` class to the document root (typically `<html>` element)
 - **Theme switching:** Handled by Next.js `next-themes` provider in `providers/`
 
 ### Content Paths
 
-Tailwind scans these directories for class names:
-
-```typescript
-content: [
-  './pages/**/*.{ts,tsx}',
-  './components/**/*.{ts,tsx}',
-  './app/**/*.{ts,tsx}',
-  './src/**/*.{ts,tsx}',
-]
-```
+Tailwind 4 automatically detects class names in project sources.
 
 ### Extended Colors
 
@@ -44,26 +35,13 @@ All colors use CSS HSL variables for dynamic theming. Colors are referenced via 
 
 Border radius is controlled via a single CSS variable:
 
-```typescript
-borderRadius: {
-  lg: 'var(--radius)',           // Default: 1rem
-  md: 'calc(var(--radius) - 2px)',
-  sm: 'calc(var(--radius) - 4px)',
-}
-```
+The theme defines `--radius-lg`, `--radius-md`, and `--radius-sm` relative to `--radius`.
 
 **Usage:** Apply `rounded-lg`, `rounded-md`, or `rounded-sm` to components. Adjust the base `--radius` value in `globals.css` to change all border radii globally.
 
 ### Animations
 
-Provided by `tailwindcss-animate` plugin:
-
-```typescript
-animation: {
-  'accordion-down': 'accordion-down 0.2s ease-out',
-  'accordion-up': 'accordion-up 0.2s ease-out',
-}
-```
+The stylesheet imports `tw-animate-css` and defines accordion keyframes in its theme.
 
 **Usage:** `animate-accordion-down` and `animate-accordion-up` for collapsible UI elements.
 
@@ -341,8 +319,8 @@ Customize shadcn/ui components via:
 1. **CSS Variables** (preferred): Modify colors in `app/globals.css`
    - Example: Change `--primary` to update all button primary states
 
-2. **Tailwind Config** (preferred): Adjust `tailwind.config.ts`
-   - Example: Modify `borderRadius.lg` to change all component radii
+2. **Tailwind Config** (preferred): Adjust the `@theme inline` block in `app/globals.css`
+   - Example: Modify `--radius-lg` to change all component radii
 
 3. **Component Props** (when needed): Override via component instances
    - Example: `<Button className="custom-class">Label</Button>`
@@ -478,23 +456,12 @@ import { Outfit as FontDisplay } from 'next/font/google'
 
 const fontDisplay = FontDisplay({
   subsets: ['latin'],
-  variable: '--font-display',
+  variable: '--font-outfit',
   weight: ['400', '600', '700'],
 })
 ```
 
-**Tailwind config integration:**
-
-```typescript
-// tailwind.config.ts
-theme: {
-  extend: {
-    fontFamily: {
-      display: ['var(--font-display)', ...fontFamily.sans],
-    },
-  },
-}
-```
+The CSS theme maps `--font-display` to the Outfit variable from Next.js.
 
 ### Using font-display Class
 

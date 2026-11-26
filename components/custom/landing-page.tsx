@@ -9,11 +9,11 @@ function LandingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       {/* Header/Nav Placeholder */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/60">
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             {/* Updated App Name */}
-            <span className="inline bg-gradient-to-r from-primary to-accent bg-clip-text font-bold text-transparent">
+            <span className="inline bg-linear-to-r from-primary to-accent bg-clip-text font-bold text-transparent">
               VoiceBridge
             </span>
           </Link>
@@ -32,14 +32,14 @@ function LandingPage() {
           <div className="container grid place-items-center gap-6 text-center">
             {/* Updated Heading with Gradient */}
             <h1 className="inline text-4xl font-extrabold tracking-tight lg:text-5xl">
-              <span className="inline bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <span className="inline bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
                 VoiceBridge
               </span>
             </h1>
             {/* Updated Description */}
             <p className="mx-auto max-w-[700px] text-lg text-muted-foreground">
               VoiceBridge is a
-              <span className="border-gradient inline border-b-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <span className="border-gradient inline border-b-2 bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
                 &nbsp;free and open source&nbsp;
               </span>
               web app that helps children or adults with autism communicate by
@@ -51,7 +51,7 @@ function LandingPage() {
               <Button
                 asChild
                 size="lg"
-                className="border-gradient bg-gradient-to-r from-primary to-accent"
+                className="border-gradient bg-linear-to-r from-primary to-accent"
               >
                 <Link href="/login">
                   <CirclePlayIcon className="mr-2 h-5 w-5" />
@@ -75,8 +75,8 @@ function LandingPage() {
         {/* Features Section */}
         <section id="features" className="w-full bg-muted/50 py-12 lg:py-24">
           <div className="container space-y-6">
-            <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-              <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
+            <div className="mx-auto flex max-w-232 flex-col items-center space-y-4 text-center">
+              <h2 className="text-3xl leading-[1.1] font-bold sm:text-3xl md:text-5xl">
                 Features
               </h2>
               {/* Updated Feature Description */}
@@ -85,7 +85,7 @@ function LandingPage() {
                 individuals with autism.
               </p>
             </div>
-            <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">
+            <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-5xl md:grid-cols-3">
               {/* Feature Card 1 - Updated */}
               <Card>
                 <CardHeader>
@@ -129,9 +129,9 @@ function LandingPage() {
         {/* Optional: Call to Action Section */}
         <section id="open-source" className="w-full py-12 lg:py-24">
           <div className="container">
-            <div className="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center">
+            <div className="mx-auto flex max-w-232 flex-col items-center justify-center gap-4 text-center">
               {/* Updated CTA Heading */}
-              <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
+              <h2 className="text-3xl leading-[1.1] font-bold sm:text-3xl md:text-5xl">
                 Ready to Bridge Communication?
               </h2>
               {/* Updated CTA Text */}
@@ -143,7 +143,7 @@ function LandingPage() {
               <Button
                 asChild
                 size="lg"
-                className="border-gradient bg-gradient-to-r from-primary to-accent"
+                className="border-gradient bg-linear-to-r from-primary to-accent"
               >
                 <Link href="/login">
                   <CirclePlayIcon className="mr-2 h-5 w-5" />
