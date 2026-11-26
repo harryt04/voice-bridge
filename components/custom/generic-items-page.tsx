@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react'
 import { Button } from '@/components/ui/button'
 import { ItemForm } from '@/components/custom/item-form'
 import { ItemComponent } from '@/components/custom/item-component'
@@ -147,7 +147,7 @@ export default function GenericItemsPage({
     return filteredItems.map((item) => (
       <div
         key={item._id}
-        className={`flex-grow basis-full sm:basis-1/4 lg:basis-1/5`}
+        className={`grow basis-full sm:basis-1/4 lg:basis-1/5`}
       >
         <ItemComponent
           item={item}
@@ -171,9 +171,11 @@ export default function GenericItemsPage({
             <div className="flex w-full max-w-md items-center space-x-2 md:w-1/3">
               <SearchIcon className="h-5 w-5 text-muted-foreground" />
               <Input
+                aria-label={`Search ${pageInfo.pluralLabel}`}
+                data-agent-secret
                 placeholder={`Search ${pageInfo.pluralLabel}...`}
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onValueChange={setSearchQuery}
                 className="h-9"
               />
               {searchQuery && (

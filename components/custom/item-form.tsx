@@ -51,14 +51,12 @@ export function ItemForm({
     }
   }, [item])
 
-  const handleChange =
-    (field: keyof typeof formState) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFormState({
-        ...formState,
-        [field]: e.target.value,
-      })
-    }
+  const handleChange = (field: keyof typeof formState) => (value: string) => {
+    setFormState({
+      ...formState,
+      [field]: value,
+    })
+  }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -97,7 +95,11 @@ export function ItemForm({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+      <DialogContent
+        data-agent-secret
+        data-agent-hidden
+        className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl">
             {item ? `Edit ${modelName}` : `Add ${modelName}`}
@@ -109,7 +111,7 @@ export function ItemForm({
             <Input
               id="name"
               value={formState.name}
-              onChange={handleChange('name')}
+              onValueChange={handleChange('name')}
               placeholder={`Enter ${modelName} name`}
               className="w-full"
             />
@@ -161,7 +163,7 @@ export function ItemForm({
                   <Input
                     id="imageUrl"
                     value={formState.imageUrl}
-                    onChange={handleChange('imageUrl')}
+                    onValueChange={handleChange('imageUrl')}
                     placeholder="Or enter image URL"
                     className="w-full"
                   />
@@ -175,7 +177,7 @@ export function ItemForm({
             <Textarea
               id="description"
               value={formState.description}
-              onChange={handleChange('description')}
+              onValueChange={handleChange('description')}
               placeholder={`Enter ${modelName} description`}
               className="w-full"
             />

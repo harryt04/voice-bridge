@@ -30,16 +30,16 @@ Navigate to each section using the links below:
 ### Technology Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 18 (with shadcn/ui components)
+- **UI Library**: React 19 (with UI SDK wrappers)
 - **Language**: TypeScript (strict mode)
 - **Database**: MongoDB (direct driver)
 - **Authentication**: better-auth (session-based, Google OAuth)
-- **Styling**: Tailwind CSS 3.4 + CSS variables
+- **Styling**: Tailwind CSS 4 + CSS variables
 - **State Management**: TanStack React Query + React Context
 - **Forms**: react-hook-form + zod validation
 - **Analytics**: PostHog
 - **Icons**: lucide-react
-- **Notifications**: sonner (toast)
+- **Notifications**: UI SDK toast
 - **Theme**: next-themes (dark/light mode)
 - **AAC**: Custom Symbol Provider abstraction (Mulberry, extensible)
 - **Speech**: Web Speech API (TTS utility)
@@ -51,7 +51,7 @@ Navigate to each section using the links below:
 |----------|---------|
 | `app/layout.tsx` | Root layout, provider hierarchy |
 | `app/api/` | REST API endpoints |
-| `components/ui/` | shadcn/ui components (auto-generated) |
+| `components/ui/` | styled UI SDK wrappers |
 | `components/custom/` | Application-specific components |
 | `models/` | TypeScript type definitions |
 | `hooks/` | React hooks |
@@ -66,7 +66,7 @@ Navigate to each section using the links below:
 |------|---------|
 | `next.config.ts` | Next.js configuration (image patterns, redirects) |
 | `tsconfig.json` | TypeScript configuration (strict mode, path aliases) |
-| `tailwind.config.ts` | Tailwind CSS config (colors, spacing, fonts, font-display) |
+| `app/globals.css` | Tailwind CSS config (colors, spacing, fonts, font-display) |
 | `.eslintrc.json` | ESLint rules and exceptions |
 | `.prettierrc` | Prettier formatting rules (no semicolons, trailing commas) |
 | `package.json` | Dependencies and scripts |
@@ -90,7 +90,7 @@ Quick navigation to find the right place for common development tasks:
 | **New hook** | [06: Hooks and State](06-hooks-and-state.md) | Create `hooks/use-{name}.tsx`, export `use{Name}()` function |
 | **New type/model** | [03: Data Models](03-data-models.md) | Create `models/{name}.ts`, add to `models/index.ts` barrel export |
 | **New utility function** | [10: Utilities](10-utilities.md) | Create in `lib/` (server) or `utils/` (client) |
-| **Styling/colors** | [09: Styling](09-styling.md) | Update `tailwind.config.ts` or add utility classes |
+| **Styling/colors** | [09: Styling](09-styling.md) | Update `app/globals.css` or add utility classes |
 
 ---
 
@@ -164,7 +164,7 @@ const { mutate: deleteFood } = useMutation({
 // ✅ Do this
 const { mutate: deleteFood } = useMutation({
   mutationFn: deleteFoodFn,
-  onError: (error) => toast.error('Delete failed'),
+  onError: (error) => toast({ title: 'Delete failed', variant: 'destructive' }),
 })
 ```
 
@@ -350,14 +350,14 @@ export function CreateForm() {
 ### Show Toast Notification
 
 ```typescript
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/use-toast'
 
 function handleDelete() {
   try {
     // Delete logic
-    toast.success('Deleted successfully')
+    toast('Deleted successfully')
   } catch (error) {
-    toast.error('Failed to delete')
+    toast({ title: 'Failed to delete', variant: 'destructive' })
   }
 }
 ```
@@ -431,7 +431,7 @@ User not authenticated or session expired. Verify:
 ### External Documentation
 
 - **Next.js 16**: https://nextjs.org/docs
-- **React 18**: https://react.dev
+- **React 19**: https://react.dev
 - **TypeScript**: https://www.typescriptlang.org/docs
 - **Tailwind CSS**: https://tailwindcss.com/docs
 - **MongoDB**: https://docs.mongodb.com/

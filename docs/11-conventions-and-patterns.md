@@ -253,7 +253,7 @@ export function FoodCard(props: FoodCardProps) {
 
 ### UI Components
 
-- **shadcn/ui components**: Live in `components/ui/` (auto-generated, do not edit)
+- **UI SDK components**: Styled wrappers live in `components/ui/`
   - `Button`, `Dialog`, `Input`, `Select`, `Checkbox`, etc.
   - Import: `import { Button } from '@/components/ui/button'`
 
@@ -672,7 +672,7 @@ const { mutate: deleteFood } = useMutation({
   },
   onError: (error) => {
     console.error('Delete failed:', error)
-    toast.error('Failed to delete item')
+    toast({ title: 'Failed to delete item', variant: 'destructive' })
   },
 })
 ```
@@ -826,7 +826,7 @@ export default function PageName() {
 
 ### Add a Modal Dialog
 
-Use shadcn/ui Dialog with react-hook-form:
+Use the UI SDK Dialog wrapper with react-hook-form:
 
 ```typescript
 'use client'
@@ -943,16 +943,16 @@ export function FoodsList() {
 ```typescript
 'use client'
 
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/use-toast'
 
 export function ItemForm() {
   const handleSubmit = async () => {
     try {
       // Do something
-      toast.success('Item created successfully')
+      toast('Item created successfully')
     } catch (error) {
       console.error(error)
-      toast.error('Failed to create item')
+      toast({ title: 'Failed to create item', variant: 'destructive' })
     }
   }
 
@@ -1000,7 +1000,7 @@ VoiceBridge follows opinionated conventions to maintain consistency and facilita
 - **Naming**: kebab-case files, PascalCase components, camelCase functions
 - **Types**: Centralized in `models/`, re-exported via barrel export
 - **Imports**: Third-party → @/ internal → relative, with blank line separation
-- **Components**: Server by default, Client when needed, use shadcn/ui
+- **Components**: Server by default, Client when needed, use the UI SDK wrappers
 - **APIs**: Consistent request/response format, auth check first, try/catch all
 - **Resources**: Follow the 8-step guide to add new types
 - **Patterns**: Use hooks for state, mutations with error handling, React Query for caching

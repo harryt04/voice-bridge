@@ -50,7 +50,11 @@ export function RegisterForm() {
   )
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md">
+    <div
+      data-agent-secret
+      data-agent-confirm="Manage authentication"
+      className="flex w-full max-w-sm flex-col gap-6 rounded-2xl border border-border bg-card p-8 shadow-md"
+    >
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="font-display text-2xl font-bold text-primary">
@@ -64,7 +68,7 @@ export function RegisterForm() {
       {/* Error display */}
       {error && (
         <div className="flex gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3">
-          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-destructive" />
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
           <p className="font-sans text-sm text-destructive">{error}</p>
         </div>
       )}
@@ -76,7 +80,7 @@ export function RegisterForm() {
           placeholder="Full name"
           className="h-11"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onValueChange={setName}
           disabled={loading}
           required
         />
@@ -85,7 +89,7 @@ export function RegisterForm() {
           placeholder="Email"
           className="h-11"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onValueChange={setEmail}
           disabled={loading}
           required
         />
@@ -94,7 +98,7 @@ export function RegisterForm() {
           placeholder="Password"
           className="h-11"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onValueChange={setPassword}
           disabled={loading}
           required
         />

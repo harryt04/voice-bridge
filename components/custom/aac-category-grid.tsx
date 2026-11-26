@@ -45,7 +45,7 @@ function AacCategoryTile({ category, isDark = false }: AacCategoryTileProps) {
   return (
     <Link href={`/aac/${category.slug}`} className="shrink-0">
       <button
-        className="flex h-32 w-32 shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all duration-150 hover:shadow-md active:scale-[0.97] sm:h-36 sm:w-36 lg:h-40 lg:w-40"
+        className="flex h-32 w-32 shrink-0 flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-xs transition-all duration-150 hover:shadow-md active:scale-[0.97] sm:h-36 sm:w-36 lg:h-40 lg:w-40"
         style={{
           backgroundColor: isDark ? colors.darkBg : colors.bg,
           color: isDark ? colors.darkFg : colors.fg,
@@ -53,7 +53,7 @@ function AacCategoryTile({ category, isDark = false }: AacCategoryTileProps) {
         aria-label={`${category.label} category`}
       >
         <LucideIcon size={32} strokeWidth={1.5} />
-        <span className="line-clamp-2 text-center font-display text-base font-semibold leading-tight">
+        <span className="line-clamp-2 text-center font-display text-base leading-tight font-semibold">
           {category.label}
         </span>
       </button>

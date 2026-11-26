@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, type JSX } from 'react'
 import { cn } from '@/lib/utils'
 
 const createComponent = <T extends HTMLElement>(
@@ -49,7 +49,7 @@ export const Lead = createComponent<HTMLParagraphElement>(
 
 export const P = createComponent<HTMLParagraphElement>(
   'p',
-  'leading-7 [&:not(:first-child)]:mt-6',
+  'leading-7 not-first:mt-6',
   'P',
 )
 

@@ -12,10 +12,9 @@ import {
   TooltipTrigger,
 } from '../ui/tooltip'
 import { SpeakerForm } from './speaker-form'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/use-toast'
 import { Speaker } from '@/models'
 import { Skeleton } from '../ui/skeleton'
-import { Progress } from '@radix-ui/react-progress'
 
 export const SpeakerSelector = () => {
   const {
@@ -91,7 +90,7 @@ export const SpeakerSelector = () => {
     )
 
   return (
-    <div className="px-4 py-6">
+    <div data-agent-secret data-agent-hidden className="px-4 py-6">
       {/* Speaker Selector */}
       <Select
         onValueChange={handleChildSwitch}
@@ -100,7 +99,7 @@ export const SpeakerSelector = () => {
         <SelectTrigger className="w-full">
           {selectedSpeaker?.name || 'Select a Speaker'}
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent data-agent-hidden data-agent-secret>
           {speakers.map((speaker) => (
             <SelectItem key={speaker._id} value={speaker._id}>
               {speaker.name}

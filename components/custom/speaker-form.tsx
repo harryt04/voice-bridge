@@ -43,17 +43,11 @@ export function SpeakerForm({
     }
   }, [speaker])
 
-  const handleChange =
-    (field: keyof typeof formState) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormState({
-        ...formState,
-        [field]: e.target.value,
-      })
-    }
-
-  const handleVillagerIdsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVillagerIds(e.target.value)
+  const handleChange = (field: keyof typeof formState) => (value: string) => {
+    setFormState({
+      ...formState,
+      [field]: value,
+    })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -82,7 +76,11 @@ export function SpeakerForm({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+      <DialogContent
+        data-agent-secret
+        data-agent-hidden
+        className="mx-auto max-w-xs rounded-lg p-6 sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl">
             {speaker ? 'Edit Speaker' : 'Add Speaker'}
@@ -95,7 +93,7 @@ export function SpeakerForm({
               <Input
                 id="name"
                 value={formState.name}
-                onChange={handleChange('name')}
+                onValueChange={handleChange('name')}
                 placeholder="Enter speaker name"
                 className="w-full"
               />
@@ -107,7 +105,7 @@ export function SpeakerForm({
               <Input
                 id="villagerIds"
                 value={villagerIds}
-                onChange={handleVillagerIdsChange}
+                onValueChange={setVillagerIds}
                 placeholder="Enter comma-separated User IDs"
                 className="w-full"
               />

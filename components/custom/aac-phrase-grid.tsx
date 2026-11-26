@@ -87,7 +87,7 @@ export function AacPhraseGrid({
         <div key={category} className="flex flex-col gap-3">
           {/* Category header */}
           <div className="col-span-full pt-2">
-            <p className="font-sans text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="font-sans text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               {AAC_CATEGORIES.find((c) => c.slug === category)?.label ??
                 category}
             </p>
@@ -188,41 +188,48 @@ function AacPhraseTile({
 
   return (
     <>
-      <button
-        onClick={handleTap}
-        className="group relative flex min-h-20 flex-col items-center justify-center gap-1 rounded-2xl p-3 transition-all duration-100 active:scale-[0.97] active:brightness-95"
-        style={{ backgroundColor: bgColor }}
-        aria-label={phrase.text}
+      <div
+        data-agent-hidden={isCustom || undefined}
+        data-agent-secret={isCustom || undefined}
+        className="group relative"
       >
-        <span style={customTextColor ? { color: customTextColor } : undefined}>
-          <AacIcon
-            icon={phrase.icon}
-            fallback={
-              AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon
-            }
-          />
-        </span>
-
-        {/* Text with dynamic font size */}
-        <span
-          className={cn(
-            'text-center font-display font-semibold leading-snug',
-            fontSizeClass,
-          )}
-          style={customTextColor ? { color: customTextColor } : undefined}
+        <button
+          onClick={handleTap}
+          className="flex h-full min-h-20 w-full flex-col items-center justify-center gap-1 rounded-2xl p-3 transition-all duration-100 active:scale-[0.97] active:brightness-95"
+          style={{ backgroundColor: bgColor }}
+          aria-label={phrase.text}
         >
-          {phrase.text}
-        </span>
+          <span
+            style={customTextColor ? { color: customTextColor } : undefined}
+          >
+            <AacIcon
+              icon={phrase.icon}
+              fallback={
+                AAC_CATEGORIES.find((c) => c.slug === phrase.category)?.icon
+              }
+            />
+          </span>
 
+          {/* Text with dynamic font size */}
+          <span
+            className={cn(
+              'text-center font-display leading-snug font-semibold',
+              fontSizeClass,
+            )}
+            style={customTextColor ? { color: customTextColor } : undefined}
+          >
+            {phrase.text}
+          </span>
+        </button>
         {/* Edit/Delete overlay - only for custom phrases and owner */}
         {isCustom && isOwner && (
-          <div className="absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-0 flex items-start justify-end gap-1 rounded-2xl bg-black/30 p-2 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 [&>button]:pointer-events-auto">
             <button
               onClick={(e) => {
                 e.stopPropagation()
                 setShowEditDialog(true)
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-sm hover:bg-background"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-xs hover:bg-background"
               aria-label="Edit phrase"
             >
               <Pencil size={16} />
@@ -233,18 +240,18 @@ function AacPhraseTile({
                 handleDelete()
               }}
               disabled={isDeleting}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-sm hover:bg-background disabled:opacity-50"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-background/90 shadow-xs hover:bg-background disabled:opacity-50"
               aria-label="Delete phrase"
             >
               <Trash2 size={16} />
             </button>
           </div>
         )}
-      </button>
+      </div>
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
+        <DialogContent data-agent-secret data-agent-hidden>
           <DialogHeader>
             <DialogTitle>Edit Phrase</DialogTitle>
           </DialogHeader>
@@ -254,7 +261,7 @@ function AacPhraseTile({
               <Input
                 id="edit-text"
                 value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                onValueChange={setEditText}
                 placeholder="Enter phrase text"
               />
             </div>

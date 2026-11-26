@@ -9,12 +9,12 @@ import { RootLayoutClient } from './layout-client'
 
 const fontSans = FontSans({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-inter',
 })
 
 const fontDisplay = FontDisplay({
   subsets: ['latin'],
-  variable: '--font-display',
+  variable: '--font-outfit',
   weight: ['400', '600', '700'],
 })
 

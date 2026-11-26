@@ -1,5 +1,6 @@
 'use client'
 
+import { AgentBridge } from '@/components/agent-bridge'
 import { SessionProvider } from '@/lib/auth-client'
 import { PostHogProvider } from '@/providers/posthogProvider'
 import { ThemeProvider } from '@/providers/themeProvider'
@@ -7,11 +8,12 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AuthGatedSidebar } from '@/components/custom/auth-gated-sidebar'
 import VBSidebarTrigger from '@/components/custom/sidebar-trigger'
 import { VBQueryClient } from '@/hooks/use-query-client'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/components/ui/toaster'
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
+      <AgentBridge />
       <PostHogProvider>
         <ThemeProvider
           attribute="class"
