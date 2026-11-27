@@ -31,7 +31,7 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { ThemeSwitcher } from './custom/themeSwitcher'
 import { SpeakerSelector } from './custom/speaker-selector'
-import { GitHubLogoIcon, PersonIcon } from '@radix-ui/react-icons'
+import { Github } from 'lucide-react'
 
 // Menu items.
 const items = [
@@ -153,7 +153,7 @@ export function AppSidebar() {
         </Button>
         <Button variant={'outline'} asChild>
           <Link href="https://github.com/harryt04/voice-bridge" target="_blank">
-            <GitHubLogoIcon className="mr-1" />
+            <Github className="mr-1" />
             View source code
           </Link>
         </Button>

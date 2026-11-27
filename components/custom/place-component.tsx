@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 import { speakText } from '@/utils/speech'
 import { AudioLines, LandPlotIcon, TrashIcon } from 'lucide-react'
 import { Button } from '../ui/button'
-import { Pencil1Icon } from '@radix-ui/react-icons'
+import { Pencil } from 'lucide-react'
 import { PlaceForm } from './place-form'
 import { openGoogleMapsDirections } from '@/utils/directions'
 import { Muted } from '../ui/typography'
@@ -133,7 +133,7 @@ export const PlaceComponent = ({
               variant="outline"
               onClick={handleEditClick} // Open the edit form
             >
-              <Pencil1Icon /> Edit
+              <Pencil /> Edit
             </Button>
             <Button variant="destructive" onClick={handleDeleteClick}>
               <TrashIcon /> Delete

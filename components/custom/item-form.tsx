@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { FileInput, FileInputTrigger } from '@/components/ui/file-input'
 import { UploadIcon } from 'lucide-react'
 import { compressAndConvertToBase64 } from '@/utils/imageUtils'
 import Image from 'next/image'
@@ -37,7 +38,6 @@ export function ItemForm({
   const [previewImage, setPreviewImage] = useState<string | null>(
     item?.imageBase64 || item?.imageUrl || null,
   )
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (item) {
@@ -58,8 +58,8 @@ export function ItemForm({
     })
   }
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+  const handleImageUpload = async (files: File[]) => {
+    const file = files[0]
     if (!file) return
 
     try {
@@ -81,10 +81,6 @@ export function ItemForm({
     } finally {
       setIsUploading(false)
     }
-  }
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click()
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -134,29 +130,23 @@ export function ItemForm({
               )}
 
               <div className="flex gap-2">
-                <Button
-                  type="button"
-                  onClick={triggerFileInput}
-                  variant="outline"
-                  disabled={isUploading}
-                  className="flex-1"
-                >
-                  {isUploading ? (
-                    'Processing...'
-                  ) : (
-                    <>
-                      <UploadIcon className="mr-2 h-4 w-4" />
-                      Upload Image
-                    </>
-                  )}
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
+                <FileInput
                   accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
+                  disabled={isUploading}
+                  onValueChange={handleImageUpload}
+                  className="flex flex-1"
+                >
+                  <FileInputTrigger className="w-full">
+                    {isUploading ? (
+                      'Processing...'
+                    ) : (
+                      <>
+                        <UploadIcon className="mr-2 h-4 w-4" />
+                        Upload Image
+                      </>
+                    )}
+                  </FileInputTrigger>
+                </FileInput>
 
                 {/* Keep the URL input for images from the web */}
                 <div className="flex-1">

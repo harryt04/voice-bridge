@@ -63,33 +63,92 @@ const SelectTrigger = React.forwardRef<
 ))
 SelectTrigger.displayName = 'SelectTrigger'
 
+const SelectListContext = React.createContext<
+  React.RefObject<HTMLDivElement | null>
+>({ current: null })
+
+const SCROLL_STEP = 32
+const SCROLL_INTERVAL = 50
+// The list's own padding (p-1) should not keep an arrow showing at an end.
+const EDGE_TOLERANCE = 6
+
+/**
+ * Scroll arrows for an overflowing list, which the SDK Select does not ship.
+ * Like shadcn's Radix version they appear only when the list can scroll in
+ * their direction, scroll while the pointer rests on them (hover, or a touch),
+ * and stay out of the tab order and accessibility tree: keyboard users scroll
+ * with the arrow keys.
+ */
 function ScrollButton({
   direction,
+  className,
   ...props
-}: React.ComponentProps<'button'> & { direction: number }) {
+}: React.ComponentProps<'div'> & { direction: -1 | 1 }) {
+  const listRef = React.useContext(SelectListContext)
+  const [visible, setVisible] = React.useState(false)
+  const timer = React.useRef<number | null>(null)
+
+  React.useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+    const update = () => {
+      const max = list.scrollHeight - list.clientHeight
+      setVisible(
+        direction < 0
+          ? list.scrollTop > EDGE_TOLERANCE
+          : list.scrollTop < max - EDGE_TOLERANCE,
+      )
+    }
+    update()
+    list.addEventListener('scroll', update, { passive: true })
+    const observer =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(update)
+    observer?.observe(list)
+    return () => {
+      list.removeEventListener('scroll', update)
+      observer?.disconnect()
+    }
+  }, [direction, listRef])
+
+  const stop = React.useCallback(() => {
+    if (timer.current !== null) window.clearInterval(timer.current)
+    timer.current = null
+  }, [])
+  const start = () => {
+    stop()
+    const step = () =>
+      listRef.current?.scrollBy({ top: direction * SCROLL_STEP })
+    step()
+    timer.current = window.setInterval(step, SCROLL_INTERVAL)
+  }
+  React.useEffect(() => stop, [stop])
+  React.useEffect(() => {
+    if (!visible) stop()
+  }, [visible, stop])
+
+  if (!visible) return null
   const Icon = direction < 0 ? ChevronUp : ChevronDown
   return (
-    <button
-      type="button"
-      tabIndex={-1}
-      aria-label={direction < 0 ? 'Scroll up' : 'Scroll down'}
+    <div
+      aria-hidden="true"
+      data-vb-select-scroll={direction < 0 ? 'up' : 'down'}
+      className={cn(
+        'flex cursor-default items-center justify-center py-1',
+        className,
+      )}
       {...props}
-      onMouseDown={(e) => e.preventDefault()}
-      onClick={(event) => {
-        const list = event.currentTarget.parentElement?.querySelector(
-          '[data-slot="select-list"]',
-        )
-        list?.scrollBy({ top: direction * 64 })
-      }}
+      onPointerDown={(event) => event.preventDefault()}
+      onPointerEnter={start}
+      onPointerLeave={stop}
     >
       <Icon className="size-4" />
-    </button>
+    </div>
   )
 }
-const SelectScrollUpButton = (props: React.ComponentProps<'button'>) => (
+const SelectScrollUpButton = (props: React.ComponentProps<'div'>) => (
   <ScrollButton direction={-1} {...props} />
 )
-const SelectScrollDownButton = (props: React.ComponentProps<'button'>) => (
+const SelectScrollDownButton = (props: React.ComponentProps<'div'>) => (
   <ScrollButton direction={1} {...props} />
 )
 const SelectContent = React.forwardRef<
@@ -97,29 +156,38 @@ const SelectContent = React.forwardRef<
   (Omit<React.ComponentPropsWithoutRef<typeof SdkSelectContent>, 'children'> & {
     children?: React.ReactNode
   }) & { position?: 'popper' | 'item-aligned' }
->(({ className, children, position = 'popper', ...props }, ref) => (
-  <SdkSelectContent
-    ref={ref}
-    className={cn(
-      'z-50 max-h-96 min-w-(--anchor-width) overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-ending-style:animate-out data-ending-style:fade-out-0 data-ending-style:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-      position === 'popper' &&
-        'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
-      className,
-    )}
-    alignItemWithTrigger={position === 'item-aligned'}
-    container={typeof document === 'undefined' ? null : document.body}
-    {...props}
-  >
-    <SdkSelectList
+>(({ className, children, position = 'popper', ...props }, ref) => {
+  const listRef = React.useRef<HTMLDivElement | null>(null)
+  return (
+    <SdkSelectContent
+      ref={ref}
       className={cn(
-        'max-h-80 overflow-y-auto p-1',
-        position === 'popper' && 'w-full',
+        'z-50 flex max-h-96 min-w-(--anchor-width) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-ending-style:animate-out data-ending-style:fade-out-0 data-ending-style:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        position === 'popper' &&
+          'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
+        className,
       )}
+      alignItemWithTrigger={position === 'item-aligned'}
+      container={typeof document === 'undefined' ? null : document.body}
+      {...props}
     >
-      {children}
-    </SdkSelectList>
-  </SdkSelectContent>
-))
+      <SelectListContext.Provider value={listRef}>
+        <SelectScrollUpButton />
+        <SdkSelectList
+          ref={listRef}
+          data-vb-select-list=""
+          className={cn(
+            'max-h-80 overflow-y-auto p-1',
+            position === 'popper' && 'w-full',
+          )}
+        >
+          {children}
+        </SdkSelectList>
+        <SelectScrollDownButton />
+      </SelectListContext.Provider>
+    </SdkSelectContent>
+  )
+})
 SelectContent.displayName = 'SelectContent'
 
 const SelectLabel = React.forwardRef<
